@@ -49,6 +49,63 @@ Set directory for building packages.
 .br
 Default: '\fBfoo\fP/work', where \fBfoo\fP is the directory of the Pkgfile.
 .TP
+\fBPKGMK_LOCALPATCHES_DIR='STRING'\fP
+Set directory for local patches that aren't part of ports.
+.sp
+If it's desired to store any patches that should not be committed into ports
+collections, they can be kept outside the ports tree in the
+\fBPKGMK_LOCALPATCHES_DIR\fP directory.
+.sp
+The directory tree is expected to have directories with port name,
+and arbitrarily named patch-files with suffix \fI.patch\fP or \fI.diff\fP that
+are stored inside these dirs.
+.sp
+For example, if you want to keep a private patch for the \fIpng\fP port, keep
+it in PKGMK_LOCALPATCHES_DIR/\fIpng\fP/patch.diff.
+.sp
+All files in the named directory will be applied with \fI-p1\fP patch arg and
+before the Pkgfile's "build()" function.
+.sp
+Default: none
+.TP
+\fBPKGMK_LOCALPATCHES_CMD='STRING'\fP
+Use specified command to apply local patches stored in
+\fBPKGMK_LOCALPATCHES_DIR\fP.
+.sp
+By default, patches are applied to all directories in \fBPKGMK_WORK_DIR/src/\fP.
+Since this directory contains most often only one directory (unpacked tarball)
+- this is enough.  If the \fBPKGMK_WORK_DIR/src\fP contains multiple
+directories, there are several solutions:
+.RS
+.IP \(bu 2
+Use patches with full prefixes to extracted sources:
+.sp
+.nf 3
+--- png-1.2.3/src/file.c
++++ png-1.2.3/src/file.c
+.fi
+.sp
+And the following command:
+.sp
+PKGMK_LOCALPATCHES_CMD="patch -r- --no-backup-if-mismatch -d $PKGMK_WORK_DIR/src -Np0".
+.sp
+This method is clean and elegant, but has disadvantages. For example, with each
+new version of the port, you will need to edit the patch.
+.sp
+.IP \(bu 2
+Use per/port setting. E.g:
+.sp
+.nf 3
+case $name in
+port1|port2) PKGMK_LOCALPATCHES_CMD="..." ;;
+*) ;;
+esac
+.fi
+.RE
+.IP
+Default: "patch -r- --no-backup-if-mismatch -d "$PKGMK_WORK_DIR/src"/*/ -Np1".
+.br
+.TP
 \fBPKGMK_DOWNLOAD_PROG='STRING'\fP
 Use specified program to download source archives. Valid strings are curl and wget.
 .br

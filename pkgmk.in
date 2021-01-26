@@ -519,6 +519,15 @@ remove_work_dir() {
 	rm -rf $PKGMK_WORK_DIR
 }
 
+apply_patches() {
+	if [ -z "$PKGMK_LOCALPATCHES_CMD" ]; then
+		PKGMK_LOCALPATCHES_CMD="patch -r- --no-backup-if-mismatch -d "$SRC"/*/ -Np1"
+	fi
+	if [ -n "$PKGMK_LOCALPATCHES_DIR" ] && [ -d "$PKGMK_LOCALPATCHES_DIR/$name" ]; then
+		find "$PKGMK_LOCALPATCHES_DIR/$name" -type f -name "*.diff" -o -name "*.patch" \
+			| xargs -I{} $PKGMK_LOCALPATCHES_CMD -i {}
+	fi
+}
 
 build_package() {
 	local BUILD_SUCCESSFUL="no"
@@ -536,7 +545,7 @@ build_package() {
 	unpack_source
 
 	cd $SRC
-	(set -e -x ; build)
+	(set -e -x ; apply_patches ; build)
 
 	if [ $? = 0 ]; then
 		if [ "$PKGMK_NO_STRIP" = "no" ]; then
