@@ -1,5 +1,5 @@
 #
-#  pkgutils
+#  pkgmk - Make software package.
 #
 #  Copyright (c) 2000-2005 by Per Liden <per@fukt.bth.se>
 #  Copyright (c) 2006-2017 by CRUX team (http://crux.nu)
@@ -21,83 +21,34 @@
 #
 
 DESTDIR =
-BINDIR = /usr/bin
-MANDIR = /usr/share/man
-ETCDIR = /etc
+PREFIX  = /usr/local
+BINDIR  = $(PREFIX)/sbin
+MANDIR  = $(PREFIX)/share/man
+ETCDIR  = /etc
 
+NAME    = pkgmk
 VERSION = 5.40.7
-NAME = pkgutils-$(VERSION)
 
-CXXFLAGS += -DNDEBUG
-CXXFLAGS += -O2 -Wall -pedantic -D_GNU_SOURCE -DVERSION=\"$(VERSION)\" \
-	    -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-LIBARCHIVELIBS := $(shell pkg-config --libs --static libarchive)
-
-LDFLAGS += -static $(LIBARCHIVELIBS)
-
-OBJECTS = main.o pkgutil.o pkgadd.o pkgrm.o pkginfo.o
-
-MANPAGES = pkgadd.8 pkgrm.8 pkginfo.8 pkgmk.8 rejmerge.8 pkgmk.conf.5
-
-all: pkgadd pkgmk rejmerge man
-
-pkgadd: .depend $(OBJECTS)
-	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
-
-pkgmk: pkgmk.in
-
-rejmerge: rejmerge.in
-
-man: $(MANPAGES)
-
-mantxt: man $(MANPAGES:=.txt)
-
-%.8.txt: %.8
-	nroff -mandoc -c $< | col -bx > $@
+all: pkgmk pkgmk.8 pkgmk.conf.5
 
 %: %.in
 	sed -e "s/#VERSION#/$(VERSION)/" $< > $@
 
-.depend:
-	$(CXX) $(CXXFLAGS) -MM $(OBJECTS:.o=.cc) > .depend
-
-ifeq (.depend,$(wildcard .depend))
-include .depend
-endif
-
-.PHONY:	install clean distclean dist
-
-dist: distclean
-	rm -rf $(NAME) $(NAME).tar.gz
-	git archive --format=tar --prefix=$(NAME)/ HEAD | tar -x
-	git log > $(NAME)/ChangeLog
-	tar cJvf $(NAME).tar.xz $(NAME)
-	rm -rf $(NAME)
-
 install: all
-	install -D -m0755 pkgadd $(DESTDIR)$(BINDIR)/pkgadd
-	install -D -m0644 pkgadd.conf $(DESTDIR)$(ETCDIR)/pkgadd.conf
-	install -D -m0755 pkgmk $(DESTDIR)$(BINDIR)/pkgmk
-	install -D -m0755 rejmerge $(DESTDIR)$(BINDIR)/rejmerge
-	install -D -m0644 pkgmk.conf $(DESTDIR)$(ETCDIR)/pkgmk.conf
-	install -D -m0644 rejmerge.conf $(DESTDIR)$(ETCDIR)/rejmerge.conf
-	install -D -m0644 pkgadd.8 $(DESTDIR)$(MANDIR)/man8/pkgadd.8
-	install -D -m0644 pkgrm.8 $(DESTDIR)$(MANDIR)/man8/pkgrm.8
-	install -D -m0644 pkginfo.8 $(DESTDIR)$(MANDIR)/man8/pkginfo.8
-	install -D -m0644 pkgmk.8 $(DESTDIR)$(MANDIR)/man8/pkgmk.8
-	install -D -m0644 rejmerge.8 $(DESTDIR)$(MANDIR)/man8/rejmerge.8
-	install -D -m0644 pkgmk.conf.5 $(DESTDIR)$(MANDIR)/man5/pkgmk.conf.5
-	ln -sf pkgadd $(DESTDIR)$(BINDIR)/pkgrm
-	ln -sf pkgadd $(DESTDIR)$(BINDIR)/pkginfo
+	install -Dm0755 pkgmk        $(DESTDIR)$(BINDIR)/pkgmk
+	install -Dm0644 pkgmk.conf   $(DESTDIR)$(ETCDIR)/pkgmk.conf
+	install -Dm0644 pkgmk.8      $(DESTDIR)$(MANDIR)/man8/pkgmk.8
+	install -Dm0644 pkgmk.conf.5 $(DESTDIR)$(MANDIR)/man5/pkgmk.conf.5
+
+uninstall:
+	rm -f $(DESTDIR)$(BINDIR)/pkgmk
+	rm -f $(DESTDIR)$(ETCDIR)/pkgmk.conf
+	rm -f $(DESTDIR)$(MANDIR)/man8/pkgmk.8
+	rm -f $(DESTDIR)$(MANDIR)/man5/pkgmk.conf.5
 
 clean:
-	rm -f .depend
-	rm -f $(OBJECTS)
-	rm -f $(MANPAGES)
-	rm -f $(MANPAGES:=.txt)
+	rm -f pkgmk pkgmk.8 pkgmk.conf.5
 
-distclean: clean
-	rm -f pkgadd pkginfo pkgrm pkgmk rejmerge
+.PHONY: install uninstall clean
 
-# End of file
+# End of file.
