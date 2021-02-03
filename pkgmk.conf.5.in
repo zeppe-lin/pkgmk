@@ -110,14 +110,13 @@ Default: "patch -r- --no-backup-if-mismatch -d "$PKGMK_WORK_DIR/src"/*/ -Np1".
 Use specified program to download source archives. Valid strings are curl and wget.
 .br
 Default: 'wget'
+.TP
+\fBPKGMK_WGET_OPTS='STRING'\fP
+Additional options for wget(1), which is used by pkgmk to download all files.
 .br
 .TP
 \fBPKGMK_CURL_OPTS='STRING'\fP
 Additional options for curl(1), which is used by pkgmk to download all files.
-.br
-.TP
-\fBPKGMK_WGET_OPTS='STRING'\fP
-Additional options for wget(1), which is used by pkgmk to download all files.
 .br
 .TP
 \fBPKGMK_DOWNLOAD='STRING'\fP
@@ -127,6 +126,11 @@ Default: 'no'
 .TP
 \fBPKGMK_IGNORE_FOOTPRINT='STRING'\fP
 If set to 'yes', pkgmk will not perform a footprint check of the built package.
+.br
+Default: 'no'
+.TP
+\fBPKGMK_IGNORE_MD5SUM='STRING'\fP
+If set to 'yes', pkgmk will not perform a md5sum check of the source archives.
 .br
 Default: 'no'
 .TP
@@ -149,7 +153,7 @@ pkgmk(8)
 .SH COPYRIGHT
 Copyright (c) 2000-2005 Per Liden
 .br
-Copyright (c) 2006-2017 CRUX team (http://crux.nu).
+Copyright (c) 2006-2017 CRUX team (http://crux.nu)
 .sp
 pkgmk is licensed through the GNU General Public License.
 Read the COPYING file for the complete license.
