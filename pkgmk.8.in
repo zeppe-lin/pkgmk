@@ -55,26 +55,6 @@ Build package without checking md5sum first.
 .B "\-cm, \-\-check\-md5sum"
 Check md5sum without building the package.
 .TP
-.B "\-us, \-\-update\-signature"
-Update port signature and sha256sums.
-.TP
-.B "\-cs, \-\-check\-signature"
-Check the validity of files using the signature and sha256sums.
-.TP
-.B "\-is, \-\-ignore\-signature"
-Build package without checking the signature and sha256sums.
-.TP
-.B "\-rs, \-\-refresh\-signature"
-Create new signature and keep existing sha256sums.
-.TP
-.B "\-sk, \-\-secret\-key <file>"
-Use private key in <file> to sign the port. By default, the name of the port's
-parent directory $repo is evaluated and the private key is read from /etc/ports/$repo.sec, if it exists.
-.TP
-.B "\-pk, \-\-public\-key <file>"
-Use public key in <file> to check the signature. By default, the name of the
-port's parent directory $repo is evaluated and the public key is read from /etc/ports/$repo.pub, if it exists.
-.TP
 .B "\-ns, \-\-no\-strip"
 Do not strip executable binaries or libraries.
 .TP
@@ -105,9 +85,6 @@ Package footprint (used for regression testing).
 .TP
 .B ".md5sum"
 MD5 checksum of source files.
-.TP
-.B ".signature"
-SHA256 checksum and signify checksum.
 .TP
 .B "/etc/pkgmk.conf"
 Global package make configuration.
@@ -149,8 +126,11 @@ An error occured while running the build function.
 .B 9
 An error occured while installing the package via pkgadd.
 .SH SEE ALSO
-pkgmk.conf(5), pkgadd(8), pkgrm(8), pkginfo(8), rejmerge(8), signify(1), curl(1), wget(1)
+pkgmk.conf(5), pkgadd(8), pkgrm(8), pkginfo(8), rejmerge(8), curl(1), wget(1)
 .SH COPYRIGHT
-pkgmk (pkgutils) is Copyright (c) 2000-2005 Per Liden and Copyright (c) 2006-2017 CRUX team (http://crux.nu).
-pkgmk (pkgutils) is licensed through the GNU General Public License.
+Copyright (c) 2000-2005 Per Liden
+.br
+Copyright (c) 2006-2017 CRUX team (http://crux.nu)
+.sp
+pkgmk is licensed through the GNU General Public License.
 Read the COPYING file for the complete license.
