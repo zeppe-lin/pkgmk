@@ -370,6 +370,10 @@ check_footprint() {
 		error "Package '$TARGET' was not found."
 		BUILD_SUCCESSFUL="no"
 	fi
+
+	if [ "$BUILD_SUCCESSFUL" = "no" ]; then
+		exit $E_FOOTPRINT
+	fi
 }
 
 make_work_dir() {
