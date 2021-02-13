@@ -1,14 +1,18 @@
 .TH pkgmk 8 "" "pkgutils #VERSION#" ""
+
 .SH NAME
 pkgmk \- make software package
+
 .SH SYNOPSIS
 \fBpkgmk [options]\fP
+
 .SH DESCRIPTION
 \fBpkgmk\fP is a \fIpackage management\fP utility, which makes
-a software package. A \fIpackage\fP is an archive of files (.pkg.tar.gz, .pkg.tar.bz2 or .pkg.tar.xz)
-that can be installed using pkgadd(8).
+a software package. A \fIpackage\fP is an archive of files
+(.pkg.tar.gz, .pkg.tar.bz2 or .pkg.tar.xz) that can be installed
+using pkgadd(8).
 
-To prepare to use pkgmk, you must write a file named \fIPkgfile\fP
+To prepare to use pkgmk, you must write a file named \fBPkgfile\fR(5)
 that describes how the package should be build. Once a suitable
 \fIPkgfile\fP file exists, each time you change some source files,
 you simply execute pkgmk to bring the package up to date. The pkgmk
@@ -17,6 +21,7 @@ times of the source files to decide if the package needs to be updated.
 
 Global build configuration is stored in \fI/etc/pkgmk.conf\fP. This
 file is read by pkgmk at startup.
+
 .SH OPTIONS
 .TP
 .B "\-i, \-\-install"
@@ -75,10 +80,11 @@ Print version and exit.
 .TP
 .B "\-h, \-\-help"
 Print help and exit.
+
 .SH FILES
 .TP
 .B "Pkgfile"
-Package build description.
+Package build description. See \fBPkgfile\fR(5).
 .TP
 .B ".footprint"
 Package footprint (used for regression testing).
@@ -89,11 +95,15 @@ MD5 checksum of source files.
 .B "/etc/pkgmk.conf"
 Global package make configuration.
 .TP
+.B "aria2c"
+Used by pkgmk to download source code.
+.TP
 .B "curl"
 Used by pkgmk to download source code.
 .TP
 .B "wget"
 Used by pkgmk to download source code.
+
 .SH EXIT CODES
 .TP
 .B 0
@@ -125,8 +135,10 @@ An error occured while running the build function.
 .TP
 .B 9
 An error occured while installing the package via pkgadd.
+
 .SH SEE ALSO
-pkgmk.conf(5), pkgadd(8), pkgrm(8), pkginfo(8), rejmerge(8), curl(1), wget(1)
+pkgmk.conf(5), pkgadd(8), pkgrm(8), pkginfo(8), rejmerge(8), aria2c(1), curl(1), wget(1)
+
 .SH COPYRIGHT
 Copyright (c) 2000-2005 Per Liden
 .br

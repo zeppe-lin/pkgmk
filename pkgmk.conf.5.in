@@ -1,13 +1,20 @@
 .TH pkgmk.conf 5 "" "pkgutils #VERSION#" ""
+
 .SH NAME
-\fBpkgmk.conf\fP \- Configuration file for pkgmk.
+\fBpkgmk.conf\fP \- configuration file for pkgmk
+
 .SH DESCRIPTION
-\fBpkgmk.conf\fP configures pkgutils package make, pkgmk(8).
+\fBpkgmk.conf\fP configures pkgmk(8).
+
 .SH FILE FORMAT
-The file consists of a number of variable assignments of the form \fBoption\fP=\fBvalue\fP. Comments can be specified by putting a hash (#) symbol as the first character on the line.
+The file consists of a number of variable assignments of the form
+\fBoption\fP=\fBvalue\fP. Comments can be specified by putting a hash
+(#) symbol as the first character on the line.
+
 .SH DIRECTIVES
 .LP
-If some option is not used (commented out or not included in the configuration file at all) pkgmk will take a default action.
+If some option is not used (commented out or not included in the
+configuration file at all) pkgmk will take a default action.
 .TP
 \fBexport CFLAGS='STRING'\fP
 Set C compiler options.
@@ -20,7 +27,8 @@ Set C++ compiler options.
 Default: none
 .TP
 \fBexport JOBS='NUMBER'\fP
-Set the number of commands to run simultaneously when building a port.
+Set the number of commands to run simultaneously when building
+a package.
 .br
 Default: none
 .TP
@@ -47,24 +55,25 @@ Default: directory of Pkgfile.
 \fBPKGMK_WORK_DIR='STRING'\fP
 Set directory for building packages.
 .br
-Default: '\fBfoo\fP/work', where \fBfoo\fP is the directory of the Pkgfile.
+Default: '\fBfoo\fP/work', where \fBfoo\fP is the directory of the
+Pkgfile.
 .TP
 \fBPKGMK_LOCALPATCHES_DIR='STRING'\fP
-Set directory for local patches that aren't part of ports.
+Set directory for local patches that aren't part of pkgsrc.
 .sp
-If it's desired to store any patches that should not be committed into ports
-collections, they can be kept outside the ports tree in the
-\fBPKGMK_LOCALPATCHES_DIR\fP directory.
+If it's desired to store any patches that should not be committed
+into pkgsrc collections, they can be kept outside the pkgsrc tree in
+the \fBPKGMK_LOCALPATCHES_DIR\fP directory.
 .sp
-The directory tree is expected to have directories with port name,
-and arbitrarily named patch-files with suffix \fI.patch\fP or \fI.diff\fP that
-are stored inside these dirs.
+The directory tree is expected to have directories with pkg name, and
+arbitrarily named patch-files with suffix \fI.patch\fP or \fI.diff\fP
+that are stored inside these dirs.
 .sp
-For example, if you want to keep a private patch for the \fIpng\fP port, keep
-it in PKGMK_LOCALPATCHES_DIR/\fIpng\fP/patch.diff.
+For example, if you want to keep a private patch for the \fIpng\fP
+package, keep it in PKGMK_LOCALPATCHES_DIR/\fIpng\fP/patch.diff.
 .sp
-All files in the named directory will be applied with \fI-p1\fP patch arg and
-before the Pkgfile's "build()" function.
+All files in the named directory will be applied with \fI-p1\fP patch
+arg and before the Pkgfile's "build()" function.
 .sp
 Default: none
 .TP
@@ -72,10 +81,11 @@ Default: none
 Use specified command to apply local patches stored in
 \fBPKGMK_LOCALPATCHES_DIR\fP.
 .sp
-By default, patches are applied to all directories in \fBPKGMK_WORK_DIR/src/\fP.
-Since this directory contains most often only one directory (unpacked tarball)
-- this is enough.  If the \fBPKGMK_WORK_DIR/src\fP contains multiple
-directories, there are several solutions:
+By default, patches are applied to all directories in
+\fBPKGMK_WORK_DIR/src/\fP.  Since this directory contains most often
+only one directory (unpacked tarball) - this is enough.  If the
+\fBPKGMK_WORK_DIR/src\fP contains multiple directories, there are
+several solutions:
 .RS
 .IP \(bu 2
 Use patches with full prefixes to extracted sources:
@@ -89,15 +99,15 @@ And the following command:
 .sp
 PKGMK_LOCALPATCHES_CMD="patch -r- --no-backup-if-mismatch -d $PKGMK_WORK_DIR/src -Np0".
 .sp
-This method is clean and elegant, but has disadvantages. For example, with each
-new version of the port, you will need to edit the patch.
+This method is clean and elegant, but has disadvantages. For example,
+with each new version of the package, you will need to edit the patch.
 .sp
 .IP \(bu 2
-Use per/port setting. E.g:
+Use per/package setting. E.g:
 .sp
 .nf 3
 case $name in
-port1|port2) PKGMK_LOCALPATCHES_CMD="..." ;;
+pkg1|pkg2) PKGMK_LOCALPATCHES_CMD="..." ;;
 *) ;;
 esac
 .fi
@@ -107,16 +117,23 @@ Default: "patch -r- --no-backup-if-mismatch -d "$PKGMK_WORK_DIR/src"/*/ -Np1".
 .br
 .TP
 \fBPKGMK_DOWNLOAD_PROG='STRING'\fP
-Use specified program to download source archives. Valid strings are curl and wget.
+Use specified program to download source archives. Valid strings are
+aria2c, curl and wget.
 .br
 Default: 'wget'
 .TP
+\fBPKGMK_ARIA2C_OPTS='STRING'\fP
+Additional options for aria2c(1), which is used by pkgmk to download
+all files.
+.TP
 \fBPKGMK_WGET_OPTS='STRING'\fP
-Additional options for wget(1), which is used by pkgmk to download all files.
+Additional options for wget(1), which is used by pkgmk to download
+all files.
 .br
 .TP
 \fBPKGMK_CURL_OPTS='STRING'\fP
-Additional options for curl(1), which is used by pkgmk to download all files.
+Additional options for curl(1), which is used by pkgmk to download
+all files.
 .br
 .TP
 \fBPKGMK_DOWNLOAD='STRING'\fP
@@ -125,12 +142,14 @@ If set to 'yes', pkgmk will download the source archives if necessary.
 Default: 'no'
 .TP
 \fBPKGMK_IGNORE_FOOTPRINT='STRING'\fP
-If set to 'yes', pkgmk will not perform a footprint check of the built package.
+If set to 'yes', pkgmk will not perform a footprint check of the
+built package.
 .br
 Default: 'no'
 .TP
 \fBPKGMK_IGNORE_MD5SUM='STRING'\fP
-If set to 'yes', pkgmk will not perform a md5sum check of the source archives.
+If set to 'yes', pkgmk will not perform a md5sum check of the source
+archives.
 .br
 Default: 'no'
 .TP
@@ -145,15 +164,19 @@ If set to 'no', pkgmk will strip built binaries.
 Default: 'no'
 .TP
 \fBPKGMK_COMPRESSION_MODE='STRING'\fP
-Option to select the mode used to compress the packages. Valid strings are gz, bz2, xz and lz.
+Option to select the mode used to compress the packages. Valid strings
+are gz, bz2, xz and lz.
 .br
 Default: 'gz'
+
 .SH SEE ALSO
-pkgmk(8)
+pkgmk(8), Pkgfile(5)
+
 .SH COPYRIGHT
 Copyright (c) 2000-2005 Per Liden
 .br
 Copyright (c) 2006-2017 CRUX team (http://crux.nu)
 .sp
 pkgmk is licensed through the GNU General Public License.
+.br
 Read the COPYING file for the complete license.
