@@ -1,8 +1,11 @@
-.TH Pkgfile 5 "" "pkgutils #VERSION#" ""
+.TH Pkgfile 5 "" "pkgmk #VERSION#" ""
+
 .SH NAME
-\fBPkgfile\fP \- Build file for pkgmk.
+\fBPkgfile\fP \- build file for pkgmk
+
 .SH DESCRIPTION
-\fBPkgfile\fP defines the build process of a port.
+\fBPkgfile\fP defines the build process of a source package.
+
 .SH FILE FORMAT
 The file is a bash(1) script, which defines a number of variables
 (\fIname\fP, \fIversion\fP, \fIrelease\fP and \fIsource\fP) and a function
@@ -11,7 +14,7 @@ The file is a bash(1) script, which defines a number of variables
 .SS Example:
 
 .EX
-# Description: A library for demonstrating how to create delicious ports.
+# Description: A library for demonstrating how to create package source
 # URL:         http://www.gnu.org/software/somelib/index.html
 # Maintainer:  Joe Maintainer, joe at myfantasticisp dot net
 # Depends on:  someotherlib coolness
@@ -19,55 +22,60 @@ The file is a bash(1) script, which defines a number of variables
 name=somelib
 version=1.2.3
 release=1
-source=(ftp://ftp.gnu.org/gnu/$name/$name-$version.tar.gz Makefile.in.patch)
+source=(ftp://ftp.gnu.org/gnu/$name/$name-$version.tar.gz
+        Makefile.in.patch)
 
 build() {
-	cd $name-$version
-	patch -p1 < ../Makefile.in.patch
-	./configure --prefix=/usr
-	make
-	make DESTDIR=$PKG install
-	rm -rf $PKG/usr/info
+        cd $name-$version
+
+        patch -p1 -i ../Makefile.in.patch
+
+        ./configure --prefix=/usr
+
+        make
+        make DESTDIR=$PKG install
+
+        rm -rf $PKG/usr/info
 }
 .EE
 
-Note that you should use this specific format for the email address if
-you want to put your ports in any of the official CRUX repositories.
-
 .SS General guidelines
 The name of a package should always be lowercase (e.g. \fBname=eterm\fP and
-not \fBname=Eterm\fP). In case the package is added to the CRUX ports system
+not \fBname=Eterm\fP). In case the package is added to the pkgsrc tree
 the exact same name should be use for the name of the directory in the
-ports structure, i.e. \fI/usr/ports/???/eterm\fP.
+pkgsrc structure, i.e. \fI/usr/pkgsrc/???/eterm\fP.
 .LP
 Do not combine several separately distributed programs/libraries into
 one package. Make several packages instead.
-.LP
-Use \fBprtverify\fP to check the port.
 
 .SS Directories
 In general packages should install files in these directories. Exceptions
 are of course allowed if there is a good reason. But try to follow the
 following directory structure as close as possible.
 
-.EX
-Directory           Description
----------           ------------
-/usr/bin/           User command/application binaries
-/usr/sbin/          System binaries (e.g. daemons)
-/usr/lib/           Libraries
-/usr/include/       Header files
-/usr/lib/<prog>/    Plug-ins, addons, etc
-/usr/share/man/     Man pages
-/usr/share/<prog>/  Data files
-/usr/etc/<prog>/    Configuration files
-/etc/               Configuration files for system software (daemons, etc)
-.EE
+.TS
+center, box, line, tab (@) ;
+l | l
+l | l.
+Directory@Description
+_
+.SP
+/usr/bin/@User command/application binaries
+/usr/sbin/@System binaries (e.g. daemons)
+/usr/lib/@Libraries
+/usr/include/@Header files
+/usr/lib/<prog>/@Plug-ins, addons, etc
+/usr/share/man/@Man pages
+/usr/share/<prog>/@Data files
+/usr/etc/<prog>/@Configuration files
+/etc/@Configuration files for system software (daemons, etc)
+.TE
+
 .LP
 \fI/opt\fP directory is reserved for manually compiled/installed
 applications. Packages should never place anything there.
 .LP
-\fI/usr/libexec/\fP is not used in CRUX, thus packages should never
+\fI/usr/libexec/\fP is not used, thus packages should never
 install anything there. Use \fI/usr/lib/<prog>/\fP instead.
 
 .SS Junk files
@@ -85,7 +93,7 @@ Useless or obsolete binaries (e.g. \fI/usr/games/banner\fP and \fI/sbin/mkfs.min
 .LP
 Do not add new variables to the \fBPkgfile\fP. Only in very few cases
 does this actually improve the readability or the quality of the
-package. Further, the only variables that are guranteed to work with
+package. Further, the only variables that are guaranteed to work with
 future versions of \fBpkgmk\fP are \fIname\fP, \fIversion\fP, \fIrelease\fP,
 and \fIsource\fP. Other names could be in conflict with internal variables
 in \fBpkgmk\fP.
@@ -109,55 +117,64 @@ since the URL will automatically updated when you modify the \fI$version\fP vari
 
 Provide a header including the following fields:
 
-.EX
-Name            Meaning
-----            -------
-Description     A short description of the package; keep it factual
-Maintainer      Your full name and e-mail address, obfuscated if you want
-Packager        The original packager's full name and e-mail address
-URL             A webpage with more information on this software package
-Depends on      A list of dependencies, separated either by spaces or commas
-.EE
+.TS
+center, box, line, tab (@) ;
+l | l
+l | l.
+Name@Meaning
+_
+.SP
+Description@A short description of the package; keep it factual
+Maintainer@Your full name and e-mail address, obfuscated if you want
+URL@A webpage with more information on this software package
+Depends on@A list of dependencies, separated either by spaces
+.TE
 
 \fIDepends on\fP can be omitted if there are no dependencies.
 
 .SS Dependencies
 
-Dependencies are supported by some CRUX tools like \fBprt-get\fP and \fBpkg-get\fP,
-the following rules should be respected:
+Dependencies are supported by \fBpkgman\fP(8).
+The following rules should be respected:
 
 .IP "" 4
-We list all runtime dependencies except for gcc (libstdc++) and glibc.
+1) We list all runtime dependencies except for gcc (libstdc++) and glibc.
 .IP "" 4
-\fBcore\fP contains essential packages for a CRUX system, and our scripts
-and ports expect the programs provided by \fBcore\fP to be installed; this
-means that:
+2) \fBcore\fP contains essential packages for a system, and our scripts
+and source packages expect the programs provided by \fBcore\fP to be
+installed; this means that:
 .IP "" 8
-build dependencies provided by \fBcore\fP are not listed in the dependency header
+- build dependencies provided by \fBcore\fP are not listed in the
+dependency header
 .IP "" 8
-run-time dependencies from \fBcore\fP which aren't dynamically linked in are not to be listed, either 
+- run-time dependencies from \fBcore\fP which aren't dynamically linked
+in are not to be listed, either
 .TP
 Examples:
 .IP "" 4
-\fBopt/sloccount\fP does \fBnot\fP list \fIperl\fP, because the program is a perl script -- there's no binary that links to \fIlibperl\fP
+\fBopt/sloccount\fP does \fBnot\fP list \fIperl\fP, because the program
+is a perl script -- there's no binary that links to \fIlibperl\fP
 .IP "" 4
-\fBopt/libxml2\fP \fBdoes\fP list \fIzlib\fP, because \fIlibxml\fP is linked to \fIlibz\fP. 
+\fBopt/libxml2\fP \fBdoes\fP list \fIzlib\fP, because \fIlibxml\fP
+is linked to \fIlibz\fP.
 .LP
-The reasoning for this policy is that you can use \fBrevdep\fP to find ports
-that need to be updated if one of the dependent libraries has become
-binary incompatible. To find out what libraries a binary is linked to,
-use \fBldd\fP or \fBfinddeps\fP.
+The reasoning for this policy is that you can use \fBrevdep\fP to find
+packages that need to be updated if one of the dependent libraries
+has become binary incompatible. To find out what libraries a binary
+is linked to, use \fBldd\fP(1) or \fBfinddeps\fP(1).
 
-.SS rc start scripts
+.SS rc.d scripts
 
-You can use the following template script for ports, that provide some
-sort of daemon that should be runnable from a script called \fI$name.rc\fP,
-your port installed to \fI/etc/rc.d/$name\fP. The installation can happen by
-calling the following in your \fibuild()\fP function:
+You can use the following template script for packages, that provide
+some sort of daemon that should be runnable from a script called
+\fI$name.rc\fP, your package installed to \fI/etc/rc.d/$name\fP. The
+installation can happen by calling the following in your \fibuild()\fP
+function:
 
 .EX
     install -D -m 755 $SRC/$name.rc $PKG/etc/rc.d/$name
 .EE
+
 .SH ENVIRONMENT
 .LP
 The \fIbuild\fP function should use the \fI$SRC\fP variable whenever it needs
@@ -171,6 +188,7 @@ undocumented side effect of how it is used by pkgmk(8), it can also
 change the behaviour of pkgmk(8) by rewriting some of its functions
 and variables while the current package is built. However, the \fIbuild\fP
 function has only read access to these mentioned above.
+
 .SH ERRORS
 .LP
 Most of the command failures in \fIbuild()\fP will stop
@@ -183,12 +201,13 @@ constructs like:
 	\fBcommand || ...\fP
 .EE
 .SH SEE ALSO
-pkgmk(8), pkgmk.conf(5),
-.UR https://crux.nu/Main/PortGuidelines
-.UE ,
-.UR https://crux.nu/Main/PrePostInstallGuidelines
-.UE .
+\fBpkgmk\fB(8), \fBpkgmk.conf\fB(5)
+
 .SH COPYRIGHT
-pkgmk is Copyright (c) 2000-2005 Per Liden and Copyright (c) 2006-2018 CRUX team (http://crux.nu).
+Copyright (c) 2000-2005 Per Liden
+.br
+Copyright (c) 2006-2018 CRUX team (http://crux.nu).
+
 pkgmk is licensed through the GNU General Public License.
+.br
 Read the COPYING file for the complete license.
