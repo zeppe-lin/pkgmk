@@ -54,6 +54,8 @@ get_filename() {
 
 	if [[ $1 =~ ^(http|https|ftp|file)://.*/(.+) ]]; then
 		echo "$PKGMK_SOURCE_DIR/${BASH_REMATCH[2]}"
+	elif [[ $1 =~ ^git\+(http|https|ftp|file|git)://.*/(.+) ]]; then
+		echo "$PKGMK_SOURCE_DIR/${BASH_REMATCH[2]}"
 	else
 		if [ "$ABSOLUTE" ]; then
 			echo $PKGMK_ROOT/$1
@@ -104,17 +106,35 @@ check_file() {
 	fi
 }
 
+download_git() {
+	if [[ $1 =~ ^git\+(.+)@(.*)$ ]]; then
+		local _DIR=`get_filename $1`
+		local _URL=${BASH_REMATCH[1]}
+		local _BRANCH=${BASH_REMATCH[2]}
+		if [[ -d $_DIR ]]; then
+			info "Fetch '$_URL'"
+			git -C $_DIR fetch --depth=1
+			git -C $_DIR clean -f
+			git -C $_DIR reset --hard origin/$_BRANCH
+		else
+			info "Clone $_BRANCH branch from '$_URL'"
+			git clone --depth=1 $_URL -b $_BRANCH $_DIR
+		fi
+		return
+	fi
+}
+
 download_file() {
 	info "Downloading '$1'."
+
+	LOCAL_FILENAME=`get_filename $1`
+	LOCAL_FILENAME_PARTIAL="$LOCAL_FILENAME.partial"
 
 	PKGMK_DOWNLOAD_PROG=${PKGMK_DOWNLOAD_PROG:-wget}
 	if [ ! "`type -p ${PKGMK_DOWNLOAD_PROG}`" ]; then
 		error "Command '${PKGMK_DOWNLOAD_PROG}' not found."
 		exit $E_GENERAL
 	fi
-
-	LOCAL_FILENAME=`get_filename $1`
-	LOCAL_FILENAME_PARTIAL="$LOCAL_FILENAME.partial"
 
 	case ${PKGMK_DOWNLOAD_PROG} in
 		aria2c)
@@ -175,21 +195,26 @@ download_file() {
 }
 
 download_source() {
-	local FILE LOCAL_FILENAME
+	local SRCPATH SRCNAME SRCTYPE
+	for SRCPATH in ${source[@]}; do
+		SRCNAME=`get_filename $SRCPATH`
+		[[ "$SRCPATH" =~ ^git+ ]] && SRCTYPE="git" || SRCTYPE="file"
 
-	for FILE in ${source[@]}; do
-		LOCAL_FILENAME=`get_filename $FILE`
-		if [ ! -e $LOCAL_FILENAME ]; then
-			if [ "$LOCAL_FILENAME" = "$FILE" ]; then
-				error "Source file '$LOCAL_FILENAME' not found (can not be downloaded, URL not specified)."
+		if [ ! -e $SRCNAME ]; then
+			if [ "$SRCNAME" = "$SRCPATH" ]; then
+				error "Source file '$SRCNAME' not found (can not be downloaded, URL not specified)."
 				exit $E_DOWNLOAD
 			else
 				if [ "$PKGMK_DOWNLOAD" = "yes" ]; then
-					download_file $FILE
+					[[ "$SRCTYPE" = "git" ]] && download_git $SRCPATH || download_file $SRCPATH
 				else
-					error "Source file '$LOCAL_FILENAME' not found (use option -d to download)."
+					error "Source $SRCTYPE '$SRCNAME' not found (use option -d to download)."
 					exit $E_DOWNLOAD
 				fi
+			fi
+		else
+			if [ "$SRCTYPE" = "git" ]; then
+				[ "$PKGMK_UPDATE_MD5SUM" = "yes" ] || download_git $SRCPATH
 			fi
 		fi
 	done
@@ -204,7 +229,7 @@ unpack_source() {
 			*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z)
 				COMMAND="bsdtar -p -o -C $SRC -xf $LOCAL_FILENAME" ;;
 			*)
-				COMMAND="cp $LOCAL_FILENAME $SRC" ;;
+				COMMAND="cp -r $LOCAL_FILENAME $SRC" ;;
 		esac
 
 		echo "$COMMAND"
