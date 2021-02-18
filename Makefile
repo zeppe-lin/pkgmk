@@ -35,11 +35,11 @@ all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 	sed -e "s/#VERSION#/$(VERSION)/" $< > $@
 
 install: all
-	install -Dm0755 pkgmk        $(DESTDIR)$(BINDIR)/pkgmk
-	install -Dm0644 pkgmk.conf   $(DESTDIR)$(ETCDIR)/pkgmk.conf
-	install -Dm0644 pkgmk.8      $(DESTDIR)$(MANDIR)/man8/pkgmk.8
-	install -Dm0644 pkgmk.conf.5 $(DESTDIR)$(MANDIR)/man5/pkgmk.conf.5
-	install -Dm0644 Pkgfile.5    $(DESTDIR)$(MANDIR)/man5/Pkgfile.5
+	install -m 0755 -D pkgmk        $(DESTDIR)$(BINDIR)/pkgmk
+	install -m 0644 -D pkgmk.conf   $(DESTDIR)$(ETCDIR)/pkgmk.conf
+	install -m 0644 -D pkgmk.8      $(DESTDIR)$(MANDIR)/man8/pkgmk.8
+	install -m 0644 -D pkgmk.conf.5 $(DESTDIR)$(MANDIR)/man5/pkgmk.conf.5
+	install -m 0644 -D Pkgfile.5    $(DESTDIR)$(MANDIR)/man5/Pkgfile.5
 
 uninstall:
 	rm -f $(DESTDIR)$(BINDIR)/pkgmk
