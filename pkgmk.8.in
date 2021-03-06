@@ -24,15 +24,6 @@ file is read by pkgmk at startup.
 
 .SH OPTIONS
 .TP
-.B "\-i, \-\-install"
-Install package using pkgadd(8) after successful build.
-.TP
-.B "\-u, \-\-upgrade"
-Install package as an upgrade using pkgadd(8) after successful build.
-.TP
-.B "\-r, \-\-recursive"
-Search for and build packages recursively.
-.TP
 .B "\-d, \-\-download"
 Download missing source file(s).
 .TP
@@ -132,9 +123,6 @@ A footprint mismatch occured.
 .TP
 .B 8
 An error occured while running the build function.
-.TP
-.B 9
-An error occured while installing the package via pkgadd.
 
 .SH SEE ALSO
 pkgmk.conf(5), pkgadd(8), pkgrm(8), pkginfo(8), rejmerge(8), aria2c(1), curl(1), wget(1)
