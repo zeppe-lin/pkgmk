@@ -490,7 +490,7 @@ build_package() {
 			touch -r $PKGMK_ROOT/$PKGMK_PKGFILE $TARGET &> /dev/null
 		fi
 		error "Building '$TARGET' failed."
-		exit 1
+		exit $E_BUILD
 	fi
 }
 
