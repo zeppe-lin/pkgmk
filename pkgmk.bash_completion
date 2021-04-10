@@ -16,12 +16,14 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-_pkgmk()
+#pkgmk completion
+_pkgmk ()
 {
 	local cur prev
 	COMPREPLY=()
 	cur=${COMP_WORDS[COMP_CWORD]}
 	prev=${COMP_WORDS[COMP_CWORD-1]}
+
 
 	case "$prev" in
 	--help|-h)
@@ -37,13 +39,13 @@ _pkgmk()
 		if [ -z $BASH_COMPLETION ]; then
 			_filedir
 		else
-			COMPREPLY=($(compgen -f $cur))
+			COMPREPLY=( $( compgen -f $cur ) )
 		fi
 		return 0
 		;;
 	esac
 
-	COMPREPLY=($(compgen -W "$(pkgmk --help | awk '/--/{printf "%2s", $2}')" -- $cur))
+	COMPREPLY=( $( compgen -W "$( pkgmk --help | awk '/--/ { printf "%2s ", $2 }' )" -- $cur ) )
 }
 complete -F _pkgmk -o filenames pkgmk
 
