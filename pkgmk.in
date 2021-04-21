@@ -199,7 +199,7 @@ download_source() {
 	local SRCPATH SRCNAME SRCTYPE
 	for SRCPATH in ${source[@]}; do
 		SRCNAME=`get_filename $SRCPATH`
-		if [[ "$SRCPATH" =~ ^git+ ]]; then
+		if [[ "$SRCPATH" =~ ^git\+.*:// ]]; then
 			SRCTYPE="git"
 		else
 			SRCTYPE="file"
