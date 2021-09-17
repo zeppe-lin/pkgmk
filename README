@@ -4,11 +4,25 @@ pkgmk
 pkgmk is a package management utility, which makes a software package.
 It is a fork of CRUX' pkgmk.
 
+
+Dependencies
+------------
+
+- aria2c   (optional)
+- bash
+- curl     (optional)
+- diff
+- git
+- pkgutils
+- scdoc
+- wget
+
+
 License and Copyright
 ---------------------
 
 Copyright (c) 2000-2005 Per Liden and
 Copyright (c) 2006-2017 CRUX team (http://crux.nu).
 
-pkgmk is licensed through the GNU General Public License v2.
-Read the COPYING file for the complete license.
+pkgmk is licensed through the GNU General Public License v2, read the
+COPYING file for the complete license.

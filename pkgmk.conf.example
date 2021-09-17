@@ -1,11 +1,11 @@
 #
-# /etc/pkgmk.conf: pkgmk(8) configuration
+# /etc/pkgmk.conf: configuration file for pkgmk(8).
 #
 # See pkgmk.conf(5) for more information.
 
 export CFLAGS="-O2 -march=x86-64 -pipe -fdiagnostics-color=always"
 export CXXFLAGS="$CFLAGS"
-export JOBS=$(grep processor /proc/cpuinfo | wc -l)
+export JOBS=$(getconf _NPROCESSORS_ONLN)
 export MAKEFLAGS="-j $JOBS"
 
 case $PKGMK_ARCH in
@@ -26,7 +26,7 @@ esac
 # PKGMK_SOURCE_MIRRORS=()
 # PKGMK_SOURCE_DIR="$PWD"
 # PKGMK_PACKAGE_DIR="$PWD"
-# PKGMK_WORK_DIR="$PWD/work"
+# PKGMK_WORK_DIR="$PWD/work/$name"
 #
 # PKGMK_LOCALPATCHES_DIR=""
 # PKGMK_LOCALPATCHES_CMD=""

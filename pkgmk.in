@@ -553,7 +553,7 @@ interrupted() {
 }
 
 print_help() {
-	echo "usage: `basename $PKGMK_COMMAND` [options]"
+	echo "usage: #NAME# [options]"
 	echo "options:"
 	echo "  -d,   --download            download missing source file(s)"
 	echo "  -do,  --download-only       do not build, only download missing source file(s)"
@@ -608,19 +608,19 @@ parse_options() {
 				PKGMK_KEEP_WORK="yes" ;;
 			-cf|--config-file)
 				if [ ! "$2" ]; then
-					echo "`basename $PKGMK_COMMAND`: option $1 requires an argument"
+					echo "#NAME#: option $1 requires an argument"
 					exit 1
 				fi
 				PKGMK_CONFFILE="$2"
 				shift ;;
 			-v|--version)
-				echo "`basename $PKGMK_COMMAND` (pkgutils) $PKGMK_VERSION"
+				echo "#NAME# (pkgutils) #VERSION#"
 				exit 0 ;;
 			-h|--help)
 				print_help
 				exit 0 ;;
 			*)
-				echo "`basename $PKGMK_COMMAND`: invalid option $1"
+				echo "#NAME#: invalid option $1"
 				exit 1 ;;
 		esac
 		shift
@@ -716,8 +716,6 @@ trap "interrupted" SIGHUP SIGINT SIGQUIT SIGTERM
 
 export LC_ALL=POSIX
 
-readonly PKGMK_VERSION="#VERSION#"
-readonly PKGMK_COMMAND="$0"
 readonly PKGMK_ROOT="$PWD"
 
 PKGMK_CONFFILE="/etc/pkgmk.conf"
