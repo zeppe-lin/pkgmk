@@ -11,13 +11,25 @@ ABOUT
 
 DEPENDENCIES
 
-    * aria2 (optional)
-    * bash
-    * curl  (optional)
-    * diff
-    * git
+    Built time:
+
+    * make(1p)
     * pod2man(1pm)
-    * wget
+
+    For downloading the distfiles pkgmk needs one of the following:
+
+    * aria2
+    * curl
+    * wget (is used by default)
+
+    Runtime:
+
+    * bash(1)
+    * bsdtar(1)
+
+    And in any case:
+
+    * POSIX utilities
 
 LICENSE
 
