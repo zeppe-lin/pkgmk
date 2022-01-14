@@ -15,12 +15,11 @@ B<pkgmk> [I<OPTION>]...
 B<pkgmk> is a package management utility, which makes a software package.
 A package is an archive of files (.pkg.tar.gz, .pkg.tar.bz2 or .pkg.tar.xz)
 that can be installed using
-L<pkgadd(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgutils/pkgadd.8.pod>
-.
+L<pkgadd(8)|https://github.com/zeppe-lin/pkgutils/blob/master/pkgadd.8.pod>.
 
 To prepare to use B<pkgmk>, you must write a file named F<Pkgfile>, that
 describes how the package should be build. See
-L<Pkgfile(5)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/Pkgfile.5.pod>
+L<Pkgfile(5)|https://github.com/zeppe-lin/pkgmk/blob/master/Pkgfile.5.pod>
 manual page for more information how-to write Pkgfile files. Once a suitable
 F<Pkgfile> file exists, each time you change some source files, you simple
 execute B<pkgmk> to bring the package up to date. The B<pkgmk> program uses
@@ -109,7 +108,7 @@ Print help and exit.
 =item F<Pkgfile>
 
 Package build description. See
-L<Pkgfile(5)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/Pkgfile.5.pod>
+L<Pkgfile(5)|https://github.com/zeppe-lin/pkgmk/blob/master/Pkgfile.5.pod>
 manual page for more information.
 
 =item F<.footprint>
@@ -123,7 +122,7 @@ MD5 checksum of source files.
 =item F</etc/pkgmk.conf>
 
 Global package make configuration. See
-L<pkgmk.conf(5)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.conf.5.pod>
+L<pkgmk.conf(5)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.conf.5.pod>
 manual page for more information.
 
 =back
@@ -170,22 +169,9 @@ An error occurred while running the B<build> function.
 
 =back
 
-=head1 COPYRIGHT
-
-Copyright (c) 2000-2005 Per Lidén.
-
-Copyright (c) 2006-2017 CRUX team L<http://crux.nu>.
-
-Copyright (c) 2002-2021 Håvard Moen L<mailto:vanilje@netcom.no>.
-
-Copyright (c) 2021-2021 Alexandr Savca L<https://github.com/zeppe-lin>.
-
-License GPLv3+: GNU GPL version 3 or later L<https://gnu.org/licenses/gpl.html>.
-
 =head1 SEE ALSO
 
-L<pkgmk.conf(5)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.conf.5.pod>
-,
-L<Pkgfile(5)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/Pkgfile.5.pod>
+L<pkgmk.conf(5)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.conf.5.pod>,
+L<Pkgfile(5)|https://github.com/zeppe-lin/pkgmk/blob/master/Pkgfile.5.pod>
 
 =cut

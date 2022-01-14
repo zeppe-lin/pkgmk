@@ -14,7 +14,7 @@ B</etc/pkgmk.conf>
 
 This manual page describes the format of the F<pkgmk.conf> file.
 This file is a simple shell file that configures
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>.
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>.
 The file consists of a number of variable assignments of the form
 C<option=value>.
 Comments can be specified by putting a hash (C<#>) symbol as the first
@@ -22,7 +22,7 @@ character on the line.
 
 If some option is not used (commented out or not included in the configuration
 file at all)
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 will take a default action.
 
 The different configuration options are:
@@ -90,7 +90,7 @@ Default: F</var/cache/pkgmk/work/$$>, where I<$$> is the pkgmk's process id.
 =item B<PKGMK_DOWNLOAD="STRING">
 
 If set to C<yes>, 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 will download the source archives if necessary.
 Valid strings are C<yes> and C<no>.
 
@@ -106,7 +106,7 @@ Default: C<wget>.
 =item B<PKGMK_ARIA2C_OPTS="STRING">
 
 Additional options for L<aria2c(1)>, which is used by 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 to download all files.
 
 Default: none.
@@ -116,7 +116,7 @@ Default: none.
 Additional options for
 L<curl(1)|https://www.mankier.com/1/curl>
 , which is used by 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 to download all files.
 
 Default: none.
@@ -126,7 +126,7 @@ Default: none.
 Additional options for
 L<wget(1)|https://www.mankier.com/1/wget>
 , which is used by 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 to download all files.
 
 Default: none.
@@ -134,7 +134,7 @@ Default: none.
 =item B<PKGMK_IGNORE_FOOTPRINT="STRING">
 
 If set to C<yes>, 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 will not perform a footprint check of the built
 package. Valid string are C<yes> and C<no>.
 
@@ -143,7 +143,7 @@ Default: C<no>.
 =item B<PKGMK_IGNORE_MD5SUM="STRING">
 
 If set to C<yes>, 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 will not perform a md5sum check of the source
 archives. Valid string are C<yes> and C<no>.
 
@@ -152,7 +152,7 @@ Default: C<no>.
 =item B<PKGMK_IGNORE_NEW="STRING">
 
 If set to C<yes>, 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 will ignore new files in a footprint mismatch.
 Valid string are C<yes> and C<no>.
 
@@ -161,7 +161,7 @@ Default: C<no>.
 =item B<PKGMK_NO_STRIP="STRING">
 
 If set to C<no>, 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 will strip built binaries.
 Valid string are C<yes> and C<no>.
 
@@ -186,8 +186,7 @@ Default: C<gz>.
 
   export CFLAGS="-O2 -march=x86-64 -pipe -fdiagnostics-color=always"
   export CXXFLAGS="$CFLAGS"
-
-  export JOBS=$(nproc)
+  export JOBS=$(getconf _NPROCESSORS_ONLN)
   export MAKEFLAGS="-j $JOBS"
 
   case $PKGMK_ARCH in
@@ -214,26 +213,13 @@ Default: C<gz>.
 =item F</etc/pkgmk.conf>
 
 Configuration file for
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>.
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>.
 
 =back
 
-=head1 COPYRIGHT
-
-Copyright (c) 2000-2005 Per Lidén.
-
-Copyright (c) 2006-2017 CRUX team L<http://crux.nu>.
-
-Copyright (c) 2002-2021 Håvard Moen L<mailto:vanilje@netcom.no>.
-
-Copyright (c) 2021-2021 Alexandr Savca L<https://github.com/zeppe-lin>.
-
-License GPLv3+: GNU GPL version 3 or later L<https://gnu.org/licenses/gpl.html>.
-
 =head1 SEE ALSO
 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
-,
-L<Pkgfile(5)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/Pkgfile.5.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>,
+L<Pkgfile(5)|https://github.com/zeppe-lin/pkgmk/blob/master/Pkgfile.5.pod>
 
 =cut

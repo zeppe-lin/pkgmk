@@ -156,11 +156,10 @@ F</sbin/mkfs.minix>).
 Do not add new variables to the F<Pkgfile>. Only in very few cases does this
 actually improve the readability or the quality of the package. Further, the
 only variables that are guaranteed to work with future versions of
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 are I<name>, I<version>, I<release> and I<source>. Other names could be in
 conflict with internal variables in
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
-.
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>.
 
 Use the I<$name> and I<$version> variables to make the package easier to
 update/maintain. For example,
@@ -183,7 +182,7 @@ variable as an associative array:
 
   declare -A source=([$name-$version.tar.gz]=http://xyz.org/v1.0.3.tar.gz)
 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 will download C<v1.0.3.tar.gz> as C<$prog-$version.tar.gz>.
 
 =head2 Header
@@ -250,8 +249,8 @@ I<Depends on> can be omitted if there are no dependencies.
 =head2 Dependencies
 
 Dependencies are supported by
-L<pkgman(1)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgman/pkgman.1.pod>
-. The following rules should be respected:
+L<pkgman(1)|https://github.com/zeppe-lin/pkgman/blob/master/pkgman.1.pod>.
+The following rules should be respected:
 
 =over
 
@@ -303,19 +302,17 @@ version in its F<.footprint>.
 =back
 
 The reasoning for this policy is that you can use
-L<revdep(1)|https://github.com/zeppe-lin/zeppe-lin/blob/master/revdep/revdep.1.pod>
+L<revdep(1)|https://github.com/zeppe-lin/revdep/blob/master/revdep.1.pod>
 to find packages that need to be updated if one of the dependent libraries
 has become binary incompatible. To find out what libraries a binary is linked
 to, use L<ldd(1)> or
-L<finddeps(1)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmaint/finddeps.1.pod>
-.
+L<finddeps(1)|https://github.com/zeppe-lin/pkgmaint/blob/master/finddeps.1.pod>.
 
 Also, in the case of updating the major version of Perl/Python, it will be
 useful that the libraries or programs that create Perl/Python bindings have a
 dependency on them. We will have to rebuild everything that depends on
 Perl/Python with one command (see
-L<pkgman-rdep(1)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgman/pkgman-rdep.1.pod>
-).
+L<pkgman-rdep(1)|https://github.com/zeppe-lin/pkgman/blob/master/pkgman-rdep.1.pod>).
 
 =head2 The rc.d scripts
 
@@ -331,14 +328,14 @@ access the files listed in the source variable, and the C<$PKG> variable as
 the root destination of the output files.
 
 Being a shell script executed in the context of
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 , the entire F<Pkgfile> file has access to the variables initialized in
 F<pkgmk.conf> and the default values set by
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 . Also, as an undocumented side effect of how it is used by
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 , it can also change the behaviour of
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 by rewriting some of its functions and variables while the current package is
 built. However, the I<build> function has only read access to these mentioned
 above.
@@ -419,20 +416,7 @@ handle a command failurer you should use constructs like:
 
   # End of file.
 
-=head1 COPYRIGHT
-
-Copyright (c) 2000-2005 Per Lidén.
-
-Copyright (c) 2006-2017 CRUX team L<http://crux.nu>.
-
-Copyright (c) 2002-2021 Håvard Moen L<mailto:vanilje@netcom.no>.
-
-Copyright (c) 2021-2021 Alexandr Savca L<https://github.com/zeppe-lin>.
-
-License GPLv3+: GNU GPL version 3 or later L<https://gnu.org/licenses/gpl.html>.
-
 =head1 SEE ALSO
 
-L<pkgmk(8)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.8.pod>
-,
-L<pkgmk.conf(5)|https://github.com/zeppe-lin/zeppe-lin/blob/master/pkgmk/pkgmk.conf.5.pod>
+L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>,
+L<pkgmk.conf(5)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.conf.5.pod>
