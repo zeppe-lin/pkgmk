@@ -1,28 +1,28 @@
-pkgmk
-=====
+ABOUT
 
-pkgmk is a package management utility, which makes a software package.
-It is a fork of CRUX' pkgmk.
+    This directory contains pkgmk, a package management utility, which
+    makes a software package.
 
+    This is a fork of CRUX' pkgmk (which is a part of pkgutils). The
+    original sources can be downloaded from:
 
-Dependencies
-------------
+    1. https://crux.nu/gitweb/?p=tools/pkgutils.git;a=summary
+    2. git://crux.nu/tools/pkgutils.git
 
-- aria2c   (optional)
-- bash
-- curl     (optional)
-- diff
-- git
-- pkgutils
-- scdoc
-- wget
+DEPENDENCIES
 
+    * aria2 (optional)
+    * bash
+    * curl  (optional)
+    * diff
+    * git
+    * pod2man(1pm)
+    * wget
 
-License and Copyright
----------------------
+LICENSE
 
-Copyright (c) 2000-2005 Per Liden and
-Copyright (c) 2006-2017 CRUX team (http://crux.nu).
+    pkgmk is licensed through the GNU General Public License v2 or
+    later <https://gnu.org/licenses/gpl.html>.
 
-pkgmk is licensed through the GNU General Public License v2, read the
-COPYING file for the complete license.
+    Read the COPYING file for the complete license.
+    Read the COPYRIGHT file for the copyright notice.
