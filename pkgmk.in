@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  pkgutils
+#  pkgmk
 #
 #  Copyright (c) 2000-2005 Per Liden
 #  Copyright (c) 2006-2017 CRUX team (http://crux.nu)
@@ -53,8 +53,6 @@ get_filename() {
 
 	if [[ $1 =~ ^(http|https|ftp|file)://.*/(.+) ]]; then
 		echo "$PKGMK_SOURCE_DIR/${BASH_REMATCH[2]}"
-	elif [[ $1 =~ ^git\+(http|https|ftp|file|git)://.*/(.+) ]]; then
-		echo "$PKGMK_SOURCE_DIR/${BASH_REMATCH[2]}"
 	else
 		if [ "$ABSOLUTE" ]; then
 			echo $PKGMK_ROOT/$1
@@ -105,31 +103,8 @@ check_file() {
 	fi
 }
 
-download_git() {
-	if [[ $1 =~ ^git\+(.+)@(.*)$ ]]; then
-		local _DIR=`get_filename $1`
-		local _URL=${BASH_REMATCH[1]}
-		local _BRANCH=${BASH_REMATCH[2]}
-		if [[ -d $_DIR ]]; then
-			info "Fetch '$_URL'"
-			git -C $_DIR fetch --depth=1
-			git -C $_DIR clean -f
-			git -C $_DIR reset --hard origin/$_BRANCH
-		else
-			info "Clone $_BRANCH branch from '$_URL'"
-			git clone --depth=1 $_URL -b $_BRANCH $_DIR
-		fi
-	else
-		error "Unknown git url: '$1'. Missing branch?"
-		exit $E_DOWNLOAD
-	fi
-}
-
 download_file() {
-	info "Downloading '$1'."
-
-	LOCAL_FILENAME=`get_filename $1`
-	LOCAL_FILENAME_PARTIAL="$LOCAL_FILENAME.partial"
+	info "Downloading '$1' as '$2'."
 
 	PKGMK_DOWNLOAD_PROG=${PKGMK_DOWNLOAD_PROG:-wget}
 	if [ ! "`type -p ${PKGMK_DOWNLOAD_PROG}`" ]; then
@@ -137,23 +112,26 @@ download_file() {
 		exit $E_GENERAL
 	fi
 
+	LOCAL_FILENAME="$2"
+	LOCAL_FILENAME_PARTIAL="$LOCAL_FILENAME.partial"
+
 	case ${PKGMK_DOWNLOAD_PROG} in
-		aria2c)
-			RESUME_CMD="-c"
-			DOWNLOAD_OPTS="--connect-timeout=10 --max-tries=3 --retry-wait=3 \
-				-d $PKGMK_SOURCE_DIR -o ${LOCAL_FILENAME_PARTIAL##*/} $PKGMK_ARIA2C_OPTS"
-			;;
-		curl)
-			RESUME_CMD="-C -"
-			DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3 --retry-delay 3 \
-			-o $LOCAL_FILENAME_PARTIAL $PKGMK_CURL_OPTS"
-			;;
-		wget)
-			RESUME_CMD="-c"
-			DOWNLOAD_OPTS="--compression=none --passive-ftp --no-directories --tries=3 --waitretry=3 \
-			--directory-prefix=$PKGMK_SOURCE_DIR \
-			--output-document=$LOCAL_FILENAME_PARTIAL $PKGMK_WGET_OPTS"
-			;;
+	aria2c)
+		RESUME_CMD="-c"
+		DOWNLOAD_OPTS="--connect-timeout=10 --max-tries=3 --retry-wait=3 \
+			-d $PKGMK_SOURCE_DIR -o ${LOCAL_FILENAME_PARTIAL##*/} $PKGMK_ARIA2C_OPTS"
+		;;
+	curl)
+		RESUME_CMD="-C -"
+		DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3 --retry-delay 3 \
+		-o $LOCAL_FILENAME_PARTIAL $PKGMK_CURL_OPTS"
+		;;
+	wget)
+		RESUME_CMD="-c"
+		DOWNLOAD_OPTS="--compression=none --passive-ftp --no-directories --tries=3 --waitretry=3 \
+		--directory-prefix=$PKGMK_SOURCE_DIR \
+		--output-document=$LOCAL_FILENAME_PARTIAL $PKGMK_WGET_OPTS"
+		;;
 	esac
 
 	if [ -f "$LOCAL_FILENAME_PARTIAL" ]; then
@@ -163,7 +141,7 @@ download_file() {
 
 	error=1
 
-	BASENAME=`get_basename $1`
+	BASENAME=$(get_basename $LOCAL_FILENAME)
 	for REPO in ${PKGMK_SOURCE_MIRRORS[@]}; do
 		REPO="`echo $REPO | sed 's|/$||'`"
 		$PKGMK_DOWNLOAD_PROG $DOWNLOAD_OPTS $RESUME_OPTS $REPO/$BASENAME
@@ -196,34 +174,27 @@ download_file() {
 }
 
 download_source() {
-	local SRCPATH SRCNAME SRCTYPE
-	for SRCPATH in ${source[@]}; do
-		SRCNAME=`get_filename $SRCPATH`
-		if [[ "$SRCPATH" =~ ^git\+.*:// ]]; then
-			SRCTYPE="git"
-		else
-			SRCTYPE="file"
-		fi
+	local FILE LOCAL_FILENAME
 
-		if [ ! -e $SRCNAME ]; then
-			if [ "$SRCNAME" = "$SRCPATH" ]; then
-				error "Source file '$SRCNAME' not found (can not be downloaded, URL not specified)."
+	for FILE in ${!source[@]}; do
+		if [[ $FILE =~ ^[0-9]+$ ]]; then
+			FILE=${source[$FILE]}
+			LOCAL_FILENAME=$(get_filename $FILE)
+		else
+			LOCAL_FILENAME=$(dirname $(get_filename ${source[$FILE]}))/${FILE##*/}
+			FILE=${source[$FILE]}
+		fi
+		if [ ! -e $LOCAL_FILENAME ]; then
+			if [ "$LOCAL_FILENAME" = "$FILE" ]; then
+				error "Source file '$LOCAL_FILENAME' not found (can not be downloaded, URL not specified)."
 				exit $E_DOWNLOAD
 			else
 				if [ "$PKGMK_DOWNLOAD" = "yes" ]; then
-					if [[ "$SRCTYPE" = "git" ]]; then
-						download_git  $SRCPATH
-					else
-						download_file $SRCPATH
-					fi
+					download_file $FILE $LOCAL_FILENAME
 				else
-					error "Source $SRCTYPE '$SRCNAME' not found (use option -d to download)."
+					error "Source file '$LOCAL_FILENAME' not found (use option -d to download)."
 					exit $E_DOWNLOAD
 				fi
-			fi
-		else
-			if [ "$SRCTYPE" = "git" ]; then
-				[ "$PKGMK_UPDATE_MD5SUM" = "yes" ] || download_git $SRCPATH
 			fi
 		fi
 	done
@@ -232,13 +203,19 @@ download_source() {
 unpack_source() {
 	local FILE LOCAL_FILENAME COMMAND
 
-	for FILE in ${source[@]}; do
-		LOCAL_FILENAME=`get_filename $FILE`
+	for FILE in ${!source[@]}; do
+		if [[ $FILE =~ ^[0-9]+$ ]]; then
+			FILE=${source[$FILE]}
+			LOCAL_FILENAME=$(get_filename $FILE)
+		else
+			LOCAL_FILENAME=$(dirname $(get_filename ${source[$FILE]}))/${FILE##*/}
+			FILE=${source[$FILE]}
+		fi
 		case $LOCAL_FILENAME in
-			*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z)
-				COMMAND="bsdtar -p -o -C $SRC -xf $LOCAL_FILENAME" ;;
-			*)
-				COMMAND="cp -r $LOCAL_FILENAME $SRC" ;;
+		*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z)
+			COMMAND="bsdtar -p -o -C $SRC -xf $LOCAL_FILENAME" ;;
+		*)
+			COMMAND="cp $LOCAL_FILENAME $SRC" ;;
 		esac
 
 		echo "$COMMAND"
@@ -254,21 +231,26 @@ unpack_source() {
 }
 
 make_md5sum() {
-	local FILE LOCAL_FILENAMES
+	local FILE LOCAL_FILENAME LOCAL_FILENAMES
 
-	if [ "$source" ]; then
-		for FILE in ${source[@]}; do
-			LOCAL_FILENAMES="$LOCAL_FILENAMES $(get_filename $FILE)"
-		done
+	for FILE in ${!source[@]}; do
+		if [[ $FILE =~ ^[0-9]+$ ]]; then
+			FILE=${source[$FILE]}
+			LOCAL_FILENAME=$(get_filename $FILE)
+		else
+			LOCAL_FILENAME=$(dirname $(get_filename ${source[$FILE]}))/${FILE##*/}
+			FILE=${source[$FILE]}
+		fi
+		LOCAL_FILENAMES+=" $LOCAL_FILENAME"
+	done
 
+	if [ ! -z "$LOCAL_FILENAMES" ]; then
 		md5sum $LOCAL_FILENAMES | sed -e 's|  .*/|  |' | sort -k 2
 	fi
 }
 
 make_footprint() {
-	pkginfo --footprint $TARGET | \
-		sed "s|\tlib/modules/`uname -r`/|\tlib/modules/<kernel-version>/|g" | \
-		sort -k 3
+	pkginfo --footprint $TARGET | sort -k 3
 }
 
 check_md5sum() {
@@ -276,7 +258,7 @@ check_md5sum() {
 
 	cd $PKGMK_ROOT
 
-	if [ -f $PKGMK_MD5SUM ]; then
+	if [ -f $PKGMK_MD5SUM ] && [ -s $PKGMK_MD5SUM ]; then
 		make_md5sum > $FILE.md5sum
 		sort -k 2 $PKGMK_MD5SUM > $FILE.md5sum.orig
 		diff -w -t -U 0 $FILE.md5sum.orig $FILE.md5sum | \
@@ -423,16 +405,6 @@ remove_work_dir() {
 	fi
 }
 
-apply_patches() {
-	if [ -z "$PKGMK_LOCALPATCHES_CMD" ]; then
-		PKGMK_LOCALPATCHES_CMD="patch -r- --no-backup-if-mismatch -d "$SRC"/*/ -Np1"
-	fi
-	if [ -n "$PKGMK_LOCALPATCHES_DIR" ] && [ -d "$PKGMK_LOCALPATCHES_DIR/$name" ]; then
-		find "$PKGMK_LOCALPATCHES_DIR/$name" -type f -name "*.diff" -o -name "*.patch" \
-			| xargs -I{} $PKGMK_LOCALPATCHES_CMD -i {}
-	fi
-}
-
 build_package() {
 	local BUILD_SUCCESSFUL="no"
 	local COMPRESSION
@@ -444,12 +416,12 @@ build_package() {
 		warning "Packages should be built as root."
 	fi
 
-	info "Building '$TARGET'."
+	info "Building '$TARGET' started $(date)."
 
 	unpack_source
 
 	cd $SRC
-	(set -e -x ; apply_patches ; build)
+	(set -e -x ; build)
 
 	if [ $? = 0 ]; then
 		if [ "$PKGMK_NO_STRIP" = "no" ]; then
@@ -487,7 +459,7 @@ build_package() {
 	remove_work_dir
 
 	if [ "$BUILD_SUCCESSFUL" = "yes" ]; then
-		info "Building '$TARGET' succeeded."
+		info "Building '$TARGET' succeeded $(date)."
 	else
 		if [ -f $TARGET ]; then
 			touch -r $PKGMK_ROOT/$PKGMK_PKGFILE $TARGET &> /dev/null
@@ -505,8 +477,9 @@ clean() {
 		rm -f $TARGET
 	fi
 
-	for FILE in ${source[@]}; do
-		LOCAL_FILENAME=`get_filename $FILE`
+	for FILE in ${!source[@]}; do
+		[[ $FILE =~ ^[0-9]+$ ]] && FILE=${source[$FILE]}
+		LOCAL_FILENAME=$(get_filename $FILE)
 		if [ -e $LOCAL_FILENAME ] && [ "$LOCAL_FILENAME" != "$FILE" ]; then
 			info "Removing $LOCAL_FILENAME"
 			rm -f $LOCAL_FILENAME
@@ -533,13 +506,23 @@ build_needed() {
 
 	if [ -f $TARGET ]; then
 		RESULT="no"
-		for FILE in $PKGMK_PKGFILE ${source[@]}; do
-			FILE=`get_filename $FILE`
-			if [ -e $FILE ] && [ ! $TARGET -nt $FILE ]; then
-				RESULT="yes"
-				break
-			fi
-		done
+		if [ ! $TARGET -nt $PKGMK_PKGFILE ]; then
+			RESULT="yes"
+		else
+			for FILE in ${!source[@]}; do
+				if [[ $FILE =~ ^[0-9]+$ ]]; then
+					FILE=${source[$FILE]}
+					LOCAL_FILENAME=$(get_filename $FILE)
+				else
+					LOCAL_FILENAME=$(dirname $(get_filename ${source[$FILE]}))/${FILE##*/}
+					FILE=${source[$FILE]}
+				fi
+				if [ ! -e $LOCAL_FILENAME ] || [ ! $TARGET -nt $LOCAL_FILENAME ]; then
+					RESULT=yes
+					break
+				fi
+			done
+		fi
 	fi
 
 	echo $RESULT
@@ -553,75 +536,79 @@ interrupted() {
 }
 
 print_help() {
-	echo "usage: #NAME# [options]"
-	echo "options:"
-	echo "  -d,   --download            download missing source file(s)"
-	echo "  -do,  --download-only       do not build, only download missing source file(s)"
-	echo "  -eo,  --extract-only        do not build, only extract source file(s)"
-	echo "  -utd, --up-to-date          do not build, only check if package is up to date"
-	echo "  -uf,  --update-footprint    update footprint using result from last build"
-	echo "  -if,  --ignore-footprint    build package without checking footprint"
-	echo "  -in,  --ignore-new          build package, ignore new files in a footprint missmatch"
-	echo "  -um,  --update-md5sum       update md5sum"
-	echo "  -im,  --ignore-md5sum       build package without checking md5sum"
-	echo "  -cm,  --check-md5sum        do not build, only check md5sum"
-	echo "  -ns,  --no-strip            do not strip executable binaries or libraries"
-	echo "  -f,   --force               build package even if it appears to be up to date"
-	echo "  -c,   --clean               remove package and downloaded files"
-	echo "  -kw,  --keep-work           keep temporary working directory"
-	echo "  -cf,  --config-file <file>  use alternative configuration file"
-	echo "  -v,   --version             print version and exit"
-	echo "  -h,   --help                print help and exit"
+	cat <<EOF
+Usage: pkgmk [OPTION]...
+Make software package.
+
+Mandatory arguments to long options are mandatory for short options too.
+  -d,   --download           download missing source file(s)
+  -do,  --download-only      do not build, only download missing source file(s)
+  -eo,  --extract-only       do not build, only extract source file(s)
+  -utd, --up-to-date         do not build, only check if package is up to date
+  -uf,  --update-footprint   update footprint using result from last build
+  -if,  --ignore-footprint   build package without checking footprint
+  -in,  --ignore-new         build package, ignore new files in a footprint mismatch
+  -um,  --update-md5sum      update md5sum
+  -im,  --ignore-md5sum      build package without checking md5sum
+  -cm,  --check-md5sum       do not build, only check md5sum
+  -ns,  --no-strip           do not strip executable binaries or libraries
+  -f,   --force              build package even if it appears to be up to date
+  -c,   --clean              remove package and downloaded files
+  -kw,  --keep-work          keep temporary working directory
+  -cf,  --config-file FILE   use alternative configuration file
+  -v,   --version            print version and exit
+  -h,   --help               print help and exit
+EOF
 }
 
 parse_options() {
 	while [ "$1" ]; do
 		case $1 in
-			-d|--download)
-				PKGMK_DOWNLOAD="yes" ;;
-			-do|--download-only)
-				PKGMK_DOWNLOAD="yes"
-				PKGMK_DOWNLOAD_ONLY="yes" ;;
-			-eo|--extract-only)
-				PKGMK_EXTRACT_ONLY="yes" ;;
-			-utd|--up-to-date)
-				PKGMK_UP_TO_DATE="yes" ;;
-			-uf|--update-footprint)
-				PKGMK_UPDATE_FOOTPRINT="yes" ;;
-			-if|--ignore-footprint)
-				PKGMK_IGNORE_FOOTPRINT="yes" ;;
-			-in|--ignore-new)
-				PKGMK_IGNORE_NEW="yes" ;;
-			-um|--update-md5sum)
-				PKGMK_UPDATE_MD5SUM="yes" ;;
-			-im|--ignore-md5sum)
-				PKGMK_IGNORE_MD5SUM="yes" ;;
-			-cm|--check-md5sum)
-				PKGMK_CHECK_MD5SUM="yes" ;;
-			-ns|--no-strip)
-				PKGMK_NO_STRIP="yes" ;;
-			-f|--force)
-				PKGMK_FORCE="yes" ;;
-			-c|--clean)
-				PKGMK_CLEAN="yes" ;;
-			-kw|--keep-work)
-				PKGMK_KEEP_WORK="yes" ;;
-			-cf|--config-file)
-				if [ ! "$2" ]; then
-					echo "#NAME#: option $1 requires an argument"
-					exit 1
-				fi
-				PKGMK_CONFFILE="$2"
-				shift ;;
-			-v|--version)
-				echo "#NAME# (pkgutils) #VERSION#"
-				exit 0 ;;
-			-h|--help)
-				print_help
-				exit 0 ;;
-			*)
-				echo "#NAME#: invalid option $1"
-				exit 1 ;;
+		-d|--download)
+			PKGMK_DOWNLOAD="yes" ;;
+		-do|--download-only)
+			PKGMK_DOWNLOAD="yes"
+			PKGMK_DOWNLOAD_ONLY="yes" ;;
+		-eo|--extract-only)
+			PKGMK_EXTRACT_ONLY="yes" ;;
+		-utd|--up-to-date)
+			PKGMK_UP_TO_DATE="yes" ;;
+		-uf|--update-footprint)
+			PKGMK_UPDATE_FOOTPRINT="yes" ;;
+		-if|--ignore-footprint)
+			PKGMK_IGNORE_FOOTPRINT="yes" ;;
+		-in|--ignore-new)
+			PKGMK_IGNORE_NEW="yes" ;;
+		-um|--update-md5sum)
+			PKGMK_UPDATE_MD5SUM="yes" ;;
+		-im|--ignore-md5sum)
+			PKGMK_IGNORE_MD5SUM="yes" ;;
+		-cm|--check-md5sum)
+			PKGMK_CHECK_MD5SUM="yes" ;;
+		-ns|--no-strip)
+			PKGMK_NO_STRIP="yes" ;;
+		-f|--force)
+			PKGMK_FORCE="yes" ;;
+		-c|--clean)
+			PKGMK_CLEAN="yes" ;;
+		-kw|--keep-work)
+			PKGMK_KEEP_WORK="yes" ;;
+		-cf|--config-file)
+			if [ ! "$2" ]; then
+				echo "pkgmk: option $1 requires an argument"
+				exit 1
+			fi
+			PKGMK_CONFFILE="$2"
+			shift ;;
+		-v|--version)
+			echo "pkgmk @VERSION@"
+			exit 0 ;;
+		-h|--help)
+			print_help
+			exit 0 ;;
+		*)
+			echo "pkgmk: invalid option $1"
+			exit 1 ;;
 		esac
 		shift
 	done
@@ -714,7 +701,7 @@ main() {
 
 trap "interrupted" SIGHUP SIGINT SIGQUIT SIGTERM
 
-export LC_ALL=POSIX
+export LC_ALL=C.UTF-8
 
 readonly PKGMK_ROOT="$PWD"
 
@@ -728,6 +715,10 @@ PKGMK_SOURCE_MIRRORS=()
 PKGMK_SOURCE_DIR="$PWD"
 PKGMK_PACKAGE_DIR="$PWD"
 PKGMK_WORK_DIR="$PWD/work"
+
+export TEMP="$PKGMK_WORK_DIR"
+export TMP="$PKGMK_WORK_DIR"
+export TMPDIR="$PKGMK_WORK_DIR"
 
 PKGMK_COMPRESSION_MODE="gz"
 
@@ -748,4 +739,4 @@ PKGMK_CLEAN="no"
 
 main "$@"
 
-# End of file
+# End of file.

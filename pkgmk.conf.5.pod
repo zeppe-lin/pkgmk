@@ -73,19 +73,19 @@ Default: none.
 
 Set directory for downloaded source archives.
 
-Default: F</var/cache/pkgmk/sources>.
+Default: directory of Pkgfile.
 
 =item B<PKGMK_PACKAGE_DIR="STRING">
 
 Set directory for built packages.
 
-Default: F</var/cache/pkgmk/packages>.
+Default: directory of Pkgfile.
 
 =item B<PKGMK_WORK_DIR="STRING">
 
 Set directory for building packages.
 
-Default: F</var/cache/pkgmk/work/$$>, where I<$$> is the pkgmk's process id.
+Default: '\fBfoo\fP/work', where \fBfoo\fP is the directory of the Pkgfile.
 
 =item B<PKGMK_DOWNLOAD="STRING">
 
@@ -105,7 +105,7 @@ Default: C<wget>.
 
 =item B<PKGMK_ARIA2C_OPTS="STRING">
 
-Additional options for L<aria2c(1)>, which is used by 
+Additional options for L<aria2c(1)>, which is used by
 L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 to download all files.
 
@@ -114,8 +114,7 @@ Default: none.
 =item B<PKGMK_CURL_OPTS="STRING">
 
 Additional options for
-L<curl(1)|https://www.mankier.com/1/curl>
-, which is used by 
+L<curl(1)|https://www.mankier.com/1/curl>, which is used by
 L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 to download all files.
 
@@ -124,8 +123,7 @@ Default: none.
 =item B<PKGMK_WGET_OPTS="STRING">
 
 Additional options for
-L<wget(1)|https://www.mankier.com/1/wget>
-, which is used by 
+L<wget(1)|https://www.mankier.com/1/wget>, which is used by
 L<pkgmk(8)|https://github.com/zeppe-lin/pkgmk/blob/master/pkgmk.8.pod>
 to download all files.
 
