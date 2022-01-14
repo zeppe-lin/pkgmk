@@ -53,16 +53,6 @@ Set L<make(1)> options.
 
 Default: none.
 
-=item B<export TMP="STRING">
-
-=item B<export TEMP="STRING">
-
-=item B<export TMPDIR="STRING">
-
-Set directory for temporary files.
-
-Default: points to B<PKGMK_WORK_DIR> (see below).
-
 =item B<PKGMK_SOURCE_MIRRORS=("STRING")>
 
 Set mirrors to check and download source archives from.
