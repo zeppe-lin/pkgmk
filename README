@@ -3,9 +3,12 @@ ABOUT
     This directory contains pkgmk, a package management utility, which
     makes a software package.
 
-    This is a fork of CRUX' pkgmk (which is a part of pkgutils). The
-    original sources can be downloaded from:
+    It is a fork of CRUX' pkgmk (extracted from pkgutils source). It
+    was rewritten in POSIX shell, added support of aria2 downloader,
+    and adjusted for zeppe-lin distribution. Use `git log` to see the
+    differences.
 
+    The original sources can be downloaded from:
     1. https://crux.nu/gitweb/?p=tools/pkgutils.git;a=summary
     2. git://crux.nu/tools/pkgutils.git
 
