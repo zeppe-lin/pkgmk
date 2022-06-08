@@ -404,6 +404,16 @@ remove_work_dir() {
 	fi
 }
 
+remove_junkfiles() {
+	if [ -f $PKGMK_ROOT/.junk ] && [ -s $PKGMK_ROOT/.junk ]; then
+		echo "=======> Remove junk files:"
+		while read -r junk; do
+			echo "'$junk'"
+			rm -rf $PKG/$junk
+		done < $PKGMK_ROOT/.junk
+	fi
+}
+
 build_package() {
 	# globals
 	BUILD_SUCCESSFUL="no" 
@@ -431,6 +441,7 @@ build_package() {
 		fi
 
 		compress_manpages
+		remove_junkfiles
 
 		cd "$PKG"
 		info "Build result:"
