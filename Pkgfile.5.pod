@@ -1,5 +1,5 @@
 # This file is a part of pkgmk.
-# See the COPYING and COPYRIGHT files for corresponding information.
+# See COPYING and COPYRIGHT files for corresponding information.
 
 =pod
 
