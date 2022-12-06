@@ -1,4 +1,3 @@
-# This file is a part of pkgmk.
 # See COPYING and COPYRIGHT files for corresponding information.
 
 =pod
@@ -408,7 +407,7 @@ like:
 
 =head1 SEE ALSO
 
-L<pkgmk(8)>, L<pkgmk.conf(5)>.
+L<pkgmk(8)>, L<pkgmk.conf(5)>
 
 =cut
 

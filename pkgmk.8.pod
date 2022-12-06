@@ -1,4 +1,3 @@
-# This file is a part of pkgmk.
 # See COPYING and COPYRIGHT files for corresponding information.
 
 =pod
@@ -171,7 +170,7 @@ An error occurred while running the B<build> function.
 
 =head1 SEE ALSO
 
-L<pkgmk.conf(5)>, L<Pkgfile(5)>.
+L<pkgmk.conf(5)>, L<Pkgfile(5)>
 
 =cut
 
