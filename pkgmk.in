@@ -1,19 +1,19 @@
 #!/bin/sh -e
-# This file is a part of pkgmk.
 # See COPYING and COPYRIGHT files for corresponding information.
+
+######################################################################
+# !! Note !! about agreements of the variables declaration in the
+# pkgmk's code:
 #
-# NOTE about some agreements of the variables declaration in the
-# code:
+# ${var} or ${VAR}  -> external, global variable, declared in Pkgfile
+#                      or pkgmk.conf
 #
-# ${var}/${VAR}
-#   `- external, global variable, declared in Pkgfile or pkgmk.conf
+# $VAR              -> internal, global variable
 #
-# $VAR
-#   `- internal, global variable
+# $__VAR            -> local variable
 #
-# $__VAR
-#   `- local variable
-#
+######################################################################
+
 
 ######################################################################
 # error codes
