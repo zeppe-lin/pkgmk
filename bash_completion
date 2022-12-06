@@ -1,9 +1,7 @@
 # Bash programmable completion for pkgmk.
-# This file is a part of pkgmk.
 # See COPYING and COPYRIGHT files for corresponding information.
 
-_pkgmk()
-{
+_pkgmk() {
   local cur prev
   COMPREPLY=()
   cur=${COMP_WORDS[COMP_CWORD]}
@@ -33,7 +31,7 @@ _pkgmk()
   esac
 
   COMPREPLY=($(compgen -W \
-    "$(pkgmk --help | awk '/--/{ printf "%2s ", $2 }')" -- $cur))
+    "$(pkgmk --help | awk '/--/{printf "%2s ", $2}')" -- $cur))
 }
 complete -F _pkgmk -o filenames pkgmk
 
