@@ -17,6 +17,10 @@ all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 %: %.in
 	sed -e "s/@VERSION@/${VERSION}/g" $< > $@
 
+check:
+	@podchecker *.pod
+	@grep -Eiho "https?://[^\"\\'> ]+" *.* | httpx -silent -fc 200 -sc
+
 install: all
 	mkdir -p ${DESTDIR}${BINDIR}
 	mkdir -p ${DESTDIR}${MANDIR}/man5
