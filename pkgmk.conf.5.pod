@@ -15,13 +15,16 @@ B</etc/pkgmk.conf>
 =head1 DESCRIPTION
 
 This manual page describes the format of the F<pkgmk.conf> file.  This
-file is a simple shell file that configures L<pkgmk(8)>.  The file
+file is a simple shell file that configures
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>.  The file
 consists of a number of variable assignments of the form
 C<option=value>.  Comments can be specified by putting a hash (C<#>)
 symbol as the first character on the line.
 
 If some option is not used (commented out or not included in the
-configuration file at all) L<pkgmk(8)> will take a default action.
+configuration file at all)
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will take a
+default action.
 
 The different configuration options are:
 
@@ -48,7 +51,7 @@ Default: none.
 
 =item B<export MAKEFLAGS="STRING">
 
-Set L<make(1)> options.
+Set L<make(1)|https://www.mankier.com/1/make> options.
 
 Default: none.
 
@@ -79,8 +82,10 @@ Pkgfile.
 
 =item B<PKGMK_DOWNLOAD="STRING">
 
-If set to C<yes>, L<pkgmk(8)> will download the source archives if
-necessary.  Valid strings are C<yes> and C<no>.
+If set to C<yes>,
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>
+will download the source archives if necessary.  Valid strings are
+C<yes> and C<no>.
 
 Default: no.
 
@@ -93,50 +98,62 @@ Default: C<curl>.
 
 =item B<PKGMK_ARIA2C_OPTS="STRING">
 
-Additional options for L<aria2c(1)>, which is used by L<pkgmk(8)> to
-download all files.
+Additional options for
+L<aria2c(1)|https://www.mankier.com/1/aria2c>, which is used by
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> to download all
+files.
 
 Default: none.
 
 =item B<PKGMK_CURL_OPTS="STRING">
 
-Additional options for L<curl(1)>, which is used by L<pkgmk(8)> to
-download all files.
+Additional options for
+L<curl(1)|https://www.mankier.com/1/curl>, which is used by
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> to download all
+files.
 
 Default: none.
 
 =item B<PKGMK_WGET_OPTS="STRING">
 
-Additional options for L<wget(1)>, which is used by L<pkgmk(8)> to
-to download all files.
+Additional options for
+L<wget(1)|https://www.mankier.com/1/wget>, which is used by
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> to download all
+files.
 
 Default: none.
 
 =item B<PKGMK_IGNORE_FOOTPRINT="STRING">
 
-If set to C<yes>, L<pkgmk(8)> will not perform a footprint check of
-the built package.  Valid string are C<yes> and C<no>.
+If set to C<yes>,
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will not perform
+a footprint check of the built package.  Valid string are C<yes> and
+C<no>.
 
 Default: C<no>.
 
 =item B<PKGMK_IGNORE_MD5SUM="STRING">
 
-If set to C<yes>, L<pkgmk(8)> will not perform a md5sum check of the
-source archives.  Valid string are C<yes> and C<no>.
+If set to C<yes>,
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will not perform
+a md5sum check of the source archives.  Valid string are C<yes> and
+C<no>.
 
 Default: C<no>.
 
 =item B<PKGMK_IGNORE_NEW="STRING">
 
-If set to C<yes>, L<pkgmk(8)> will ignore new files in a footprint
-mismatch.  Valid string are C<yes> and C<no>.
+If set to C<yes>,
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will ignore new
+files in a footprint mismatch.  Valid string are C<yes> and C<no>.
 
 Default: C<no>.
 
 =item B<PKGMK_NO_STRIP="STRING">
 
-If set to C<no>, L<pkgmk(8)> will strip built binaries.  Valid string
-are C<yes> and C<no>.
+If set to C<no>,
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will strip built
+binaries.  Valid string are C<yes> and C<no>.
 
 Default: C<no>.
 
@@ -185,13 +202,15 @@ Default: C<gz>.
 
 =item F</etc/pkgmk.conf>
 
-Configuration file for L<pkgmk(8)>.
+Configuration file for
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>.
 
 =back
 
 =head1 SEE ALSO
 
-L<pkgmk(8)>, L<Pkgfile(5)>
+L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>,
+L<Pkgfile(5)|https://zeppe-lin.github.io/Pkgfile.5.html>
 
 =cut
 

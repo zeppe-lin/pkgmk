@@ -16,10 +16,12 @@ B<pkgmk> [I<OPTION>]...
 
 B<pkgmk> is a package management utility, which makes a software
 package.  A package is an archive of files (.pkg.tar.gz, .pkg.tar.bz2
-or .pkg.tar.xz) that can be installed using L<pkgadd(8)>.
+or .pkg.tar.xz) that can be installed using
+L<pkgadd(8)|https://zeppe-lin.github.io/pkgadd.8.html>.
 
 To prepare to use B<pkgmk>, you must write a file named F<Pkgfile>,
-that describes how the package should be build.  See L<Pkgfile(5)>
+that describes how the package should be build.  See
+L<Pkgfile(5)|https://zeppe-lin.github.io/Pkgfile.5.html>
 for more information how-to write Pkgfile files.  Once a suitable
 F<Pkgfile> file exists, each time you change some source files, you
 simple execute B<pkgmk> to bring the package up to date.  The B<pkgmk>
@@ -108,7 +110,9 @@ Print help and exit.
 
 =item F<Pkgfile>
 
-Package build description.  See L<Pkgfile(5)> for more information.
+Package build description.  See
+L<Pkgfile(5)|https://zeppe-lin.github.io/Pkgfile.5.html> for more
+information.
 
 =item F<.footprint>
 
@@ -120,8 +124,9 @@ MD5 checksum of source files.
 
 =item F</etc/pkgmk.conf>
 
-Global package make configuration.  See L<pkgmk.conf(5)> for more
-information.
+Global package make configuration.  See
+L<pkgmk.conf(5)|https://zeppe-lin.github.io/pkgmk.conf.5.html> for
+more information.
 
 =back
 
@@ -170,7 +175,8 @@ An error occurred while running the B<build> function.
 
 =head1 SEE ALSO
 
-L<pkgmk.conf(5)>, L<Pkgfile(5)>
+L<pkgmk.conf(5)|https://zeppe-lin.github.io/pkgmk.conf.5.html>,
+L<Pkgfile(5)|https://zeppe-lin.github.io/Pkgfile.5.html>
 
 =cut
 
