@@ -40,6 +40,8 @@ The original sources can be downloaded from:
 
 =head3 Build time
 
+=over
+
 =item *
 
 L<make(1p)|https://www.mankier.com/1p/make>,
@@ -60,6 +62,8 @@ distribution
 =back
 
 =head3 Runtime
+
+=over
 
 =item *
 
