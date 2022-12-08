@@ -26,7 +26,7 @@ and not B<name=Eterm>.  Dashes are also allowed.
 
 In case the package is added to the packages sources tree the exact
 same name should be used for the name of the directory in the packages
-sources structure, i.e. I</usr/src/zeppe-lin/???/eterm>.
+sources structure, i.e. I</usr/src/pkgsrc/???/eterm>.
 
 Do not combine several separately distributed programs/libraries into
 one package.  Make several packages instead.
