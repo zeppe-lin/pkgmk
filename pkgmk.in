@@ -727,7 +727,7 @@ export LC_ALL=C.UTF-8
 
 readonly PKGMK_ROOT="$PWD"
 
-PKGMK_CONFFILE="/etc/pkgmk.conf"
+PKGMK_CONFFILE="@ETCDIR@/pkgmk.conf"
 
 PKGMK_SOURCE_MIRRORS=
 PKGMK_SOURCE_DIR="$PWD"

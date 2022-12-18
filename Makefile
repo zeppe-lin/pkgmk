@@ -6,16 +6,22 @@ VERSION = 5.41
 # paths
 PREFIX  = /usr/local
 BINDIR  = ${PREFIX}/sbin
+ETCDIR  = ${PREFIX}/etc
 MANDIR  = ${PREFIX}/share/man
 
 all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 
 %: %.pod
-	pod2man --nourls -r ${VERSION} -c ' ' -n $(basename $@) \
-		-s $(subst .,,$(suffix $@)) $<  >  $@
+	sed "s|@ETCDIR@|${ETCDIR}|g" $< | pod2man --nourls \
+		-r ${VERSION} -c ' ' \
+		-n $(basename $@) \
+		-s $(subst .,,$(suffix $@)) \
+		- > $@
 
 %: %.in
-	sed -e "s/@VERSION@/${VERSION}/g" $< > $@
+	sed -e "s|@VERSION@|${VERSION}|g" \
+	    -e "s|@ETCDIR@|${ETCDIR}|g" \
+	    $< > $@
 
 check:
 	@podchecker *.pod
