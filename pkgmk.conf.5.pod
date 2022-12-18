@@ -169,7 +169,7 @@ Default: C<gz>.
 =head1 EXAMPLE
 
   #
-  # @ETCDIR@/pgkmk.conf: pkgmk(8) configuration
+  # @ETCDIR@/pkgmk.conf: pkgmk(8) configuration
   #
   # See pkgmk.conf(5) for more information.
   #
