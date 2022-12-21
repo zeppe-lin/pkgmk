@@ -555,7 +555,7 @@ Mandatory arguments to long options are mandatory for short options too.
   -f,   --force              build package even if it appears to be up to date
   -c,   --clean              remove package and downloaded files
   -kw,  --keep-work          keep temporary working directory
-  -cf,  --config-file FILE   use alternative configuration file
+  -cf,  --config-file=FILE   use alternative configuration file
   -v,   --version            print version and exit
   -h,   --help               print help and exit
 EOF
@@ -611,6 +611,13 @@ parse_options() {
         fi
         PKGMK_CONFFILE="$2"
         shift
+        ;;
+      --config-file=*)
+        PKGMK_CONFFILE=$(echo "$1" | cut -d= -f2-)
+        if [ ! "$PKGMK_CONFFILE" ]; then
+          echo "pkgmk: option --config-file requires an argument"
+          exit 1
+        fi
         ;;
       -v|--version)
         echo "pkgmk @VERSION@"
