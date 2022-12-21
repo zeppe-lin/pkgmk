@@ -10,7 +10,7 @@ pkgmk.conf - configuration file for pkgmk
 
 =head1 SYNOPSIS
 
-B<@ETCDIR@/pkgmk.conf>
+B<@SYSCONFDIR@/pkgmk.conf>
 
 =head1 DESCRIPTION
 
@@ -169,7 +169,7 @@ Default: C<gz>.
 =head1 EXAMPLE
 
   #
-  # @ETCDIR@/pkgmk.conf: pkgmk(8) configuration
+  # @SYSCONFDIR@/pkgmk.conf: pkgmk(8) configuration
   #
   # See pkgmk.conf(5) for more information.
   #
@@ -200,7 +200,7 @@ Default: C<gz>.
 
 =over 8
 
-=item F<@ETCDIR@/pkgmk.conf>
+=item F<@SYSCONFDIR@/pkgmk.conf>
 
 Configuration file for
 L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>.
