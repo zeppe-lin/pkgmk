@@ -1,5 +1,8 @@
 #!/bin/sh -e
+#
+# pkgmk - make software packages.
 # See COPYING and COPYRIGHT files for corresponding information.
+#
 
 ######################################################################
 # !! Note !! about agreements of the variables declaration in the
@@ -727,7 +730,7 @@ export LC_ALL=C.UTF-8
 
 readonly PKGMK_ROOT="$PWD"
 
-PKGMK_CONFFILE="@ETCDIR@/pkgmk.conf"
+PKGMK_CONFFILE="@SYSCONFDIR@/pkgmk.conf"
 
 PKGMK_SOURCE_MIRRORS=
 PKGMK_SOURCE_DIR="$PWD"
