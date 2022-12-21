@@ -48,6 +48,11 @@ error() {
   info "ERROR: $1" >&2
 }
 
+dfatal() {
+  echo "pkgmk: $1" >/dev/stderr
+  exit 1
+}
+
 ######################################################################
 # pkgmk's routines
 ######################################################################
@@ -606,8 +611,7 @@ parse_options() {
         ;;
       -cf|--config-file)
         if [ ! "$2" ]; then
-          echo "pkgmk: option $1 requires an argument"
-          exit 1
+          dfatal "option $1 requires an argument"
         fi
         PKGMK_CONFFILE="$2"
         shift
@@ -615,8 +619,7 @@ parse_options() {
       --config-file=*)
         PKGMK_CONFFILE=$(echo "$1" | cut -d= -f2-)
         if [ ! "$PKGMK_CONFFILE" ]; then
-          echo "pkgmk: option --config-file requires an argument"
-          exit 1
+          dfatal "option --config-file requires an argument"
         fi
         ;;
       -v|--version)
@@ -628,8 +631,7 @@ parse_options() {
         exit 0
         ;;
       *)
-        echo "pkgmk: invalid option $1"
-        exit 1
+        dfatal "invalid option $1"
         ;;
     esac
     shift
