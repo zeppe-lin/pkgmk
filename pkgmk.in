@@ -450,7 +450,8 @@ build_package() {
       lz)  __COMPRESSION="--lzip" ;;
     esac
 
-    if bsdtar -c $__COMPRESSION -f "$TARGET" -- *  &&  bsdtar -t -v -f "$TARGET"; then
+    if bsdtar --format=gnutar -c $__COMPRESSION -f "$TARGET" -- * \
+    && bsdtar -t -v -f "$TARGET"; then
       BUILD_SUCCESSFUL="yes"
 
       if [ "$PKGMK_IGNORE_FOOTPRINT" = "yes" ]; then
