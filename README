@@ -21,7 +21,6 @@ ABOUT pkgmk
     1. git://crux.nu/tools/pkgutils.git                         (git)
     2. https://crux.nu/gitweb/?p=tools/pkgutils.git;a=summary   (web)
 
-
 REQUIREMENTS
 
     Build time:
@@ -37,11 +36,8 @@ REQUIREMENTS
     * bsdtar(1) or tar(1) for unpacking sources
 
     Tests:
-    * podchecker(1pm)
-      check PODs for errors
-    * httpx(1)
-      check URLs for non-200 response code
-
+    * podchecker(1pm) to check PODs for errors
+    * httpx(1) to check URLs for non-200 response code
 
 INSTALL
 
@@ -50,7 +46,6 @@ INSTALL
 
     The shell commands "make && make check" should build and start
     some tests.  See "Makefile" for additional information.
-
 
 LICENSE
 
