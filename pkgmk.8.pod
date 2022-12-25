@@ -1,5 +1,3 @@
-# See COPYING and COPYRIGHT files for corresponding information.
-
 =pod
 
 =encoding UTF-8
@@ -28,7 +26,7 @@ simple execute B<pkgmk> to bring the package up to date.  The B<pkgmk>
 program uses F<Pkgfile> file and the last-modification times of the
 source files to decide if the package needs to be updated.
 
-Global configuration file is stored in F<@SYSCONFDIR@/pkgmk.conf>.
+Global configuration file is stored in F</etc/pkgmk.conf>.
 This file is read by B<pkgmk> at startup.
 
 =head1 OPTIONS
@@ -93,7 +91,7 @@ Keep temporary working directory.
 =item B<-cf>, B<--config-file> I<FILE>
 
 Use alternative configuration file (default is
-F<@SYSCONFDIR@/pkgmk.conf>).
+F</etc/pkgmk.conf>).
 
 =item B<-v>, B<--version>
 
@@ -123,7 +121,7 @@ Package footprint (used for regression testing).
 
 MD5 checksum of source files.
 
-=item F<@SYSCONFDIR@/pkgmk.conf>
+=item F</etc/pkgmk.conf>
 
 Global package make configuration.  See
 L<pkgmk.conf(5)|https://zeppe-lin.github.io/pkgmk.conf.5.html> for
