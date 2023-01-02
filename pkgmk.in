@@ -43,7 +43,7 @@ error() {
 }
 
 dfatal() {
-  echo "pkgmk: $1" >/dev/stderr
+  echo "pkgmk: $1" >&2
   exit 1
 }
 
