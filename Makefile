@@ -1,3 +1,5 @@
+.POSIX:
+
 # pkgmk version
 VERSION = 5.41
 
