@@ -9,7 +9,7 @@ part of CRUX' *pkgutils* software) as of commit 9ca0da6
   * rewritten in POSIX sh(1p)
   * added support of suckless' sbase utilities
   * added support of aria2c(1) downloader
-  * the man pages have been rewritten in POD
+  * the man pages have been rewritten in POD format
   * added Pkgfile(5) man page
   * added bash completion
   * removed "-i", "-u", and "-r" command-line options
