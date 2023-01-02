@@ -1,25 +1,19 @@
 #!/bin/sh -e
-#
-# pkgmk - make software packages.
-# See COPYING and COPYRIGHT files for corresponding information.
-#
 
 ######################################################################
-# !! Note !! about agreements of the variables declaration in the
-# pkgmk's code:
-#
-# ${var} or ${VAR}  -> external, global variable, declared in Pkgfile
-#                      or pkgmk.conf
-#
-# $VAR              -> internal, global variable
-#
-# $__VAR            -> local variable
-#
+#            Variables declaration in the pkgmk's code:              #
+# +----------------+-----------------------------------------------+ #
+# | ${var}, ${VAR} | external, global variable, declared in        | #
+# |                | sourced files like Pkgfile or pkgmk.conf      | #
+# +----------------+-----------------------------------------------+ #
+# | $VAR           | internal, global variable                     | #
+# +----------------+-----------------------------------------------+ #
+# | $__VAR         | local variable                                | #
+# +----------------+-----------------------------------------------+ #
 ######################################################################
 
-
 ######################################################################
-# error codes
+# error codes                                                        #
 ######################################################################
 
 readonly E_GENERAL=1
@@ -33,7 +27,7 @@ readonly E_FOOTPRINT=7  # - footprint check failure
 readonly E_BUILD=8      # - error while running 'build()'
 
 ######################################################################
-# notification helpers
+# notification helpers                                               #
 ######################################################################
 
 info() {
@@ -54,7 +48,7 @@ dfatal() {
 }
 
 ######################################################################
-# pkgmk's routines
+# pkgmk's routines                                                   #
 ######################################################################
 
 get_filename() {
@@ -139,17 +133,21 @@ download_file() {
   case $__DOWNLOAD_CMD in
     aria2c)
       __RESUME_CMD="-c"
-      __DOWNLOAD_OPTS="--connect-timeout=10 --max-tries=3 --retry-wait=3 \
-        -d $PKGMK_SOURCE_DIR -o ${__LOCAL_FILENAME_PARTIAL##*/} $PKGMK_ARIA2C_OPTS"
+      __DOWNLOAD_OPTS="--connect-timeout=10 --max-tries=3 \
+        --retry-wait=3 \
+        -d $PKGMK_SOURCE_DIR \
+        -o ${__LOCAL_FILENAME_PARTIAL##*/} $PKGMK_ARIA2C_OPTS"
       ;;
     curl)
       __RESUME_CMD="-C -"
-      __DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3 --retry-delay 3 \
+      __DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3 \
+        --retry-delay 3 \
         -o $__LOCAL_FILENAME_PARTIAL $PKGMK_CURL_OPTS"
       ;;
     wget)
       __RESUME_CMD="-c"
-      __DOWNLOAD_OPTS="--compression=none --passive-ftp --no-directories \
+      __DOWNLOAD_OPTS="--compression=none --passive-ftp \
+        --no-directories \
         --tries=3 --waitretry=3 \
         --directory-prefix=$PKGMK_SOURCE_DIR \
         --output-document=$__LOCAL_FILENAME_PARTIAL $PKGMK_WGET_OPTS"
@@ -167,8 +165,10 @@ download_file() {
   for __REPO in $PKGMK_SOURCE_MIRRORS; do
     __REPO="$(echo "$__REPO" | sed 's|/$||')"
 
+    # intentional
     # shellcheck disable=2086
-    if $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS  "$__REPO/$__BASENAME"; then
+    if $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS \
+      "$__REPO/$__BASENAME"; then
       error=0
       break
     else
@@ -490,7 +490,8 @@ clean() {
 
   for __FILE in ${source}; do
     __LOCAL_FILENAME=$(get_filename "$__FILE")
-    if [ -e "$__LOCAL_FILENAME" ] && [ "$__LOCAL_FILENAME" != "$__FILE" ]; then
+    if [ -e "$__LOCAL_FILENAME" ] \
+    && [ "$__LOCAL_FILENAME" != "$__FILE" ]; then
       info "Removing $__LOCAL_FILENAME"
       rm -f "$__LOCAL_FILENAME"
     fi
@@ -529,7 +530,7 @@ build_needed() {
 }
 
 ######################################################################
-# main && main helpers
+# main && main helpers                                               #
 ######################################################################
 
 interrupted() {
@@ -617,10 +618,10 @@ parse_options() {
         PKGMK_CONFFILE="$2"
         shift
         ;;
-      --config-file=*)
-        PKGMK_CONFFILE=$(echo "$1" | cut -d= -f2-)
+      -cf*|--config-file=*)
+        PKGMK_CONFFILE=$(echo "$1" | sed 's/^-\(-config-file\|cf\)//')
         if [ ! "$PKGMK_CONFFILE" ]; then
-          dfatal "option --config-file requires an argument"
+          dfatal "option -cf (--config-file) requires an argument"
         fi
         ;;
       -v|--version)
@@ -719,7 +720,9 @@ main() {
     exit 0
   fi
 
-  if [ "$(build_needed)" = "no" ] && [ "$PKGMK_FORCE" = "no" ] && [ "$PKGMK_CHECK_MD5SUM" = "no" ]; then
+  if [ "$(build_needed)" = "no" ] \
+  && [ "$PKGMK_FORCE" = "no" ] \
+  && [ "$PKGMK_CHECK_MD5SUM" = "no" ]; then
     info "Package '$TARGET' is up to date."
   else
     download_source
@@ -733,7 +736,7 @@ trap "interrupted" HUP INT QUIT TERM
 trap "atexit" EXIT
 
 ######################################################################
-# default configuration
+# default configuration                                              #
 ######################################################################
 
 export LC_ALL=C.UTF-8
