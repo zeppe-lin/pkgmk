@@ -27,18 +27,18 @@ REQUIREMENTS
 ------------
 Build time:
   * POSIX sh(1p), make(1p) and "mandatory utilities"
-  * pod2man(1pm) from perl distribution to build man pages
+  * pod2man(1pm) to build man pages
 
 Runtime:
   * POSIX sh(1p) and "mandatory utilities"
   * sbase or coreutils
   * GNU diffutils
   * GNU findutils
-  * curl(1) or wget(1) or aria2c(1) for downloading sources
-  * bsdtar(1) or tar(1) for unpacking sources
+  * curl(1) or wget(1) or aria2c(1) to download sources
+  * bsdtar(1) or tar(1) to unpack sources
 
 Tests:
-  * podchecker(1pm) from perl distribution to check PODs for errors
+  * podchecker(1pm) to check PODs for errors
   * curl(1) to check URLs for response code
 
 INSTALL
