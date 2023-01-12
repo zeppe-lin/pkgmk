@@ -387,7 +387,7 @@ like:
 
   SSD=/sbin/start-stop-daemon
   PROG=/usr/sbin/exampled
-  PID=/var/run/exampled.pid
+  PID=/run/exampled.pid
   OPTS="--exampled-opts"
 
   case $1 in
