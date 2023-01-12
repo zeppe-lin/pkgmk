@@ -252,8 +252,9 @@ The following rules should be respected:
 
 =item *
 
-We list all linked runtime dependencies except for gcc (libstdc++),
-glibc, binutils and the package itself (to prevent cyclic dependencies).
+We list all linked runtime dependencies except for C<gcc>
+(C<libstdc++>), C<glibc>, C<binutils> and the package itself
+(to prevent cyclic dependencies).
 
 =item *
 
