@@ -293,7 +293,7 @@ no binary that links to libperl).
 
 B<Does> list readline, because bc is linked to readline.
 
-=item F<core/python3-setuptools>
+=item F<core/py3-setuptools>
 
 B<Does> list python3, because the package contains the specific
 interpreter version in its F<.footprint>.
