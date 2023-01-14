@@ -40,7 +40,7 @@ Set C++ compiler options.
 
 Default: none.
 
-=item B<export JOBS='NUMBER'>
+=item B<export JOBS="NUMBER">
 
 Set the number of commands to run simultaneously when building a
 package.
