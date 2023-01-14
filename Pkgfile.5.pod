@@ -382,13 +382,13 @@ like:
 
   #!/bin/sh
   #
-  # /etc/rc.d/example: start/stop example(8) daemon
+  # /etc/rc.d/daemon: start/stop daemon(8) daemon
   #
 
   SSD=/sbin/start-stop-daemon
-  PROG=/usr/sbin/exampled
-  PID=/run/exampled.pid
-  OPTS="--exampled-opts"
+  PROG=/usr/sbin/daemon
+  PID=/run/daemon.pid
+  OPTS="--some-opts"
 
   case $1 in
   start)
