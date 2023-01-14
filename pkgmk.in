@@ -60,16 +60,16 @@ get_filename() {
   fi
 
   case $1 in
-    http://*/* | https://*/* | ftp://*/* | file://*/*)
-      echo "$PKGMK_SOURCE_DIR/${1##*/}"
-      ;;
-    *)
-      if [ "$__ABSOLUTE" ]; then
-        echo "$PKGMK_ROOT/$1"
-      else
-        echo "$1"
-      fi
-      ;;
+  http://*/* | https://*/* | ftp://*/* | file://*/*)
+    echo "$PKGMK_SOURCE_DIR/${1##*/}"
+    ;;
+  *)
+    if [ "$__ABSOLUTE" ]; then
+      echo "$PKGMK_ROOT/$1"
+    else
+      echo "$1"
+    fi
+    ;;
   esac
 }
 
@@ -131,27 +131,27 @@ download_file() {
   fi
 
   case $__DOWNLOAD_CMD in
-    aria2c)
-      __RESUME_CMD="-c"
-      __DOWNLOAD_OPTS="--connect-timeout=10 --max-tries=3 \
-        --retry-wait=3 \
-        -d $PKGMK_SOURCE_DIR \
-        -o ${__LOCAL_FILENAME_PARTIAL##*/} $PKGMK_ARIA2C_OPTS"
-      ;;
-    curl)
-      __RESUME_CMD="-C -"
-      __DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3 \
-        --retry-delay 3 \
-        -o $__LOCAL_FILENAME_PARTIAL $PKGMK_CURL_OPTS"
-      ;;
-    wget)
-      __RESUME_CMD="-c"
-      __DOWNLOAD_OPTS="--compression=none --passive-ftp \
-        --no-directories \
-        --tries=3 --waitretry=3 \
-        --directory-prefix=$PKGMK_SOURCE_DIR \
-        --output-document=$__LOCAL_FILENAME_PARTIAL $PKGMK_WGET_OPTS"
+  aria2c)
+    __RESUME_CMD="-c"
+    __DOWNLOAD_OPTS="--connect-timeout=10 --max-tries=3 \
+      --retry-wait=3 \
+      -d $PKGMK_SOURCE_DIR \
+      -o ${__LOCAL_FILENAME_PARTIAL##*/} $PKGMK_ARIA2C_OPTS"
     ;;
+  curl)
+    __RESUME_CMD="-C -"
+    __DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3 \
+      --retry-delay 3 \
+      -o $__LOCAL_FILENAME_PARTIAL $PKGMK_CURL_OPTS"
+    ;;
+  wget)
+    __RESUME_CMD="-c"
+    __DOWNLOAD_OPTS="--compression=none --passive-ftp \
+      --no-directories \
+      --tries=3 --waitretry=3 \
+      --directory-prefix=$PKGMK_SOURCE_DIR \
+      --output-document=$__LOCAL_FILENAME_PARTIAL $PKGMK_WGET_OPTS"
+  ;;
   esac
 
   if [ -f "$__LOCAL_FILENAME_PARTIAL" ]; then
@@ -228,12 +228,12 @@ unpack_source() {
   for __FILE in ${source}; do
     __LOCAL_FILENAME=$(get_filename "$__FILE")
     case $__LOCAL_FILENAME in
-      *.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z|*.zst)
-        __COMMAND="bsdtar -p -o -C $SRC -xf $__LOCAL_FILENAME"
-        ;;
-      *)
-        __COMMAND="cp $__LOCAL_FILENAME $SRC"
-        ;;
+    *.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z|*.zst)
+      __COMMAND="bsdtar -p -o -C $SRC -xf $__LOCAL_FILENAME"
+      ;;
+    *)
+      __COMMAND="cp $__LOCAL_FILENAME $SRC"
+      ;;
     esac
 
     echo "$__COMMAND"
@@ -444,10 +444,10 @@ build_package() {
     info "Build result:"
 
     case $PKGMK_COMPRESSION_MODE in
-      gz)  __COMPRESSION="-z" ;;
-      bz2) __COMPRESSION="-j" ;;
-      xz)  __COMPRESSION="-J" ;;
-      lz)  __COMPRESSION="--lzip" ;;
+     gz)  __COMPRESSION="-z"     ;;
+    bz2)  __COMPRESSION="-j"     ;;
+     xz)  __COMPRESSION="-J"     ;;
+     lz)  __COMPRESSION="--lzip" ;;
     esac
 
     if bsdtar --format=gnutar -c $__COMPRESSION -f "$TARGET" -- * \
@@ -571,70 +571,70 @@ EOF
 parse_options() {
   while [ "$1" ]; do
     case $1 in
-      -d|--download)
-        PKGMK_DOWNLOAD="yes"
-        ;;
-      -do|--download-only)
-        PKGMK_DOWNLOAD="yes"
-        PKGMK_DOWNLOAD_ONLY="yes"
-        ;;
-      -eo|--extract-only)
-        PKGMK_EXTRACT_ONLY="yes"
-        ;;
-      -utd|--up-to-date)
-        PKGMK_UP_TO_DATE="yes"
-        ;;
-      -uf|--update-footprint)
-        PKGMK_UPDATE_FOOTPRINT="yes"
-        ;;
-      -if|--ignore-footprint)
-        PKGMK_IGNORE_FOOTPRINT="yes"
-        ;;
-      -um|--update-md5sum)
-        PKGMK_UPDATE_MD5SUM="yes"
-        ;;
-      -im|--ignore-md5sum)
-        PKGMK_IGNORE_MD5SUM="yes"
-        ;;
-      -cm|--check-md5sum)
-        PKGMK_CHECK_MD5SUM="yes"
-        ;;
-      -ns|--no-strip)
-        PKGMK_NO_STRIP="yes"
-        ;;
-      -f|--force)
-        PKGMK_FORCE="yes"
-        ;;
-      -c|--clean)
-        PKGMK_CLEAN="yes"
-        ;;
-      -kw|--keep-work)
-        PKGMK_KEEP_WORK="yes"
-        ;;
-      -cf|--config-file)
-        if [ ! "$2" ]; then
-          dfatal "option $1 requires an argument"
-        fi
-        PKGMK_CONFFILE="$2"
-        shift
-        ;;
-      -cf*|--config-file=*)
-        PKGMK_CONFFILE=$(echo "$1" | sed 's/^-\(-config-file\|cf\)//')
-        if [ ! "$PKGMK_CONFFILE" ]; then
-          dfatal "option -cf (--config-file) requires an argument"
-        fi
-        ;;
-      -v|--version)
-        echo "pkgmk @VERSION@"
-        exit 0
-        ;;
-      -h|--help)
-        print_help
-        exit 0
-        ;;
-      *)
-        dfatal "invalid option $1"
-        ;;
+    -d|--download)
+      PKGMK_DOWNLOAD="yes"
+      ;;
+    -do|--download-only)
+      PKGMK_DOWNLOAD="yes"
+      PKGMK_DOWNLOAD_ONLY="yes"
+      ;;
+    -eo|--extract-only)
+      PKGMK_EXTRACT_ONLY="yes"
+      ;;
+    -utd|--up-to-date)
+      PKGMK_UP_TO_DATE="yes"
+      ;;
+    -uf|--update-footprint)
+      PKGMK_UPDATE_FOOTPRINT="yes"
+      ;;
+    -if|--ignore-footprint)
+      PKGMK_IGNORE_FOOTPRINT="yes"
+      ;;
+    -um|--update-md5sum)
+      PKGMK_UPDATE_MD5SUM="yes"
+      ;;
+    -im|--ignore-md5sum)
+      PKGMK_IGNORE_MD5SUM="yes"
+      ;;
+    -cm|--check-md5sum)
+      PKGMK_CHECK_MD5SUM="yes"
+      ;;
+    -ns|--no-strip)
+      PKGMK_NO_STRIP="yes"
+      ;;
+    -f|--force)
+      PKGMK_FORCE="yes"
+      ;;
+    -c|--clean)
+      PKGMK_CLEAN="yes"
+      ;;
+    -kw|--keep-work)
+      PKGMK_KEEP_WORK="yes"
+      ;;
+    -cf|--config-file)
+      if [ ! "$2" ]; then
+        dfatal "option $1 requires an argument"
+      fi
+      PKGMK_CONFFILE="$2"
+      shift
+      ;;
+    -cf*|--config-file=*)
+      PKGMK_CONFFILE=$(echo "$1" | sed 's/^-\(-config-file\|cf\)//')
+      if [ ! "$PKGMK_CONFFILE" ]; then
+        dfatal "option -cf (--config-file) requires an argument"
+      fi
+      ;;
+    -v|--version)
+      echo "pkgmk @VERSION@"
+      exit 0
+      ;;
+    -h|--help)
+      print_help
+      exit 0
+      ;;
+    *)
+      dfatal "invalid option $1"
+      ;;
     esac
     shift
   done
@@ -671,13 +671,13 @@ main() {
   check_pkgfile
 
   case $PKGMK_COMPRESSION_MODE in
-    gz|bz2|xz|lz)
-      TARGET="$PKGMK_PACKAGE_DIR/$name#$version-$release.pkg.tar.$PKGMK_COMPRESSION_MODE"
-      ;;
-    *)
-      error "Compression mode '$PKGMK_COMPRESSION_MODE' not supported"
-      exit 1
-      ;;
+  gz|bz2|xz|lz)
+    TARGET="$PKGMK_PACKAGE_DIR/$name#$version-$release.pkg.tar.$PKGMK_COMPRESSION_MODE"
+    ;;
+  *)
+    error "Compression mode '$PKGMK_COMPRESSION_MODE' not supported"
+    exit 1
+    ;;
   esac
 
   if [ "$PKGMK_CLEAN" = "yes" ]; then
