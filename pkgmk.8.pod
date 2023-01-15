@@ -88,10 +88,9 @@ Remove the (previously built) package and the downloaded source files.
 
 Keep temporary working directory.
 
-=item B<-cf>, B<--config-file> I<FILE>
+=item B<-cf>, B<--config-file>=I<FILE>
 
-Use alternative configuration file (default is
-F</etc/pkgmk.conf>).
+Use alternative configuration file (default is F</etc/pkgmk.conf>).
 
 =item B<-v>, B<--version>
 
