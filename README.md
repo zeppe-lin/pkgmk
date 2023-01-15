@@ -16,7 +16,8 @@ part of CRUX' *pkgutils* software) as of commit 9ca0da6
   * removed "-i", "-u", and "-r" command-line options
   * removed signify(1) support since pkgsrc collection is
     distributed through git(1) with signed commits
-  * added gnu-like option parsing
+  * added GNU-style long options
+  * refactored options parsing
 
 See git log for complete/further differences.
 
