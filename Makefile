@@ -1,7 +1,6 @@
 .POSIX:
 
-# pkgmk version
-VERSION = 5.41
+include config.mk
 
 all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 
@@ -21,23 +20,23 @@ check:
 		xargs -P10 -I{} curl -o /dev/null -sw "%{url} [%{http_code}]\n" '{}'
 
 install: all
-	mkdir -p           ${DESTDIR}/usr/sbin
-	mkdir -p           ${DESTDIR}/usr/share/man/man5
-	mkdir -p           ${DESTDIR}/usr/share/man/man8
-	cp -f pkgmk        ${DESTDIR}/usr/sbin/
-	cp -f pkgmk.conf.5 ${DESTDIR}/usr/share/man/man5/
-	cp -f Pkgfile.5    ${DESTDIR}/usr/share/man/man5/
-	cp -f pkgmk.8      ${DESTDIR}/usr/share/man/man8/
-	chmod 0755         ${DESTDIR}/usr/sbin/pkgmk
-	chmod 0644         ${DESTDIR}/usr/share/man/man5/pkgmk.conf.5
-	chmod 0644         ${DESTDIR}/usr/share/man/man5/Pkgfile.5
-	chmod 0644         ${DESTDIR}/usr/share/man/man8/pkgmk.8
+	mkdir -p           ${DESTDIR}${PREFIX}/sbin
+	mkdir -p           ${DESTDIR}${MANPREFIX}/man5
+	mkdir -p           ${DESTDIR}${MANPREFIX}/man8
+	cp -f pkgmk        ${DESTDIR}${PREFIX}/sbin/
+	cp -f pkgmk.conf.5 ${DESTDIR}${MANPREFIX}/man5/
+	cp -f Pkgfile.5    ${DESTDIR}${MANPREFIX}/man5/
+	cp -f pkgmk.8      ${DESTDIR}${MANPREFIX}/man8/
+	chmod 0755         ${DESTDIR}${PREFIX}/sbin/pkgmk
+	chmod 0644         ${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
+	chmod 0644         ${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
+	chmod 0644         ${DESTDIR}${MANPREFIX}/man8/pkgmk.8
 
 uninstall:
-	rm -f ${DESTDIR}/usr/sbin/pkgmk
-	rm -f ${DESTDIR}/usr/share/man/man5/pkgmk.conf.5
-	rm -f ${DESTDIR}/usr/share/man/man5/Pkgfile.5
-	rm -f ${DESTDIR}/usr/share/man/man8/pkgmk.8
+	rm -f ${DESTDIR}${PREFIX}/sbin/pkgmk
+	rm -f ${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
+	rm -f ${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
+	rm -f ${DESTDIR}${MANPREFIX}/man8/pkgmk.8
 
 clean:
 	rm -f pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
