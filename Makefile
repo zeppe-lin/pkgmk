@@ -9,7 +9,7 @@ all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 		-s $(subst .,,$(suffix $@)) $< > $@
 
 %: %.in
-	sed -e "s|@VERSION@|${VERSION}|g" $< > $@
+	sed "s|@VERSION@|${VERSION}|g" $< > $@
 
 check:
 	@echo "=======> Check PODs for errors"
