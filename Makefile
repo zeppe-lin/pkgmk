@@ -15,8 +15,8 @@ check:
 	@echo "=======> Check PODs for errors"
 	@podchecker *.pod
 	@echo "=======> Check URLs for response code"
-	@grep -Eiho "https?://[^\"\\'> ]+" *.* | \
-		grep -E -v 'https?://\*/\*' | \
+	@grep -Eiho "https?://[^\"\\'> ]+" *.*  | \
+		grep -E -v 'https?://\*/\*'     | \
 		xargs -P10 -I{} curl -o /dev/null -sw "%{url} [%{http_code}]\n" '{}'
 
 install: all
