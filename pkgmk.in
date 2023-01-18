@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 ######################################################################
 #            Variables declaration in the pkgmk's code:              #
@@ -346,7 +346,7 @@ strip_files() {
         print "--strip-debug    \"" $1 "\""
       }
       ' \
-    | xargs -r -L1 -P${JOBS:-1} strip || true
+    | xargs -r -L1 -P${JOBS:-1} strip
 }
 
 compress_manpages() {
@@ -358,7 +358,7 @@ compress_manpages() {
 
   find . -type f -path "*/man/man*/*" | while read __FILE; do
     if [ "$__FILE" = "${__FILE%%.gz}" ]; then
-      gzip -9 "$__FILE" || true
+      gzip -9 "$__FILE"
     fi
   done
 
