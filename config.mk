@@ -1,5 +1,5 @@
 # pkgmk version
-VERSION = 5.41
+VERSION = 5.41.1
 
 # paths
 PREFIX = /usr
