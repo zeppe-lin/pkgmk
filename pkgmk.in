@@ -42,7 +42,7 @@ error() {
   info "ERROR: $1" >&2
 }
 
-dfatal() {
+die() {
   echo "pkgmk: $1" >&2
   exit 1
 }
@@ -612,14 +612,14 @@ parse_options() {
       PKGMK_KEEP_WORK="yes"
       ;;
     -cf|--config-file)
-      [ "$2" ] || dfatal "option $1 requires an argument"
+      [ "$2" ] || die "option $1 requires an argument"
       PKGMK_CONFFILE="$2"
       shift
       ;;
     -cf*|--config-file=*)
       PKGMK_CONFFILE=$(echo "$1" | sed 's/^-\(-config-file\|cf\)//')
       if [ ! "$PKGMK_CONFFILE" ]; then
-        dfatal "option -cf (--config-file) requires an argument"
+        die "option -cf (--config-file) requires an argument"
       fi
       ;;
     -v|--version)
@@ -631,7 +631,7 @@ parse_options() {
       exit 0
       ;;
     *)
-      dfatal "invalid option $1"
+      die "invalid option $1"
       ;;
     esac
     shift
