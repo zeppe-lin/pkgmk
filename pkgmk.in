@@ -133,25 +133,24 @@ download_file() {
   case $__DOWNLOAD_CMD in
   aria2c)
     __RESUME_CMD="-c"
-    __DOWNLOAD_OPTS="--connect-timeout=10 --max-tries=3 \
-      --retry-wait=3 \
-      -d $PKGMK_SOURCE_DIR \
-      -o ${__LOCAL_FILENAME_PARTIAL##*/} $PKGMK_ARIA2C_OPTS"
+    __DOWNLOAD_OPTS="--connect-timeout=10 --max-tries=3   \
+                     --retry-wait=3 -d $PKGMK_SOURCE_DIR  \
+                     -o ${__LOCAL_FILENAME_PARTIAL##*/}   \
+                     $PKGMK_ARIA2C_OPTS"
     ;;
   curl)
     __RESUME_CMD="-C -"
-    __DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3 \
-      --retry-delay 3 \
-      -o $__LOCAL_FILENAME_PARTIAL $PKGMK_CURL_OPTS"
+    __DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3 --retry-delay 3  \
+                     -o $__LOCAL_FILENAME_PARTIAL $PKGMK_CURL_OPTS"
     ;;
   wget)
     __RESUME_CMD="-c"
-    __DOWNLOAD_OPTS="--compression=none --passive-ftp \
-      --no-directories \
-      --tries=3 --waitretry=3 \
-      --directory-prefix=$PKGMK_SOURCE_DIR \
-      --output-document=$__LOCAL_FILENAME_PARTIAL $PKGMK_WGET_OPTS"
-  ;;
+    __DOWNLOAD_OPTS="--compression=none --passive-ftp             \
+                     --no-directories --tries=3 --waitretry=3     \
+                     --directory-prefix=$PKGMK_SOURCE_DIR         \
+                     --output-document=$__LOCAL_FILENAME_PARTIAL  \
+                     $PKGMK_WGET_OPTS"
+    ;;
   esac
 
   if [ -f "$__LOCAL_FILENAME_PARTIAL" ]; then
@@ -165,7 +164,7 @@ download_file() {
   for __REPO in $PKGMK_SOURCE_MIRRORS; do
     __REPO="$(echo "$__REPO" | sed 's|/$||')"
 
-    # intentional
+    # Intentional.
     # shellcheck disable=2086
     if $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS \
       "$__REPO/$__BASENAME"; then
@@ -204,15 +203,18 @@ download_source() {
 
   for __FILE in ${source}; do
     __LOCAL_FILENAME=$(get_filename "$__FILE")
+
     if [ ! -e "$__LOCAL_FILENAME" ]; then
       if [ "$__LOCAL_FILENAME" = "$__FILE" ]; then
-        error "Source file '$__LOCAL_FILENAME' not found (can not be downloaded, URL not specified)."
+        error "Source file '$__LOCAL_FILENAME' not found "\
+              "(can not be downloaded, URL not specified)."
         exit $E_DOWNLOAD
       else
         if [ "$PKGMK_DOWNLOAD" = "yes" ]; then
           download_file "$__FILE"
         else
-          error "Source file '$__LOCAL_FILENAME' not found (use option -d to download)."
+          error "Source file '$__LOCAL_FILENAME' not found "\
+                "(use option -d to download)."
           exit $E_DOWNLOAD
         fi
       fi
@@ -227,6 +229,7 @@ unpack_source() {
 
   for __FILE in ${source}; do
     __LOCAL_FILENAME=$(get_filename "$__FILE")
+
     case $__LOCAL_FILENAME in
     *.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z|*.zst)
       __COMMAND="bsdtar -p -o -C $SRC -xf $__LOCAL_FILENAME"
@@ -269,14 +272,19 @@ check_md5sum() {
   cd "$PKGMK_ROOT"
 
   if [ -f .md5sum ] && [ -s .md5sum ]; then
-    echo "$(make_md5sum)" > "$__FILE.md5sum"
+    make_md5sum       > "$__FILE.md5sum"
     sort -k 2 .md5sum > "$__FILE.md5sum.orig"
-    diff -w -t -U 0 "$__FILE.md5sum.orig" "$__FILE.md5sum" \
+
+    diff -w -t -U 0             \
+      "$__FILE.md5sum.orig"     \
+      "$__FILE.md5sum"          \
       | sed '/^@@/d'            \
       | sed '/^+++/d'           \
       | sed '/^---/d'           \
       | sed 's/^+/NEW       /g' \
-      | sed 's/^-/MISSING   /g' > "$__FILE.md5sum.diff"
+      | sed 's/^-/MISSING   /g' \
+    > "$__FILE.md5sum.diff"
+
     if [ -s "$__FILE.md5sum.diff" ]; then
       error "Md5sum mismatch found:"
       cat "$__FILE.md5sum.diff" >&2
@@ -318,17 +326,23 @@ strip_files() {
     __FILTER="cat"
   fi
 
-  find . -type f -printf "%P\n"                  \
-    | $__FILTER                                  \
-    | xargs -r -L10 -P${JOBS:-1}                 \
-      file --no-buffer --separator '>'           \
-      -e apptype -e ascii -e encoding -e tokens  \
-      -e cdf -e compress -e tar -e text          \
+  find . -type f -printf "%P\n"                    \
+    | $__FILTER                                    \
+    | xargs -r -L10 -P${JOBS:-1}                   \
+      file --no-buffer --separator '>'             \
+        -e apptype -e ascii -e encoding -e tokens  \
+        -e cdf -e compress -e tar -e text          \
     | awk '
       BEGIN { FS = ">[ ]+" }
-      $0 ~ /ELF.*executable.*not stripped/    { print "--strip-all      \"" $1 "\"" }
-      $0 ~ /ELF.*shared object.*not stripped/ { print "--strip-unneeded \"" $1 "\"" }
-      $2 == "current ar archive"              { print "--strip-debug    \"" $1 "\"" }
+      $0 ~ /ELF.*executable.*not stripped/    {
+        print "--strip-all      \"" $1 "\""
+      }
+      $0 ~ /ELF.*shared object.*not stripped/ {
+        print "--strip-unneeded \"" $1 "\""
+      }
+      $2 == "current ar archive"              {
+        print "--strip-debug    \"" $1 "\""
+      }
       ' \
     | xargs -r -L1 -P${JOBS:-1} strip || true
 }
@@ -369,17 +383,22 @@ check_footprint() {
     make_footprint > "$__FILE.footprint"
 
     if [ -f .footprint ]; then
-      sort -k 3 .footprint > "$__FILE.footprint.orig"
-      diff -w -t -U 0 "$__FILE.footprint.orig" "$__FILE.footprint" \
+      sort -k 3 .footprint         \
+      > "$__FILE.footprint.orig"
+
+      diff -w -t -U 0 \
+        "$__FILE.footprint.orig"   \
+        "$__FILE.footprint"        \
         | sed '/^@@/d'             \
         | sed '/^+++/d'            \
         | sed '/^---/d'            \
         | sed 's/^+/NEW       /g'  \
-        | sed 's/^-/MISSING   /g'  > "$__FILE.footprint.diff"
+        | sed 's/^-/MISSING   /g'  \
+      > "$__FILE.footprint.diff"
 
       if [ -s "$__FILE.footprint.diff" ]; then
-        error "Footprint mismatch found:"
         BUILD_SUCCESSFUL="no"
+        error "Footprint mismatch found:"
         cat "$__FILE.footprint.diff" >&2
       fi
     else
@@ -387,8 +406,8 @@ check_footprint() {
       mv "$__FILE.footprint" .footprint
     fi
   else
-    error "Package '$TARGET' was not found."
     BUILD_SUCCESSFUL="no"
+    error "Package '$TARGET' was not found."
   fi
 }
 
@@ -441,6 +460,7 @@ build_package() {
     compress_manpages
 
     cd "$PKG"
+
     info "Build result:"
 
     case $PKGMK_COMPRESSION_MODE in
@@ -490,8 +510,9 @@ clean() {
 
   for __FILE in ${source}; do
     __LOCAL_FILENAME=$(get_filename "$__FILE")
-    if [ -e "$__LOCAL_FILENAME" ] \
-    && [ "$__LOCAL_FILENAME" != "$__FILE" ]; then
+
+    if [ -e "$__LOCAL_FILENAME"              ] \
+    && [    "$__LOCAL_FILENAME" != "$__FILE" ]; then
       info "Removing $__LOCAL_FILENAME"
       rm -f "$__LOCAL_FILENAME"
     fi
@@ -504,7 +525,7 @@ update_footprint() {
     exit 1
   fi
 
-  check_file ".footprint"
+  check_file       .footprint
   make_footprint > .footprint
   touch "$TARGET"
 
@@ -619,7 +640,7 @@ parse_options() {
     -cf*|--config-file=*)
       PKGMK_CONFFILE=$(echo "$1" | sed 's/^-\(-config-file\|cf\)//')
       if [ ! "$PKGMK_CONFFILE" ]; then
-        die "option -cf (--config-file) requires an argument"
+        die "option -cf/--config-file requires an argument"
       fi
       ;;
     -v|--version)
@@ -673,7 +694,7 @@ main() {
     TARGET="$PKGMK_PACKAGE_DIR/$name#$version-$release.pkg.tar.$PKGMK_COMPRESSION_MODE"
     ;;
   *)
-    error "Compression mode '$PKGMK_COMPRESSION_MODE' not supported"
+    error "Compression mode '$PKGMK_COMPRESSION_MODE' not supported."
     exit 1
     ;;
   esac
