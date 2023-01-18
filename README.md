@@ -1,10 +1,10 @@
 ABOUT
 -----
-This directory contains *pkgmk*, a package management utility that
+This directory contains _pkgmk_, a package management utility that
 makes a software package.
 
-This *pkgmk* distribution is a fork of CRUX' *pkgmk* utility (which is
-part of CRUX' *pkgutils* software) as of commit 9ca0da6
+This _pkgmk_ distribution is a fork of CRUX' _pkgmk_ utility (which is
+part of CRUX' _pkgutils_ software) as of commit 9ca0da6
 (Sat Nov 17 2018) with the following differences:
 
   * rewritten in POSIX sh(1p)
@@ -52,10 +52,10 @@ The shell command `make check` should start some tests.
 
 LICENSE
 -------
-*pkgmk* is licensed through the GNU General Public License v2 or
+_pkgmk_ is licensed through the GNU General Public License v2 or
 later <https://gnu.org/licenses/gpl.html>.
-Read the *COPYING* file for copying conditions.
-Read the *COPYRIGHT* file for copyright notices.
+Read the _COPYING_ file for copying conditions.
+Read the _COPYRIGHT_ file for copyright notices.
 
 <!-- vim:sw=2:ts=2:sts=2:et:cc=72:tw=70
 End of file. -->
