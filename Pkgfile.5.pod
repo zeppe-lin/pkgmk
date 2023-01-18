@@ -41,21 +41,21 @@ to follow the following directory structure as close as possible.
 =begin man
 
 .TS
-center, box, line, tab (|) ;
-l                  | l
-l                  | l.
-Directory          | Description
+center, box, expand, tab (|) ;
+l                 | l
+l                 | l.
+Directory         | Description
 _
 .SP
-/usr/bin/          | User command/application binaries
-/usr/sbin/         | System binaries (e.g. daemons)
-/usr/lib/          | Libraries
-/usr/include/      | Header files
-/usr/lib/<prog>/   | Plug-ins, addons, etc
-/usr/share/man/    | Man pages
-/usr/share/<prog>/ | Data files
-/usr/etc/<prog>/   | Configuration files
-/etc/              | Configuration files for system software (daemons, etc)
+/usr/bin          | User command/application binaries
+/usr/sbin         | System binaries (e.g. daemons)
+/usr/lib          | Libraries
+/usr/include      | Header files
+/usr/lib/<prog>   | Plug-ins, addons, etc
+/usr/share/man    | Man pages
+/usr/share/<prog> | Data files
+/usr/etc/<prog>   | Configuration files
+/etc              | Configuration files for system software (daemons)
 .TE
 
 =end man
@@ -101,7 +101,7 @@ _
   </tr>
   <tr>
    <td>/etc/</td>
-   <td>Configuration files for system software (daemons, etc)</td>
+   <td>Configuration files for system software (daemons)</td>
   </tr>
  </table>
 
@@ -119,7 +119,7 @@ _
     /usr/share/man/    | Man pages
     /usr/share/<prog>/ | Data files
     /usr/etc/<prog>/   | Configuration files
-    /etc/              | Configuration files for system software (daemons, etc)
+    /etc/              | Configuration files for system software (daemons)
     
 =end text
 
@@ -188,16 +188,16 @@ Provide a header including the following fields:
 =begin man
 
 .TS
-center, box, line, tab (|) ;
+center, box, expand, tab (|) ;
 l            | l
 l            | l.
 Name         | Meaning
 _
 .SP
-Description  | A short description of the package (keep it factual)
-Maintainer   | Your full name and e-mail address, obfuscated if you want
-URL          | A webpage with more information on this software package
-Depends on   | A list of dependencies, separated either by spaces
+Description  | Short description of the package (keep it factual)
+Maintainer   | Your full name and e-mail address (can be obfuscated)
+URL          | Website with more information on this software package
+Depends on   | List of dependencies, separated either by spaces
 .TE
 
 =end man
@@ -211,19 +211,19 @@ Depends on   | A list of dependencies, separated either by spaces
   </tr>
   <tr>
    <td>Description</td>
-   <td>A short description of the package (keep it factual)</td>
+   <td>Short description of the package (keep it factual)</td>
   </tr>
   <tr>
    <td>Maintainer</td>
-   <td>Your full name and e-mail address, obfuscated if you want</td>
+   <td>Your full name and e-mail address (can be obfuscated)</td>
   </tr>
   <tr>
    <td>URL</td>
-   <td>A webpage with more information on this software package</td>
+   <td>Website with more information on this software package</td>
   </tr>
   <tr>
    <td>Depends on</td>
-   <td>A list of dependencies, separated either by spaces</td>
+   <td>List of dependencies, separated either by spaces</td>
   </tr>
  </table>
 
@@ -233,10 +233,10 @@ Depends on   | A list of dependencies, separated either by spaces
 
     Name         | Meaning
     -------------|----------------------------------------------------------
-    Description  | A short description of the package (keep it factual)
-    Maintainer   | Your full name and e-mail address, obfuscated if you want
-    URL          | A webpage with more information on this software package
-    Depends on   | A list of dependencies, separated either by spaces
+    Description  | Short description of the package (keep it factual)
+    Maintainer   | Your full name and e-mail address (can be obfuscated)
+    URL          | Website with more information on this software package
+    Depends on   | List of dependencies, separated either by spaces
     
 =end text
 
