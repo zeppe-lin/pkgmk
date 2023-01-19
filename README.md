@@ -6,7 +6,6 @@ makes a software package.
 This _pkgmk_ distribution is a fork of CRUX' _pkgmk_ utility (which is
 part of CRUX' _pkgutils_ software) as of commit 9ca0da6
 (Sat Nov 17 2018) with the following differences:
-
   * rewritten in POSIX sh(1p)
   * added support of suckless' sbase utilities
   * added support of aria2c(1) downloader
