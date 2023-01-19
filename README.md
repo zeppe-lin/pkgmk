@@ -36,7 +36,7 @@ Runtime:
   * GNU diffutils
   * GNU findutils
   * curl(1) or wget(1) or aria2c(1) to download sources
-  * bsdtar(1) or tar(1) to unpack sources
+  * bsdtar(1) to unpack sources
 
 Tests:
   * podchecker(1pm) to check PODs for errors
