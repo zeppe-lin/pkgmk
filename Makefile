@@ -20,10 +20,12 @@ check:
 		xargs -P10 -I{} curl -o /dev/null \
 		-sw "[%{http_code}] %{url}\n" '{}'
 
-install: all
-	mkdir -p           ${DESTDIR}${PREFIX}/sbin
-	mkdir -p           ${DESTDIR}${MANPREFIX}/man5
-	mkdir -p           ${DESTDIR}${MANPREFIX}/man8
+install-dirs:
+	mkdir -p ${DESTDIR}${PREFIX}/sbin
+	mkdir -p ${DESTDIR}${MANPREFIX}/man5
+	mkdir -p ${DESTDIR}${MANPREFIX}/man8
+
+install: all install-dirs
 	cp -f pkgmk        ${DESTDIR}${PREFIX}/sbin/
 	cp -f pkgmk.conf.5 ${DESTDIR}${MANPREFIX}/man5/
 	cp -f Pkgfile.5    ${DESTDIR}${MANPREFIX}/man5/
