@@ -44,4 +44,4 @@ uninstall:
 clean:
 	rm -f pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 
-.PHONY: all check install uninstall clean
+.PHONY: all check install-dirs install uninstall clean
