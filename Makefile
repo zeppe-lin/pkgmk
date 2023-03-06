@@ -9,7 +9,7 @@ all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 		-s $(subst .,,$(suffix $@)) $< > $@
 
 %: %.in
-	sed "s|@VERSION@|${VERSION}|g" $< > $@
+	sed "s/@VERSION@/${VERSION}/g" $< > $@
 
 check:
 	@echo "=======> Check PODs for errors"
@@ -17,7 +17,8 @@ check:
 	@echo "=======> Check URLs for response code"
 	@grep -Eiho "https?://[^\"\\'> ]+" *.*  | \
 		grep -E -v 'https?://\*/\*'     | \
-		xargs -P10 -I{} curl -o /dev/null -sw "[%{http_code}] %{url}\n" '{}'
+		xargs -P10 -I{} curl -o /dev/null \
+		-sw "[%{http_code}] %{url}\n" '{}'
 
 install: all
 	mkdir -p           ${DESTDIR}${PREFIX}/sbin
