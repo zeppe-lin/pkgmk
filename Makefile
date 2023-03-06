@@ -5,8 +5,8 @@ include config.mk
 all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 
 %: %.pod
-	pod2man --nourls -r "pkgmk ${VERSION}" -c ' ' -n $(basename $@) \
-		-s $(subst .,,$(suffix $@)) $< > $@
+	pod2man --nourls -r "pkgmk ${VERSION}" -c ' ' \
+		-n $(basename $@) -s $(subst .,,$(suffix $@)) $< > $@
 
 %: %.in
 	sed "s/@VERSION@/${VERSION}/g" $< > $@
@@ -18,7 +18,7 @@ check:
 	@grep -Eiho "https?://[^\"\\'> ]+" *.*  | \
 		grep -E -v 'https?://\*/\*'     | \
 		xargs -P10 -I{} curl -o /dev/null \
-		-sw "[%{http_code}] %{url}\n" '{}'
+		  -sw "[%{http_code}] %{url}\n" '{}'
 
 install-dirs:
 	mkdir -p ${DESTDIR}${PREFIX}/sbin
