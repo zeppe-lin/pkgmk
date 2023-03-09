@@ -231,12 +231,12 @@ Depends on   | List of dependencies, separated either by spaces
 
 =begin text
 
-    Name         | Meaning
-    -------------|----------------------------------------------------------
-    Description  | Short description of the package (keep it factual)
-    Maintainer   | Your full name and e-mail address (can be obfuscated)
-    URL          | Website with more information on this software package
-    Depends on   | List of dependencies, separated either by spaces
+    Name        | Meaning
+    ------------+--------------------------------------------------------
+    Description | Short description of the package (keep it factual)
+    Maintainer  | Your full name and e-mail address (can be obfuscated)
+    URL         | Website with more information on this software package
+    Depends on  | List of dependencies, separated either by spaces
     
 =end text
 
