@@ -75,7 +75,7 @@ Default: directory of Pkgfile.
 
 Set directory for building packages.
 
-Default: '\fBfoo\fP/work', where \fBfoo\fP is the directory of the
+Default: 'B<foo>/work', where B<foo> is the directory of the
 Pkgfile.
 
 =item B<PKGMK_DOWNLOAD="STRING">
