@@ -313,7 +313,7 @@ bindings have a dependency on them.  We will have to rebuild
 everything that depends on Perl/Python with one command (see
 L<pkgman-rdep(1)|https://zeppe-lin.github.io/pkgman-rdep.1.html>).
 
-=head2 The rc.d scripts
+=head2 RC Scripts
 
 The actual scripts that control services should be named
 C<< rc.<prog> >>, and installed to F<< /etc/rc.d/<prog> >>.
