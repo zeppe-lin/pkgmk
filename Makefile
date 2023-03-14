@@ -15,10 +15,11 @@ check:
 	@echo "=======> Check PODs for errors"
 	@podchecker *.pod
 	@echo "=======> Check URLs for response code"
-	@grep -Eiho "https?://[^\"\\'> ]+" *.*  | \
-		grep -E -v 'https?://\*/\*'     | \
-		xargs -P10 -I{} curl -o /dev/null \
-		  -sw "[%{http_code}] %{url}\n" '{}'
+	@grep -Eiho "https?://[^\"\\'> ]+" *.*       \
+		| grep -Ev 'https?://\*/\*'          \
+		| xargs -P10 -I{} curl -o /dev/null  \
+		  -sw "[%{http_code}] %{url}\n" '{}' \
+		| sort -u
 
 install-dirs:
 	mkdir -p ${DESTDIR}${PREFIX}/sbin
