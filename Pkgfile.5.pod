@@ -51,7 +51,7 @@ _
 /usr/sbin         | System binaries (e.g. daemons)
 /usr/lib          | Libraries
 /usr/include      | Header files
-/usr/lib/<prog>   | Plug-ins, addons, etc
+/usr/lib/<prog>   | Plug-ins, add-ons, etc
 /usr/share/man    | Man pages
 /usr/share/<prog> | Data files
 /usr/etc/<prog>   | Configuration files
@@ -85,7 +85,7 @@ _
   </tr>
   <tr>
    <td>/usr/lib/&lt;prog&gt;/</td>
-   <td>Plug-ins, addons, etc</td>
+   <td>Plug-ins, add-ons, etc</td>
   </tr>
   <tr>
    <td>/usr/share/man/</td>
@@ -115,7 +115,7 @@ _
     /usr/sbin/         | System binaries (e.g. daemons)
     /usr/lib/          | Libraries
     /usr/include/      | Header files
-    /usr/lib/<prog>/   | Plug-ins, addons, etc
+    /usr/lib/<prog>/   | Plug-ins, add-ons, etc
     /usr/share/man/    | Man pages
     /usr/share/<prog>/ | Data files
     /usr/etc/<prog>/   | Configuration files
