@@ -318,7 +318,7 @@ L<pkgman-rdep(1)|https://zeppe-lin.github.io/pkgman-rdep.1.html>).
 The actual scripts that control services should be named
 C<< rc.<prog> >>, and installed to F<< /etc/rc.d/<prog> >>.
 
-See L<EXAMPLES/"RC Script"> for template script for a package.
+See L<RC Script> for template script for a package.
 
 =head1 ENVIRONMENT
 
