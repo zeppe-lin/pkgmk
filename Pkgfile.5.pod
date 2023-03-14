@@ -68,7 +68,7 @@ _
    <th style="text-align:left;">Description</th>
   </tr>
   <tr>
-   <td>/usr/bin/</td>
+   <td>/usr/bin</td>
    <td>User command/application binaries</td>
   </tr>
   <tr>
@@ -76,31 +76,31 @@ _
    <td>System binaries</td>
   </tr>
   <tr>
-   <td>/usr/lib/</td>
+   <td>/usr/lib</td>
    <td>Libraries</td>
   </tr>
   <tr>
-   <td>/usr/include/</td>
+   <td>/usr/include</td>
    <td>Header files</td>
   </tr>
   <tr>
-   <td>/usr/lib/&lt;prog&gt;/</td>
+   <td>/usr/lib/&lt;prog&gt;</td>
    <td>Plug-ins, add-ons, etc</td>
   </tr>
   <tr>
-   <td>/usr/share/man/</td>
+   <td>/usr/share/man</td>
    <td>Man pages</td>
   </tr>
   <tr>
-   <td>/usr/share/&lt;prog&gt;/</td>
+   <td>/usr/share/&lt;prog&gt;</td>
    <td>Data files</td>
   </tr>
   <tr>
-   <td>/usr/etc/&lt;prog&gt;/</td>
+   <td>/usr/etc/&lt;prog&gt;</td>
    <td>Configuration files</td>
   </tr>
   <tr>
-   <td>/etc/</td>
+   <td>/etc</td>
    <td>Configuration files for system software (daemons)</td>
   </tr>
  </table>
@@ -109,17 +109,17 @@ _
 
 =begin text
 
-    Directory          | Description
-    -------------------|------------------------------------------------------
-    /usr/bin/          | User command/application binaries
-    /usr/sbin/         | System binaries (e.g. daemons)
-    /usr/lib/          | Libraries
-    /usr/include/      | Header files
-    /usr/lib/<prog>/   | Plug-ins, add-ons, etc
-    /usr/share/man/    | Man pages
-    /usr/share/<prog>/ | Data files
-    /usr/etc/<prog>/   | Configuration files
-    /etc/              | Configuration files for system software (daemons)
+    Directory         | Description
+    ------------------|------------------------------------------------------
+    /usr/bin          | User command/application binaries
+    /usr/sbin         | System binaries (e.g. daemons)
+    /usr/lib          | Libraries
+    /usr/include      | Header files
+    /usr/lib/<prog>   | Plug-ins, add-ons, etc
+    /usr/share/man    | Man pages
+    /usr/share/<prog> | Data files
+    /usr/etc/<prog>   | Configuration files
+    /etc              | Configuration files for system software (daemons)
     
 =end text
 
@@ -128,7 +128,7 @@ applications, or binary distributable packages.  Good packages (built
 from sources) should never place anything there.
 
 I</usr/libexec/> is not used, thus packages should never install
-anything there.  Use I</usr/lib/E<lt>progE<gt>/> instead.
+anything there.  Use I</usr/lib/E<lt>progE<gt>> instead.
 
 =head2 Junk files
 
