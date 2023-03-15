@@ -28,57 +28,57 @@ The different configuration options are:
 
 =over 8
 
-=item B<export CFLAGS="STRING">
+=item B<export CFLAGS>="I<STRING>"
 
 Set C compiler options.
 
 Default: none.
 
-=item B<export CXXFLAGS="STRING">
+=item B<export CXXFLAGS>="I<STRING>"
 
 Set C++ compiler options.
 
 Default: none.
 
-=item B<export JOBS="NUMBER">
+=item B<export JOBS>="I<NUMBER>"
 
 Set the number of commands to run simultaneously when building a
 package.
 
 Default: none.
 
-=item B<export MAKEFLAGS="STRING">
+=item B<export MAKEFLAGS>="I<STRING>"
 
 Set L<make(1)|https://www.mankier.com/1/make> options.
 
 Default: none.
 
-=item B<PKGMK_SOURCE_MIRRORS="STRING...">
+=item B<PKGMK_SOURCE_MIRRORS>="I<STRING> ..."
 
 Set mirrors to check and download source archives from.
 
 Default: none.
 
-=item B<PKGMK_SOURCE_DIR="STRING">
+=item B<PKGMK_SOURCE_DIR>="I<STRING>"
 
 Set directory for downloaded source archives.
 
 Default: directory of Pkgfile.
 
-=item B<PKGMK_PACKAGE_DIR="STRING">
+=item B<PKGMK_PACKAGE_DIR>="I<STRING>"
 
 Set directory for built packages.
 
 Default: directory of Pkgfile.
 
-=item B<PKGMK_WORK_DIR="STRING">
+=item B<PKGMK_WORK_DIR>="I<STRING>"
 
 Set directory for building packages.
 
 Default: 'B<foo>/work', where B<foo> is the directory of the
 Pkgfile.
 
-=item B<PKGMK_DOWNLOAD="STRING">
+=item B<PKGMK_DOWNLOAD>="I<STRING>"
 
 If set to C<yes>,
 L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>
@@ -87,14 +87,14 @@ C<yes> and C<no>.
 
 Default: no.
 
-=item B<PKGMK_DOWNLOAD_PROG="STRING">
+=item B<PKGMK_DOWNLOAD_PROG>="I<STRING>"
 
 Use specified program to download source archives.  Valid strings are
 C<aria2c>, C<curl> and C<wget>.
 
 Default: C<curl>.
 
-=item B<PKGMK_ARIA2C_OPTS="STRING">
+=item B<PKGMK_ARIA2C_OPTS>="I<STRING>"
 
 Additional options for
 L<aria2c(1)|https://www.mankier.com/1/aria2c>, which is used by
@@ -103,7 +103,7 @@ files.
 
 Default: none.
 
-=item B<PKGMK_CURL_OPTS="STRING">
+=item B<PKGMK_CURL_OPTS>="I<STRING>"
 
 Additional options for
 L<curl(1)|https://www.mankier.com/1/curl>, which is used by
@@ -112,7 +112,7 @@ files.
 
 Default: none.
 
-=item B<PKGMK_WGET_OPTS="STRING">
+=item B<PKGMK_WGET_OPTS>="I<STRING>"
 
 Additional options for
 L<wget(1)|https://www.mankier.com/1/wget>, which is used by
@@ -121,7 +121,7 @@ files.
 
 Default: none.
 
-=item B<PKGMK_IGNORE_FOOTPRINT="STRING">
+=item B<PKGMK_IGNORE_FOOTPRINT>="I<STRING>"
 
 If set to C<yes>,
 L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will not perform
@@ -130,7 +130,7 @@ C<no>.
 
 Default: C<no>.
 
-=item B<PKGMK_IGNORE_MD5SUM="STRING">
+=item B<PKGMK_IGNORE_MD5SUM>="I<STRING>"
 
 If set to C<yes>,
 L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will not perform
@@ -139,7 +139,7 @@ C<no>.
 
 Default: C<no>.
 
-=item B<PKGMK_IGNORE_NEW="STRING">
+=item B<PKGMK_IGNORE_NEW>="I<STRING>"
 
 If set to C<yes>,
 L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will ignore new
@@ -147,7 +147,7 @@ files in a footprint mismatch.  Valid string are C<yes> and C<no>.
 
 Default: C<no>.
 
-=item B<PKGMK_NO_STRIP="STRING">
+=item B<PKGMK_NO_STRIP>="I<STRING>"
 
 If set to C<no>,
 L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> will strip built
@@ -155,7 +155,7 @@ binaries.  Valid string are C<yes> and C<no>.
 
 Default: C<no>.
 
-=item B<PKGMK_COMPRESSION_MODE="STRING">
+=item B<PKGMK_COMPRESSION_MODE>="I<STRING>"
 
 Option to select the mode used to compress the packages.  Valid
 strings are C<gz>, C<bz2>, C<xz> and C<lz>.
