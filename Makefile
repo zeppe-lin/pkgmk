@@ -9,7 +9,7 @@ MAN8 = pkgmk.8
 all: ${BIN8} ${MAN5} ${MAN8}
 
 %: %.pod
-	pod2man --nourls -r "pkgmk ${VERSION}" -c ' ' \
+	pod2man --nourls -r "${NAME} ${VERSION}" -c ' ' \
 		-n $(basename $@) -s $(subst .,,$(suffix $@)) $< > $@
 
 %: %.in
