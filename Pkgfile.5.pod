@@ -15,10 +15,9 @@ B<Pkgfile>
 =head1 DESCRIPTION
 
 This manual page describes the format of the F<Pkgfile> file.  The
-file is a L<sh(1p)|https://www.mankier.com/1p/sh> script, which
-defines a number of variables (I<name>, I<version>, I<release> and
-I<source>) and a function (I<build>) that should be executed in order
-to compile a package.
+file is a L<sh(1p)> script, which defines a number of variables
+(I<name>, I<version>, I<release> and I<source>) and a function
+(I<build>) that should be executed in order to compile a package.
 
 =head2 General Guidelines
 
@@ -158,10 +157,9 @@ F</sbin/mkfs.minix>).
 Do not add new variables to the F<Pkgfile>.  Only in very few cases
 does this actually improve the readability or the quality of the
 package.  Further, the only variables that are guaranteed to work with
-future versions of L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>
-are I<name>, I<version>, I<release> and I<source>.  Other names could
-be in conflict with internal variables in
-L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>.
+future versions of L<pkgmk(8)> are I<name>, I<version>, I<release> and
+I<source>.  Other names could be in conflict with internal variables
+in L<pkgmk(8)>.
 
 Use the I<$name> and I<$version> variables to make the package easier
 to update/maintain.  For example,
@@ -244,9 +242,8 @@ I<Depends on> can be omitted if there are no dependencies.
 
 =head2 Dependencies
 
-Dependencies are supported by
-L<pkgman(1)|https://zeppe-lin.github.io/pkgman.1.html>.
-The following rules should be respected:
+Dependencies are supported by L<pkgman(1)>.  The following rules
+should be respected:
 
 =over
 
@@ -300,18 +297,16 @@ interpreter version in its F<.footprint>.
 
 =back
 
-The reasoning for this policy is that you can use
-L<revdep(1)|https://zeppe-lin.github.io/revdep.1.html> to find
+The reasoning for this policy is that you can use L<revdep(1)> to find
 packages that need to be updated if one of the dependent libraries has
 become binary incompatible.  To find out what libraries a binary is
-linked to, use L<ldd(1)|https://www.mankier.com/1/ldd> or
-L<finddeps-linked(1)|https://zeppe-lin.github.io/finddeps-linked.1.html>.
+linked to, use L<ldd(1)> or L<finddeps-linked(1)>.
 
 Also, in the case of updating the major version of Perl/Python, it
 will be useful that the libraries or programs that create Perl/Python
 bindings have a dependency on them.  We will have to rebuild
 everything that depends on Perl/Python with one command (see
-L<pkgman-rdep(1)|https://zeppe-lin.github.io/pkgman-rdep.1.html>).
+L<pkgman-rdep(1)>).
 
 =head2 RC Scripts
 
@@ -326,18 +321,13 @@ The I<build> function should use the C<$SRC> variable whenever it
 needs to access the files listed in the C<source> variable, and the
 C<$PKG> variable as the root destination of the output files.
 
-Being a shell script executed in the context of
-L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>, the entire
-F<Pkgfile> file has access to the variables initialized in
-F<pkgmk.conf> and the default values set by
-L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>.  Also, as an
-undocumented side effect of how it is used by
-L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>, it can also
-change the behaviour of
-L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html> by rewriting some
-of its functions and variables while the current package is built.
-However, the I<build> function has only read access to these mentioned
-above.
+Being a shell script executed in the context of L<pkgmk(8)>, the
+entire F<Pkgfile> file has access to the variables initialized in
+F<pkgmk.conf> and the default values set by L<pkgmk(8)>.  Also, as an
+undocumented side effect of how it is used by L<pkgmk(8)>, it can also
+change the behaviour of L<pkgmk(8)> by rewriting some of its functions
+and variables while the current package is built.  However, the
+I<build> function has only read access to these mentioned above.
 
 =head1 ERROR HANDLING
 
@@ -418,8 +408,7 @@ like:
 
 =head1 SEE ALSO
 
-L<pkgmk(8)|https://zeppe-lin.github.io/pkgmk.8.html>,
-L<pkgmk.conf(5)|https://zeppe-lin.github.io/pkgmk.conf.5.html>
+L<pkgmk(8)>, L<pkgmk.conf(5)>
 
 =cut
 

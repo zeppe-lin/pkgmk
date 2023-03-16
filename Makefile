@@ -2,7 +2,11 @@
 
 include config.mk
 
-all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
+BIN8 = pkgmk
+MAN5 = pkgmk.conf.5 Pkgfile.5
+MAN8 = pkgmk.8
+
+all: ${BIN8} ${MAN5} ${MAN8}
 
 %: %.pod
 	pod2man --nourls -r "pkgmk ${VERSION}" -c ' ' \
@@ -11,38 +15,25 @@ all: pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
 %: %.in
 	sed "s/@VERSION@/${VERSION}/g" $< > $@
 
-check:
-	@echo "=======> Check PODs for errors"
-	@podchecker *.pod
-	@echo "=======> Check URLs for response code"
-	@grep -Eiho "https?://[^\"\\'> ]+" *.*       \
-		| grep -Ev 'https?://\*/\*'          \
-		| xargs -P10 -I{} curl -o /dev/null  \
-		  -sw "[%{http_code}] %{url}\n" '{}' \
-		| sort -u
-
 install-dirs:
 	mkdir -p ${DESTDIR}${PREFIX}/sbin
 	mkdir -p ${DESTDIR}${MANPREFIX}/man5
 	mkdir -p ${DESTDIR}${MANPREFIX}/man8
 
 install: all install-dirs
-	cp -f pkgmk        ${DESTDIR}${PREFIX}/sbin/
-	cp -f pkgmk.conf.5 ${DESTDIR}${MANPREFIX}/man5/
-	cp -f Pkgfile.5    ${DESTDIR}${MANPREFIX}/man5/
-	cp -f pkgmk.8      ${DESTDIR}${MANPREFIX}/man8/
-	chmod 0755         ${DESTDIR}${PREFIX}/sbin/pkgmk
-	chmod 0644         ${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
-	chmod 0644         ${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
-	chmod 0644         ${DESTDIR}${MANPREFIX}/man8/pkgmk.8
+	cp -f ${BIN8} ${DESTDIR}${PREFIX}/sbin/
+	cp -f ${MAN5} ${DESTDIR}${MANPREFIX}/man5/
+	cp -f ${MAN8} ${DESTDIR}${MANPREFIX}/man8/
+	cd ${DESTDIR}${PREFIX}/sbin    && chmod 0755 ${BIN8}
+	cd ${DESTDIR}${MANPREFIX}/man5 && chmod 0644 ${MAN5}
+	cd ${DESTDIR}${MANPREFIX}/man8 && chmod 0644 ${MAN8}
 
 uninstall:
-	rm -f ${DESTDIR}${PREFIX}/sbin/pkgmk
-	rm -f ${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
-	rm -f ${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
-	rm -f ${DESTDIR}${MANPREFIX}/man8/pkgmk.8
+	cd ${DESTDIR}${PREFIX}/sbin    && rm -f ${BIN8}
+	cd ${DESTDIR}${MANPREFIX}/man5 && rm -f ${MAN5}
+	cd ${DESTDIR}${MANPREFIX}/man8 && rm -f ${MAN8}
 
 clean:
-	rm -f pkgmk pkgmk.8 pkgmk.conf.5 Pkgfile.5
+	rm -f ${BIN8} ${MAN5} ${MAN8}
 
-.PHONY: all check install-dirs install uninstall clean
+.PHONY: all install-dirs install uninstall clean
