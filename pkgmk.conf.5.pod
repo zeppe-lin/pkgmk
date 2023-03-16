@@ -52,7 +52,8 @@ Default: none.
 
 =item B<PKGMK_SOURCE_MIRRORS>="I<STRING> ..."
 
-Set mirrors to check and download source archives from.
+Set mirrors to check and download source archives from.  If the URI
+contains space symbol, replace it by C<%20>.
 
 Default: none.
 
