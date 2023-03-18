@@ -1,6 +1,9 @@
-CODING STYLE
+ABOUT
+	This file attempts to describe the rules to use when hacking
+	the pkgmk sources cloned from the Zeppe-Lin's source code
+	repository.
 
-	Variables declaration in the pkgmk's code:
+VARIABLES DECLARATION
 
 	+----------------+-------------------------------------------+
 	| ${var}, ${VAR} | Global variable. External, declared in    |
