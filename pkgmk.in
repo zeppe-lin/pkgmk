@@ -1,4 +1,5 @@
 #!/bin/sh
+# See COPYING and COPYRIGHT files for corresponding information.
 
 ######################################################################
 #            Variables declaration in the pkgmk's code:              #
