@@ -38,11 +38,11 @@ too.
 
 =item B<-d>, B<--download>
 
-Download missing source file(s).
+Download missing source files.
 
 =item B<-do>, B<--download-only>
 
-Do not build, only download missing source file(s).
+Do not build, only download missing source files.
 
 =item B<-utd>, B<--up-to-date>
 
