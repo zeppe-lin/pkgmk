@@ -1,3 +1,7 @@
+# vim undo
+.*.un~
+
+# build artefacts
 *.8
 *.5
 pkgmk
