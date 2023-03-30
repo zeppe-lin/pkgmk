@@ -283,16 +283,16 @@ Examples:
 
 =item F<core/automake>
 
-Does B<not> list perl, because the program is a perl script (there is
-no binary that links to libperl).
+Does B<not> list C<perl>, because the program is a Perl script (there
+is no binary that links to C<libperl>).
 
 =item F<core/bc>
 
-B<Does> list readline, because bc is linked to readline.
+B<Does> list C<readline>, because C<bc> is linked to C<readline>.
 
 =item F<core/py3-setuptools>
 
-B<Does> list python3, because the package contains the specific
+B<Does> list C<python3>, because the package contains the specific
 interpreter version in its F<.footprint>.
 
 =back
