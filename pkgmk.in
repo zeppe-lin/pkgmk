@@ -153,7 +153,7 @@ download_file() {
   for __REPO in $PKGMK_SOURCE_MIRRORS; do
     __REPO="$(echo "$__REPO" | sed 's|/$||')"
 
-    # Intentional.
+    # Intentional word splitting.
     # shellcheck disable=2086
     if $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS \
       "$__REPO/$__BASENAME"; then
