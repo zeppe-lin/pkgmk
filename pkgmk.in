@@ -667,7 +667,7 @@ main() {
   parse_options "$@"
 
   for __FILE in ./Pkgfile $PKGMK_CONFFILE; do
-    if [ ! -f $__FILE ]; then
+    if [ ! -f "$__FILE" ]; then
       error "File '$__FILE' not found."
       exit 1
     fi
