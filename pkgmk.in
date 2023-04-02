@@ -63,7 +63,7 @@ get_filename() {
 }
 
 get_basename() {
-  echo ${1##*/}
+  echo "${1##*/}"
 }
 
 check_pkgfile() {
