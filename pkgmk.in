@@ -655,10 +655,10 @@ main() {
   TARGET=
 
   if [ -f .32bit ]; then
-    PKGMK_ARCH=32
+    export PKGMK_ARCH=32
   else
     # multilib
-    PKGMK_ARCH=64
+    export PKGMK_ARCH=64
   fi
 
   # locals
