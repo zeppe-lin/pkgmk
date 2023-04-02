@@ -249,6 +249,8 @@ make_md5sum() {
       __LOCAL_FILENAMES="$__LOCAL_FILENAMES $(get_filename "$__FILE")"
     done
 
+    # Intentional word splitting.
+    # shellcheck disable=2086
     md5sum $__LOCAL_FILENAMES | sed -e 's:  .*/:  :' | sort -k 2
   fi
 }
