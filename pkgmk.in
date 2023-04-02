@@ -671,7 +671,9 @@ main() {
       error "File '$__FILE' not found."
       exit 1
     fi
-    . $__FILE
+    # Intentional.
+    # shellcheck disable=1090
+    . "$__FILE"
   done
 
   check_directory "$PKGMK_SOURCE_DIR"
