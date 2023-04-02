@@ -744,8 +744,9 @@ main() {
   exit 0
 }
 
-trap "interrupted" HUP INT QUIT TERM
-trap "atexit" EXIT
+# Set exit hooks.
+trap "interrupted" HUP  INT  QUIT  TERM
+trap "atexit"      EXIT
 
 ######################################################################
 # default configuration                                              #
