@@ -166,6 +166,8 @@ download_file() {
 
   if [ $error != 0 ]; then
     while true; do
+      # Intentional word splitting.
+      # shellcheck disable=2086
       $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS  "$1"
       error=$?
       if [ $error != 0 ] && [ "$__RESUME_OPTS" ]; then
