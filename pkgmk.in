@@ -683,7 +683,7 @@ main() {
   check_pkgfile
 
   case $PKGMK_COMPRESSION_MODE in
-  gz|bz2|xz|lz)
+  gz | bz2 | xz | lz)
     TARGET="$PKGMK_PACKAGE_DIR/$name#$version-$release.pkg.tar.$PKGMK_COMPRESSION_MODE"
     ;;
   *)
