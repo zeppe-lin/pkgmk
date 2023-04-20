@@ -315,6 +315,43 @@ C<< rc.<prog> >>, and installed to F<< /etc/rc.d/<prog> >>.
 
 See L<RC Script> for template script for a package.
 
+=head2 Runscripts
+
+Runscripts are supported by L<pkgman(1)>.  Packages should be built
+with the idea in mind that people won't execute the C<pre-install>,
+C<post-install>, C<pre-remove> and C<post-remove> scripts.  This is
+entirely true for C<core> pkgsrc collection (because the packages in
+this collection are designed to be installed in a separate root
+directory by L<pkgadd(1)> utility), and varies from one to another
+collections.  If a package adds an user to the system using
+C<pre-install>, a C<pre-remove> scripts must remove that user.
+
+What these scripts should B<not> do:
+
+=over
+
+=item *
+
+Edit configuration files.
+
+=item *
+
+Remove other packages.
+
+=item *
+
+Restart servers.
+
+=item *
+
+Request for user input.
+
+=back
+
+The above prohibitions apply only to packages in the official
+pkgsrc repositories.  You may not follow them in your own collections
+if you need more sophisticated setups.
+
 =head1 ENVIRONMENT
 
 The I<build> function should use the C<$SRC> variable whenever it
