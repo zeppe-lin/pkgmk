@@ -1,11 +1,11 @@
 OVERVIEW
 --------
-This directory contains pkgmk, a package management utility that makes a
-software package.
+This directory contains pkgmk, a package management utility that makes
+a software package.
 
-This distribution is a fork of CRUX' pkgmk utility (which is part of CRUX'
-pkgutils software) as of commit 9ca0da6 (Sat Nov 17 2018) with the following
-differences:
+This distribution is a fork of CRUX' pkgmk utility (which is part of
+CRUX' pkgutils software) as of commit 9ca0da6 (Sat Nov 17 2018) with
+the following differences:
 - rewritten in POSIX sh(1p)
 - added support of suckless' sbase utilities
 - added support of aria2c(1) downloader
@@ -13,8 +13,8 @@ differences:
 - added Pkgfile(5) man page
 - added bash completion
 - removed "-i", "-u", and "-r" command-line options
-- removed signify(1) support since pkgsrc collection is distributed through
-  git(1) with signed commits
+- removed signify(1) support since pkgsrc collection is distributed
+  through git(1) with signed commits
 - added GNU-style long options
 - refactored options parsing
 
@@ -42,8 +42,8 @@ REQUIREMENTS
 
 INSTALL
 -------
-The shell commands `make && make install` should build and install this
-package.
+The shell commands `make && make install` should build and install
+this package.
 
 
 LICENSE
