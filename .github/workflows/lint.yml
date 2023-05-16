@@ -1,0 +1,26 @@
+name: Build CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    #- name: Install shellcheck
+    #  run: sudo apt-get install -y shellcheck
+
+    - name: Check PODs for errors
+      run: podchecker *.pod
+
+    # TODO
+    #- name: Check shell scripts for errors
+    #  run: shellcheck -s sh -x pkgmk.in
+
+# End of file.
