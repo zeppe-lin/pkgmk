@@ -26,10 +26,17 @@ install: all
 	cd ${DESTDIR}${MANPREFIX}/man5 && chmod 0644 ${MAN5}
 	cd ${DESTDIR}${MANPREFIX}/man8 && chmod 0644 ${MAN8}
 
+install-bashcomp:
+	mkdir -p ${DESTDIR}${BASHCOMPDIR}
+	cp -f bash_completion ${DESTDIR}${BASHCOMPDIR}/pkgmk
+
 uninstall:
 	cd ${DESTDIR}${PREFIX}/sbin    && rm -f ${BIN8}
 	cd ${DESTDIR}${MANPREFIX}/man5 && rm -f ${MAN5}
 	cd ${DESTDIR}${MANPREFIX}/man8 && rm -f ${MAN8}
+
+uninstall-bashcomp:
+	rm -f ${DESTDIR}${BASHCOMPDIR}/pkgmk
 
 clean:
 	rm -f ${BIN8} ${MAN5} ${MAN8}
@@ -38,4 +45,4 @@ clean:
 dist: clean
 	git archive --format=tar.gz -o ${DIST}.tar.gz --prefix=${DIST}/ HEAD
 
-.PHONY: all install uninstall clean dist
+.PHONY: all install install-bashcomp uninstall uninstall-bashcomp clean dist
