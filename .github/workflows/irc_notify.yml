@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: Gottox/irc-message-action@v2
 
       - name: Push Notification
+        uses: Gottox/irc-message-action@v2
         if: github.event_name == 'push'
         with:
           channel: '#zeppe-lin'
@@ -20,6 +20,7 @@ jobs:
             ') }}
 
       - name: PR Notification
+        uses: Gottox/irc-message-action@v2
         if: github.event_name == 'pull_request'
         with:
           channel: '#zeppe-lin'
