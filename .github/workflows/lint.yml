@@ -13,14 +13,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    #- name: Install shellcheck
-    #  run: sudo apt-get install -y shellcheck
+    - name: Install shellcheck
+      run: sudo apt-get install -y shellcheck
+
+    - name: Check shell scripts for errors
+      run: shellcheck -s sh pkgmk.in
 
     - name: Check PODs for errors
       run: podchecker *.pod
-
-    # TODO
-    #- name: Check shell scripts for errors
-    #  run: shellcheck -s sh -x pkgmk.in
 
 # End of file.
