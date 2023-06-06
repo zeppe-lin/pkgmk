@@ -323,7 +323,7 @@ strip_files() {
 
   find . -type f -printf "%P\n"                    \
     | $__FILTER                                    \
-    | xargs -r -L10 -P${JOBS:-1}                   \
+    | xargs -r -L10 -P"${JOBS:-1}"                 \
       file --no-buffer --separator '>'             \
         -e apptype -e ascii -e encoding -e tokens  \
         -e cdf -e compress -e tar -e text          \
