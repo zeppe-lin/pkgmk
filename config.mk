@@ -1,6 +1,6 @@
 # project metadata
 NAME        = pkgmk
-VERSION     = 5.42.1
+VERSION     = 5.42.2
 DIST        = ${NAME}-${VERSION}
 
 # paths
