@@ -445,7 +445,8 @@ build_package() {
 
   cd "$SRC"
 
-  if (set -e -x; build); then
+  (set -e -x; build)
+  if [ $? = 0 ]; then
     if [ "$PKGMK_NO_STRIP" = "no" ]; then
       strip_files
     fi
