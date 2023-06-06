@@ -7,20 +7,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: Gottox/irc-message-action@v2
+
       - name: Push Notification
-        uses: Gottox/irc-message-action@v2
         if: github.event_name == 'push'
         with:
           channel: '#zeppe-lin'
           nickname: zeppbot
           message: |-
-            ${{ github.actor }} pushed ${{ github.event.repository.name }}:${{ github.ref_name || github.event.ref }}
+            ${{ github.actor }} pushed ${{ github.event.repository.name }}:${{ github.ref_name || github.event.ref }} -- ${{ github.event.compare }}
             ${{ join(github.event.commits.*.message, '
             ') }}
-            ${{ github.event.compare }}
 
-      - name: Pull Request Notification
-        uses: Gottox/irc-message-action@v2
+      - name: PR Notification
         if: github.event_name == 'pull_request'
         with:
           channel: '#zeppe-lin'
