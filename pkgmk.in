@@ -349,13 +349,13 @@ compress_manpages() {
 
   cd "$PKG"
 
-  find . -type f -path "*/man/man*/*" | while read __FILE; do
+  find . -type f -path "*/man/man*/*" | while read -r __FILE; do
     if [ "$__FILE" = "${__FILE%%.gz}" ]; then
       gzip -9 "$__FILE"
     fi
   done
 
-  find . -type l -path "*/man/man*/*" | while read __FILE; do
+  find . -type l -path "*/man/man*/*" | while read -r __FILE; do
     __TARGET=$(readlink -n "$__FILE")
     __TARGET="${__TARGET##*/}"
     __TARGET="${__TARGET%%.gz}.gz"
