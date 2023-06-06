@@ -258,7 +258,7 @@ make_md5sum() {
 }
 
 make_footprint() {
-  pkginfo --footprint "$TARGET" | sort -k 3
+  pkginfo --footprint "$TARGET"
 }
 
 check_md5sum() {
@@ -378,8 +378,7 @@ check_footprint() {
     make_footprint > "$__FILE.footprint"
 
     if [ -f .footprint ]; then
-      sort -k 3 .footprint         \
-      > "$__FILE.footprint.orig"
+      cp .footprint "$__FILE.footprint.orig"
 
       diff -w -t -U 0 \
         "$__FILE.footprint.orig"   \
