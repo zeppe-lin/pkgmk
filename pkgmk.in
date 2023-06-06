@@ -446,6 +446,9 @@ build_package() {
   cd "$SRC"
 
   (set -e -x; build)
+
+  # Intentional use.
+  # shellcheck disable=SC2181
   if [ $? = 0 ]; then
     if [ "$PKGMK_NO_STRIP" = "no" ]; then
       strip_files
