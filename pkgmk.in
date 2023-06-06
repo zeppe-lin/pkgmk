@@ -339,7 +339,7 @@ strip_files() {
         print "--strip-debug    \"" $1 "\""
       }
       ' \
-    | xargs -r -L1 -P${JOBS:-1} strip
+    | xargs -r -L1 -P"${JOBS:-1}" strip
 }
 
 compress_manpages() {
