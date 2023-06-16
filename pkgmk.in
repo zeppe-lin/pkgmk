@@ -414,15 +414,11 @@ make_work_dir() {
   rm -rf "$PKGMK_WORK_DIR" # must
   mkdir -p "$SRC" "$PKG"
 
-  if [ "$PKGMK_IGNORE_MD5SUM" = "no" ]; then
-    check_md5sum
-  fi
+  [ "$PKGMK_IGNORE_MD5SUM" = "no" ] && check_md5sum
 }
 
 remove_work_dir() {
-  if [ "$PKGMK_KEEP_WORK" = "no" ]; then
-    rm -rf "$PKGMK_WORK_DIR"
-  fi
+  [ "$PKGMK_KEEP_WORK" = "no" ] && rm -rf "$PKGMK_WORK_DIR"
 }
 
 build_package() {
@@ -435,9 +431,7 @@ build_package() {
   check_file "$TARGET"
   make_work_dir
 
-  if [ "$(id -u)" != 0 ]; then
-    warning "Packages should be built as root."
-  fi
+  [ "$(id -u)" = 0 ] || warning "Packages should be built as root."
 
   info "Building '$TARGET' started $(date)."
 
@@ -450,9 +444,8 @@ build_package() {
   # Intentional use.
   # shellcheck disable=SC2181
   if [ $? = 0 ]; then
-    if [ "$PKGMK_NO_STRIP" = "no" ]; then
-      strip_files
-    fi
+
+    [ "$PKGMK_NO_STRIP" = "yes" ] || strip_files
 
     compress_manpages
 
