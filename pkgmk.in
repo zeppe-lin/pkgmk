@@ -706,7 +706,7 @@ main() {
 
   if [ "$PKGMK_UPDATE_MD5SUM" = "yes" ]; then
     download_source
-    check_file ".md5sum"
+    check_file    .md5sum
     make_md5sum > .md5sum
     info "Md5sum updated."
     exit 0
