@@ -1,7 +1,13 @@
-# vim undo
-.*.un~
-
-# build artefacts
+# build files and artefacts
 *.8
 *.5
 pkgmk
+
+# vim undo files
+.*.un~
+
+# backup files
+*.bak
+
+# dist tarballs
+*.tar.gz
