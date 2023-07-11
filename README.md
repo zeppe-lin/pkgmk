@@ -17,6 +17,7 @@ the following differences:
   through git(1) with signed commits
 - added GNU-style long options
 - refactored options parsing
+- added zst packages support
 
 See git log for complete/further differences.
 
