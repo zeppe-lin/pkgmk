@@ -144,7 +144,7 @@ Default: C<no>.
 =item B<PKGMK_COMPRESSION_MODE>="I<STRING>"
 
 Option to select the mode used to compress the packages.  Valid
-strings are C<gz>, C<bz2>, C<xz> and C<lz>.
+strings are C<gz>, C<bz2>, C<xz>, C<lz> and C<zst>.
 
 Default: C<gz>.
 
