@@ -243,8 +243,8 @@ unpack_source() {
 }
 
 make_md5sum() {
-  __FILE=
-  __LOCAL_FILENAMES=
+  local __FILE=
+  local __LOCAL_FILENAMES=
 
   if [ "${source}" ]; then
     for __FILE in ${source}; do
@@ -262,7 +262,7 @@ make_footprint() {
 }
 
 check_md5sum() {
-  __FILE="$PKGMK_WORK_DIR"/.tmp
+  local __FILE="$PKGMK_WORK_DIR"/.tmp
 
   cd "$PKGMK_ROOT"
 
