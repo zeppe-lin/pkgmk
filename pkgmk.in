@@ -41,7 +41,7 @@ die() {
 ######################################################################
 
 get_filename() {
-  __ABSOLUTE=
+  local __ABSOLUTE=
 
   if [ "$1" = "-a" ]; then
     __ABSOLUTE=1
@@ -103,14 +103,14 @@ check_file() {
 }
 
 download_file() {
-  __LOCAL_FILENAME=$(get_filename "$1")
-  __LOCAL_FILENAME_PARTIAL="$__LOCAL_FILENAME.partial"
-  __DOWNLOAD_CMD=${PKGMK_DOWNLOAD_PROG:-curl}
-  __DOWNLOAD_OPTS=
-  __RESUME_CMD=
-  __RESUME_OPTS=
-  __BASENAME=
-  __REPO=
+  local __LOCAL_FILENAME=$(get_filename "$1")
+  local __LOCAL_FILENAME_PARTIAL="$__LOCAL_FILENAME.partial"
+  local __DOWNLOAD_CMD=${PKGMK_DOWNLOAD_PROG:-curl}
+  local __DOWNLOAD_OPTS=
+  local __RESUME_CMD=
+  local __RESUME_OPTS=
+  local __BASENAME=
+  local __REPO=
 
   info "Downloading '$1'."
 
@@ -189,8 +189,8 @@ download_file() {
 }
 
 download_source() {
-  __FILE=
-  __LOCAL_FILENAME=
+  local __FILE=
+  local __LOCAL_FILENAME=
 
   for __FILE in ${source}; do
     __LOCAL_FILENAME=$(get_filename "$__FILE")
@@ -214,9 +214,9 @@ download_source() {
 }
 
 unpack_source() {
-  __FILE=
-  __LOCAL_FILENAME=
-  __COMMAND=
+  local __FILE=
+  local __LOCAL_FILENAME=
+  local __COMMAND=
 
   for __FILE in ${source}; do
     __LOCAL_FILENAME=$(get_filename "$__FILE")
@@ -313,6 +313,8 @@ check_md5sum() {
 }
 
 strip_files() {
+  local __FILTER=
+
   cd "$PKG"
 
   if [ -f "$PKGMK_ROOT/.nostrip" ]; then
@@ -343,9 +345,9 @@ strip_files() {
 }
 
 compress_manpages() {
-  __FILE=
-  __TARGET=
-  __DIR=
+  local __FILE=
+  local __TARGET=
+  local __DIR=
 
   cd "$PKG"
 
@@ -370,7 +372,7 @@ compress_manpages() {
 }
 
 check_footprint() {
-  __FILE="$PKGMK_WORK_DIR/.tmp"
+  local __FILE="$PKGMK_WORK_DIR/.tmp"
 
   cd "$PKGMK_ROOT"
 
@@ -426,7 +428,7 @@ build_package() {
   BUILD_SUCCESSFUL="no" 
 
   # locals
-  __COMPRESSION=
+  local __COMPRESSION=
 
   check_file "$TARGET"
   make_work_dir
@@ -491,8 +493,8 @@ build_package() {
 }
 
 clean() {
-  __FILE=
-  __LOCAL_FILENAME=
+  local __FILE=
+  local __LOCAL_FILENAME=
 
   if [ -f "$TARGET" ]; then
     info "Removing $TARGET"
@@ -524,8 +526,8 @@ update_footprint() {
 }
 
 build_needed() {
-  __FILE=
-  __RESULT="yes"
+  local __FILE=
+  local __RESULT="yes"
 
   if [ -f "$TARGET" ]; then
     __RESULT="no"
@@ -664,10 +666,9 @@ main() {
     export PKGMK_ARCH=64
   fi
 
-  # locals
-  __FILE=
-
   parse_options "$@"
+
+  local __FILE
 
   for __FILE in ./Pkgfile $PKGMK_CONFFILE; do
     if [ ! -f "$__FILE" ]; then
