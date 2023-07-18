@@ -103,9 +103,10 @@ check_file() {
 }
 
 download_file() {
-  local __LOCAL_FILENAME=$(get_filename "$1")
+  # shellcheck disable=2155
+  local __LOCAL_FILENAME="$(get_filename "$1")"
   local __LOCAL_FILENAME_PARTIAL="$__LOCAL_FILENAME.partial"
-  local __DOWNLOAD_CMD=${PKGMK_DOWNLOAD_PROG:-curl}
+  local __DOWNLOAD_CMD="${PKGMK_DOWNLOAD_PROG:-curl}"
   local __DOWNLOAD_OPTS=
   local __RESUME_CMD=
   local __RESUME_OPTS=
