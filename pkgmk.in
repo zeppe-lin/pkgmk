@@ -195,20 +195,19 @@ download_source() {
 
   for __FILE in ${source}; do
     __LOCAL_FILENAME=$(get_filename "$__FILE")
+    [ -e "$__LOCAL_FILENAME" ] && continue
 
-    if [ ! -e "$__LOCAL_FILENAME" ]; then
-      if [ "$__LOCAL_FILENAME" = "$__FILE" ]; then
-        error "Source file '$__LOCAL_FILENAME' not found "\
-              "(can not be downloaded, URL not specified)."
-        exit $E_DOWNLOAD
+    if [ "$__LOCAL_FILENAME" = "$__FILE" ]; then
+      error "Source file '$__LOCAL_FILENAME' not found "\
+            "(can not be downloaded, URL not specified)."
+      exit $E_DOWNLOAD
+    else
+      if [ "$PKGMK_DOWNLOAD" = "yes" ]; then
+        download_file "$__FILE"
       else
-        if [ "$PKGMK_DOWNLOAD" = "yes" ]; then
-          download_file "$__FILE"
-        else
-          error "Source file '$__LOCAL_FILENAME' not found "\
-                "(use option -d to download)."
-          exit $E_DOWNLOAD
-        fi
+        error "Source file '$__LOCAL_FILENAME' not found "\
+              "(use option -d to download)."
+        exit $E_DOWNLOAD
       fi
     fi
   done
