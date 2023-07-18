@@ -1,0 +1,3 @@
+# Allow locals declaration.
+# https://www.shellcheck.net/wiki/SC3043
+disable=3043
