@@ -472,7 +472,7 @@ build_package() {
     info "Building '$TARGET' succeeded $(date)."
   else
     [ -f "$TARGET" ] &&
-      touch -r "$PKGMK_ROOT/Pkgfile" "$TARGET" >/dev/null 1>&2
+      touch -r "$PKGMK_ROOT/Pkgfile" "$TARGET" >/dev/null 2>&1
 
     error "Building '$TARGET' failed."
     exit $E_BUILD
