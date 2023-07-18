@@ -313,15 +313,11 @@ check_md5sum() {
 }
 
 strip_files() {
-  local __FILTER=
+  local __FILTER="cat"
+  [ -f "$PKGMK_ROOT/.nostrip" ] &&
+    __FILTER="grep -v -f $PKGMK_ROOT/.nostrip"
 
   cd "$PKG"
-
-  if [ -f "$PKGMK_ROOT/.nostrip" ]; then
-    __FILTER="grep -v -f $PKGMK_ROOT/.nostrip"
-  else
-    __FILTER="cat"
-  fi
 
   find . -type f -printf "%P\n"                    \
     | $__FILTER                                    \
@@ -330,18 +326,11 @@ strip_files() {
         -e apptype -e ascii -e encoding -e tokens  \
         -e cdf -e compress -e tar -e text          \
     | awk '
-      BEGIN { FS = ">[ ]+" }
-      $0 ~ /ELF.*executable.*not stripped/    {
-        print "--strip-all      \"" $1 "\""
-      }
-      $0 ~ /ELF.*shared object.*not stripped/ {
-        print "--strip-unneeded \"" $1 "\""
-      }
-      $2 == "current ar archive"              {
-        print "--strip-debug    \"" $1 "\""
-      }
-      ' \
-    | xargs -r -L1 -P"${JOBS:-1}" strip
+BEGIN { FS = ">[ ]+" }
+$0 ~ /ELF.*executable.*not stripped/    { print "--strip-all      \"" $1 "\"" }
+$0 ~ /ELF.*shared object.*not stripped/ { print "--strip-unneeded \"" $1 "\"" }
+$2 == "current ar archive"              { print "--strip-debug    \"" $1 "\"" }
+'   | xargs -r -L1 -P"${JOBS:-1}" strip
 }
 
 compress_manpages() {
@@ -352,9 +341,7 @@ compress_manpages() {
   cd "$PKG"
 
   find . -type f -path "*/man/man*/*" | while read -r __FILE; do
-    if [ "$__FILE" = "${__FILE%%.gz}" ]; then
-      gzip -9 "$__FILE"
-    fi
+    [ "$__FILE" = "${__FILE%%.gz}" ] && gzip -9 "$__FILE"
   done
 
   find . -type l -path "*/man/man*/*" | while read -r __FILE; do
@@ -365,9 +352,7 @@ compress_manpages() {
     __FILE="${__FILE%%.gz}.gz"
     __DIR=$(dirname "$__FILE")
 
-    if [ -e "$__DIR/$__TARGET" ]; then
-      ln -sf "$__TARGET" "$__FILE"
-    fi
+    [ -e "$__DIR/$__TARGET" ] && ln -sf "$__TARGET" "$__FILE"
   done
 }
 
@@ -397,10 +382,12 @@ check_footprint() {
         error "Footprint mismatch found:"
         cat "$__FILE.footprint.diff" >&2
       fi
+
     else
       warning "Footprint not found, creating new."
       mv "$__FILE.footprint" .footprint
     fi
+
   else
     BUILD_SUCCESSFUL="no"
     error "Package '$TARGET' was not found."
@@ -484,9 +471,9 @@ build_package() {
   if [ "$BUILD_SUCCESSFUL" = "yes" ]; then
     info "Building '$TARGET' succeeded $(date)."
   else
-    if [ -f "$TARGET" ]; then
+    [ -f "$TARGET" ] &&
       touch -r "$PKGMK_ROOT/Pkgfile" "$TARGET" >/dev/null 1>&2
-    fi
+
     error "Building '$TARGET' failed."
     exit $E_BUILD
   fi
