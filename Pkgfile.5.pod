@@ -15,9 +15,29 @@ B<Pkgfile>
 =head1 DESCRIPTION
 
 This manual page describes the format of the F<Pkgfile> file.  The
-file is a POSIX L<sh(1p)> script, which defines a number of variables
-(I<name>, I<version>, I<release> and I<source>) and a function
-(I<build>) that should be executed in order to compile a package.
+file is a POSIX L<sh(1p)> script with some exceptions (see below),
+which defines a number of variables (I<name>, I<version>, I<release>
+and I<source>) and a function (I<build>) that should be executed in
+order to compile a package.
+
+=head2 POSIX Exceptions
+
+In POSIX sh, C<local> is undefined.  You can adopt some convention to
+avoid accidentally overwriting variable names, e.g. prefixing with the
+function name:
+
+  build() {
+          _build_i=0
+          ...
+  }
+
+However, C<local> is supported in many shells, including L<bash(1)>,
+L<ksh(1)>, L<dash(1)> (which is used in Zeppe-Lin), and BusyBox
+L<ash(1)>.  So, strictly speaking, it's not POSIX, but since quite a
+lot of real world shells support this feature, prefixing variables is
+little ugly, and finding bugs with overwriting variables is a big
+headache for developers, it was decided to allow C<locale>.  In the
+end, the choice is yours to use or not.
 
 =head2 General Guidelines
 
