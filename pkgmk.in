@@ -49,8 +49,11 @@ get_filename() {
   fi
 
   case $1 in
-  http://*/* | https://*/* | ftp://*/* | file://*/*)
+     http://*/* |    https://*/* |    ftp://*/* |    file://*/*)
     echo "$PKGMK_SOURCE_DIR/${1##*/}"
+    ;;
+  *::http://*/* | *::https://*/* | *::ftp://*/* | *::file://*/*)
+    echo "$PKGMK_SOURCE_DIR/${1%::*}"
     ;;
   *)
     if [ "$__ABSOLUTE" ]; then
@@ -107,13 +110,23 @@ download_file() {
   local __LOCAL_FILENAME="$(get_filename "$1")"
   local __LOCAL_FILENAME_PARTIAL="$__LOCAL_FILENAME.partial"
   local __DOWNLOAD_CMD="${PKGMK_DOWNLOAD_PROG:-curl}"
+  local __DOWNLOAD_URL=
   local __DOWNLOAD_OPTS=
   local __RESUME_CMD=
   local __RESUME_OPTS=
   local __BASENAME=
   local __REPO=
 
-  info "Downloading '$1'."
+  case $1 in
+  *::http://* | *::https://* | *::ftp://* | *::file://* )
+    __DOWNLOAD_URL=${1#*::}
+    info "Downloading '$__DOWNLOAD_URL' as '$__LOCAL_FILENAME'"
+    ;;
+  *)
+    __DOWNLOAD_URL=$1
+    info "Downloading '$__DOWNLOAD_URL'"
+    ;;
+  esac
 
   if ! command -v "$__DOWNLOAD_CMD" >/dev/null; then
     error "Command '$__DOWNLOAD_CMD' not found."
@@ -169,7 +182,7 @@ download_file() {
     while true; do
       # Intentional word splitting.
       # shellcheck disable=2086
-      $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS  "$1"
+      $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS  "$__DOWNLOAD_URL"
       error=$?
       if [ $error != 0 ] && [ "$__RESUME_OPTS" ]; then
         info "Partial download failed, restarting"
@@ -182,7 +195,7 @@ download_file() {
   fi
 
   if [ $error != 0 ] || [ ! -f "$__LOCAL_FILENAME_PARTIAL" ]; then
-    error "Downloading '$1' failed."
+    error "Downloading '$__DOWNLOAD_URL' failed."
     exit $E_DOWNLOAD
   fi
 
