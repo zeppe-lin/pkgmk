@@ -5,13 +5,13 @@ MAXLINE = 80
 deadlinks:
 	@echo "=======> Check for dead links"
 	@grep -Eiho "https?://[^\"\\'> ]+" ${GREPOPT} \
-		| grep -v "http://www.gnu.org/software/somelib/index.html" \
-		| grep -Ev "https?://\*/\*"           \
-		| grep -v "http://xyz.org/"           \
-		| xargs -P10 -I{} curl -o /dev/null   \
-		 -sw "[%{http_code}] %{url}\n" '{}'   \
-		| grep -v '^\[200\]'                  \
-		| sort -u
+	 | grep -v "http://www.gnu.org/software/somelib/index.html" \
+	 | grep -Ev "https?://\*(/\*)?"        \
+	 | grep -v "http://xyz.org/"           \
+	 | xargs -P10 -I{} curl -o /dev/null   \
+	   -sw "[%{http_code}] %{url}\n" '{}'  \
+	 | grep -v '^\[200\]'                  \
+	 | sort -u
 
 podchecker:
 	@echo "=======> Check PODs for syntax errors"
