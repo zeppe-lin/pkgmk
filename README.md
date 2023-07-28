@@ -18,6 +18,7 @@ the following differences:
 - added GNU-style long options
 - refactored options parsing
 - added zst packages support
+- added support to rename downloaded tarballs
 
 See git log for complete/further differences.
 
