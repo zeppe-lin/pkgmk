@@ -199,6 +199,13 @@ by a whitespace.  If you want to specify multiple files, use quotes:
   source="http://xyz.org/$name-$version.tar.gz
           http://xyz.org/$name-$version.patch"
 
+By the way, while building packages, sometimes source tarballs have
+names that could collide with other sources.  So, L<pkgmk(8)> allows
+renaming the downloaded source by prefixing the URL, like this:
+
+  source="$name-$version.tar.gz::http://xyz.org/v$version.tar.gz
+          $name-$version.patch::http://xyz.org/$name.patch"
+
 =head2 Header
 
 Provide a header including the following fields:
