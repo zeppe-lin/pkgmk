@@ -6,13 +6,13 @@ _pkgmk()
   _init_completion -s || return
 
   case $prev in
-  --help | --version | -!(-*)[hv])
+  --help|--version|-!(-*)[hv])
     return
     ;;
-  --up-to-date | -utd | --download-only | -do)
+  --up-to-date|-utd|--download-only|-do)
     return
     ;;
-  --config-file | -!(-*)cf)
+  --config-file|-!(-*)cf)
     _filedir
     return
     ;;
