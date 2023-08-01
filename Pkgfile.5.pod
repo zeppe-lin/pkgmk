@@ -27,7 +27,7 @@ avoid accidentally overwriting variable names, e.g. prefixing with the
 function name:
 
   build() {
-          _build_i=0
+          _build_foo="bar"
           ...
   }
 
@@ -36,7 +36,7 @@ L<ksh(1)>, L<dash(1)> (which is used in Zeppe-Lin), and BusyBox
 L<ash(1)>.  So, strictly speaking, it's not POSIX, but since quite a
 lot of real world shells support this feature, prefixing variables is
 little ugly, and finding bugs with overwriting variables is a big
-headache for developers, it was decided to allow C<locale>.  In the
+headache for developers, it was decided to allow C<local>.  In the
 end, the choice is yours to use or not.
 
 =head2 General Guidelines
