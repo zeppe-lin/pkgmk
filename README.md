@@ -6,7 +6,7 @@ a software package.
 This distribution is a fork of CRUX' pkgmk utility (which is part of
 CRUX' pkgutils software) as of commit 9ca0da6 (Sat Nov 17 2018) with
 the following differences:
-- rewritten in POSIX sh(1p) with "locals" exception
+- rewritten in POSIX sh(1p) with "local"s exception
 - added support of suckless' sbase utilities
 - added support of aria2c(1) downloader
 - the man pages have been rewritten in POD format
