@@ -6,7 +6,8 @@ BIN8 = pkgmk
 MAN5 = pkgmk.conf.5 Pkgfile.5
 MAN8 = pkgmk.8
 
-all: ${BIN8} ${MAN5} ${MAN8}
+manpages: ${MAN5} ${MAN8}
+all: ${BIN8} manpages
 
 %: %.pod
 	pod2man -r "${NAME} ${VERSION}" -c ' ' -n $(basename $@) \
