@@ -380,7 +380,7 @@ check_footprint() {
     if [ -f .footprint ]; then
       cp .footprint "$__FILE.footprint.orig"
 
-      diff -w -t -U 0 \
+      diff -w -t -U 0              \
         "$__FILE.footprint.orig"   \
         "$__FILE.footprint"        \
         | sed '/^@@/d'             \
@@ -527,28 +527,28 @@ update_footprint() {
 
 build_needed() {
   local __FILE=
-  local __RESULT="yes"
+  local __NEEDED="yes"
 
   if [ -f "$TARGET" ]; then
-    __RESULT="no"
+    __NEEDED="no"
     for __FILE in Pkgfile ${source}; do
       __FILE=$(get_filename "$__FILE")
       if [ -e "$__FILE" ] && ! test "$TARGET" -nt "$__FILE"; then
-        __RESULT="yes"
+        __NEEDED="yes"
         break
       fi
     done
   fi
 
-  echo $__RESULT
+  [ "$__NEEDED" = yes ] || return 1
 }
 
 ######################################################################
 # main && main helpers                                               #
 ######################################################################
 
-# Don't warn about unreachable commands in these functions.  See
-# trap(1p) for more information.
+# Don't warn about unreachable commands in these functions.
+# See trap(1p) for more information.
 # shellcheck disable=2317
 interrupted() {
   echo ""
@@ -662,8 +662,7 @@ main() {
   if [ -f .32bit ]; then
     export PKGMK_ARCH=32
   else
-    # multilib
-    export PKGMK_ARCH=64
+    export PKGMK_ARCH=64 # multilib
   fi
 
   parse_options "$@"
@@ -728,7 +727,7 @@ main() {
   fi
 
   if [ "$PKGMK_UP_TO_DATE" = "yes" ]; then
-    if [ "$(build_needed)" = "yes" ]; then
+    if build_needed; then
       info "Package '$TARGET' is not up to date."
     else
       info "Package '$TARGET' is up to date."
@@ -736,7 +735,7 @@ main() {
     exit 0
   fi
 
-  if [ "$(build_needed)" = "no" ] \
+  if ! build_needed \
   && [ "$PKGMK_FORCE" = "no" ] \
   && [ "$PKGMK_CHECK_MD5SUM" = "no" ]; then
     info "Package '$TARGET' is up to date."
