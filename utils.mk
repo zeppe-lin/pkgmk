@@ -1,29 +1,30 @@
-GREPOPT = --exclude-dir=.git --exclude-dir=.github -R .
-FINDOPT = -not \( -path "./.git*" -or -path ".*~" \)
-MAXLINE = 80
+# Makefile.lint is the automated checking of pkgmk project
+# for various programmatic and stylistic errors.
+
+all: deadlinks podchecker shellcheck longlines
 
 deadlinks:
 	@echo "=======> Check for dead links"
-	@grep -Eiho "https?://[^\"\\'> ]+" ${GREPOPT} \
+	@grep -EIihor "https?://[^\"\\'> ]+" --exclude-dir=.git*    \
 	 | grep -v "http://www.gnu.org/software/somelib/index.html" \
-	 | grep -Ev "https?://\*(/\*)?"               \
-	 | grep -v "http://xyz.org/"                  \
-	 | xargs -P10 -I{} curl -o /dev/null -I -L    \
-	   -sw "[%{http_code}] %{url}\n" '{}'         \
-	 | grep -v '^\[200\]'                         \
+	 | grep -Ev "https?://\*(/\*)?"                             \
+	 | grep -v "http://xyz.org/"                                \
+	 | xargs -P10 -r -I{} curl -I -o/dev/null                   \
+	   -sw "[%{http_code}] %{url}\n" '{}'                       \
+	 | grep -v '^\[200\]'                                       \
 	 | sort -u
 
 podchecker:
 	@echo "=======> Check PODs for syntax errors"
-	@podchecker *.pod
+	@podchecker *.pod >/dev/null
 
 shellcheck:
 	@echo "=======> Check shell scripts for syntax errors"
-	@grep -m1 -l '^#\s*!/bin/sh' ${GREPOPT} | xargs -L10 shellcheck -s sh
+	@grep -m1 -Irl '^#\s*!/bin/sh' --exclude-dir=.git* \
+		| xargs -L10 -r shellcheck -s sh
 
 longlines:
-	@echo "=======> Check for long lines (> ${MAXLINE})"
-	@find . -type f ${FINDOPT} -exec awk -v ML=${MAXLINE} \
-		'length > ML { print FILENAME ":" FNR " " $$0 }'  {} \;
+	@echo "=======> Check for long lines"
+	@! grep -PIrn '^.{81,}$$' --exclude-dir=.git*
 
-.PHONY: deadlinks podchecker shellcheck longlines
+.PHONY: all deadlinks podchecker shellcheck longlines
