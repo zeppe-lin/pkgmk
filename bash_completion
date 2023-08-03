@@ -1,4 +1,4 @@
-# pkgmk(8) completion
+# bash completion for pkgmk(8)
 
 _pkgmk()
 {
