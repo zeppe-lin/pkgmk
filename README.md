@@ -40,6 +40,7 @@ REQUIREMENTS
 - GNU findutils
 - curl(1) or wget(1) or aria2c(1) to download sources
 - bsdtar(1) to unpack sources
+- pkginfo(1) (from pkgutils package) to make/check package footprint
 
 
 INSTALL
