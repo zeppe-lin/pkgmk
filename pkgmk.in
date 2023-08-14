@@ -2,7 +2,7 @@
 # See COPYING and COPYRIGHT files for corresponding information.
 
 ######################################################################
-# error codes                                                        #
+# Error codes.                                                       #
 ######################################################################
 
 readonly E_GENERAL=1    # Generic error code
