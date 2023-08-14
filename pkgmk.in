@@ -677,7 +677,7 @@ parse_options() {
 			exit 0
 			;;
 		*)
-			fatal "invalid option $1"
+			fatal "unknown option $1"
 			;;
 		esac
 		shift
