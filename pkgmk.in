@@ -442,10 +442,7 @@ remove_work_dir() {
 }
 
 build_package() {
-  # globals
   BUILD_SUCCESSFUL="no" 
-
-  # locals
   local __COMPRESSION=
 
   check_file "$TARGET"
@@ -549,7 +546,7 @@ build_needed() {
 
   if [ -f "$TARGET" ]; then
     __NEEDED="no"
-    for __FILE in Pkgfile ${source}; do
+    for __FILE in $PKGMK_ROOT/Pkgfile ${source}; do
       __FILE=$(get_filename "$__FILE")
       if [ -e "$__FILE" ] && ! test "$TARGET" -nt "$__FILE"; then
         __NEEDED="yes"
@@ -661,7 +658,6 @@ parse_options() {
 }
 
 main() {
-  # globals
   TARGET=
 
   if [ -f .32bit ]; then
@@ -674,7 +670,7 @@ main() {
 
   local __FILE
 
-  for __FILE in ./Pkgfile $PKGMK_CONFFILE; do
+  for __FILE in $PKGMK_ROOT/Pkgfile $PKGMK_CONFFILE; do
     if [ ! -f "$__FILE" ]; then
       error "File '$__FILE' not found."
       exit $E_GENERAL
