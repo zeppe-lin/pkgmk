@@ -47,7 +47,7 @@ fatal() {
 interrupted() {
   echo ""
   error "Interrupted."
-  exit 1
+  exit $E_GENERAL
 }
 # shellcheck disable=2317
 atexit() {
@@ -119,7 +119,7 @@ check_directory() {
 check_file() {
   if [ -e "$1" ] && [ ! -w "$1" ]; then
     error "File '$1' is not writable."
-    exit 1
+    exit $E_GENERAL
   fi
 }
 
@@ -533,7 +533,7 @@ clean() {
 update_footprint() {
   if [ ! -f "$TARGET" ]; then
     error "Unable to update footprint. File '$TARGET' not found."
-    exit 1
+    exit $E_GENERAL
   fi
 
   check_file       .footprint
@@ -677,7 +677,7 @@ main() {
   for __FILE in ./Pkgfile $PKGMK_CONFFILE; do
     if [ ! -f "$__FILE" ]; then
       error "File '$__FILE' not found."
-      exit 1
+      exit $E_GENERAL
     fi
     # Intentional.
     # shellcheck disable=1090
@@ -696,7 +696,7 @@ main() {
     ;;
   *)
     error "Compression mode '$PKGMK_COMPRESSION_MODE' not supported."
-    exit 1
+    exit $E_GENERAL
     ;;
   esac
 
