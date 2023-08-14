@@ -158,6 +158,14 @@ download_file() {
 
 	case $__DOWNLOAD_CMD in
 	aria2c)
+		# --connect-timeout=10:
+		# Set the connection timeout in seconds.
+		#
+		# --max-tries=3:
+		# Set the number of tries.
+		#
+		# --retry-wait=3:
+		# Set the seconds to wait between retries.
 		__RESUME_CMD="-c"
 		__DOWNLOAD_OPTS="--connect-timeout=10               \
 				 --max-tries=3                      \
@@ -167,6 +175,27 @@ download_file() {
 				 $PKGMK_ARIA2C_OPTS"
 		;;
 	curl)
+		# -L:
+		# If the server reports that the requested page has
+		# moved to a different location (indicated with a
+		# Location: header and a 3xx response code), make curl
+		# redo the request on the new place.
+		#
+		# --fail:
+		# Fail fast with no output at all on server errors.
+		#
+		# --ftp-pasv:
+		# Use passive mode for the data connection.
+		#
+		# --retry 3:
+		# If a transient error is returned when curl tries to
+		# perform a transfer, it will retry this number of
+		# times before giving up.
+		#
+		# --retry-delay 3:
+		# Make curl sleep this amount of time before each
+		# retry when a transfer has failed with a transient
+		# error.
 		__RESUME_CMD="-C -"
 		__DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3     \
 				 --retry-delay 3                    \
@@ -174,6 +203,23 @@ download_file() {
 				 $PKGMK_CURL_OPTS"
 		;;
 	wget)
+		# --compression=none:
+		# Do not ask the server to compress the file and do not
+		# decompress any server response.
+		#
+		# --passive-ftp:
+		# Use passive mode for the data connection.
+		#
+		# --no-directories:
+		# Do not create a hierarchy of directories when
+		# retrieving recursively and save data without
+		# clobbering.
+		#
+		# --tries=3:
+		# Set number of tries.
+		#
+		# --waitretry=3:
+		# Wait 3 seconds between retries of failed downloads.
 		__RESUME_CMD="-c"
 		__DOWNLOAD_OPTS="--compression=none                   \
 				 --passive-ftp                        \
@@ -498,6 +544,8 @@ build_package() {
 		zst) __COMPRESSION="--zstd" ;;
 		esac
 
+		# -t: List archive contents to stdout
+		# -v: Produce output similar to that of ls(1)
 		if bsdtar --format=gnutar -c $__COMPRESSION -f "$TARGET" -- * \
 		&& bsdtar -t -v -f "$TARGET"; then
 			BUILD_SUCCESSFUL="yes"
