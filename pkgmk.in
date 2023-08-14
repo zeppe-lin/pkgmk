@@ -175,7 +175,7 @@ download_file() {
 				 $PKGMK_ARIA2C_OPTS"
 		;;
 	curl)
-		# -L:
+		# --location:
 		# If the server reports that the requested page has
 		# moved to a different location (indicated with a
 		# Location: header and a 3xx response code), make curl
@@ -197,7 +197,10 @@ download_file() {
 		# retry when a transfer has failed with a transient
 		# error.
 		__RESUME_CMD="-C -"
-		__DOWNLOAD_OPTS="-L --fail --ftp-pasv --retry 3     \
+		__DOWNLOAD_OPTS="--location                         \
+				 --fail                             \
+				 --ftp-pasv                         \
+				 --retry 3                          \
 				 --retry-delay 3                    \
 				 -o $__LOCAL_FILENAME_PARTIAL       \
 				 $PKGMK_CURL_OPTS"
