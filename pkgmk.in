@@ -317,8 +317,8 @@ check_md5sum() {
 		# -t: Expand tabs to spaces in output
 		# -U 0: Output 0 lines of unified context
 		diff -w -t -U 0           \
-		"$__FILE.md5sum.orig"     \
-		"$__FILE.md5sum"          \
+		  "$__FILE.md5sum.orig"   \
+		  "$__FILE.md5sum"        \
 		| sed '/^@@/d'            \
 		| sed '/^+++/d'           \
 		| sed '/^---/d'           \
@@ -415,6 +415,9 @@ check_footprint() {
 		if [ -f .footprint ]; then
 			cp .footprint "$__FILE.footprint.orig"
 
+			# -w: Ignore all whitespace
+			# -t: Expand tabs to spaces in output
+			# -U 0: Output 0 lines of unified context
 			diff -w -t -U 0            \
 			  "$__FILE.footprint.orig" \
 			  "$__FILE.footprint"      \
