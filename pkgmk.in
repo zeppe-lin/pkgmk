@@ -5,15 +5,15 @@
 # error codes                                                        #
 ######################################################################
 
-readonly E_GENERAL=1
-readonly E_PKGFILE=2    # - invalid Pkgfile
-readonly E_DIR_PERM=3   # - (source/build) directory missing or
-                        #   missing read/write permission
-readonly E_DOWNLOAD=4   # - error during download
-readonly E_UNPACK=5     # - error during unpacking of source file(s)
-readonly E_MD5=6        # - md5sum verification failed
-readonly E_FOOTPRINT=7  # - footprint check failure
-readonly E_BUILD=8      # - error while running 'build()'
+readonly E_GENERAL=1    # Generic error code
+readonly E_PKGFILE=2    # Invalid Pkgfile
+readonly E_DIR_PERM=3   # Directory (source/build) missing or missing
+                        #  read/write permission
+readonly E_DOWNLOAD=4   # Error during download
+readonly E_UNPACK=5     # Error during unpacking of source file(s)
+readonly E_MD5=6        # MD5sum verification failed
+readonly E_FOOTPRINT=7  # Footprint check failure
+readonly E_BUILD=8      # Error while running 'build()'
 
 ######################################################################
 # Notification helpers.                                              #
