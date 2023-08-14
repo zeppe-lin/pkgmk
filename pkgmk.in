@@ -602,6 +602,10 @@ Mandatory arguments to long options are mandatory for short options too.
 EOF
 }
 
+print_version() {
+	echo "pkgmk @VERSION@"
+}
+
 parse_options() {
 	while [ "$1" ]; do
 		case $1 in
@@ -662,7 +666,7 @@ parse_options() {
 			  fatal "option --config-file requires an argument"
 			;;
 		-v|--version)
-			echo "pkgmk @VERSION@"
+			print_version
 			exit 0
 			;;
 		-h|--help)
