@@ -652,7 +652,7 @@ parse_options() {
 		-cf*|--config-file=*)
 			PKGMK_CONFFILE=$(
 				echo "$1" |
-				  sed 's/^-\(-config-file\|cf\)//'
+				  sed 's/^-\(-config-file=\|cf\)//'
 			)
 			if [ ! "$PKGMK_CONFFILE" ]; then
 				fatal "option -cf/--config-file requires an argument"
