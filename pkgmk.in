@@ -43,6 +43,9 @@ fatal() {
 # Don't warn about unreachable commands in these functions.
 # See trap(1p) for more information.
 
+# https://www.shellcheck.net/wiki/SC2317
+# https://www.shellcheck.net/wiki/SC2086
+
 # shellcheck disable=2317,2086
 interrupted() {
 	echo >&2 ""
