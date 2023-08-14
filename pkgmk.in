@@ -318,6 +318,10 @@ unpack_source() {
 		*.tar  | *.tar.gz | *.tar.Z | *.tgz      | *.tar.bz2 | \
 		*.tbz2 | *.tar.xz | *.txz   | *.tar.lzma | *.tar.lz  | \
 		*.zip  | *.rpm    | *.7z    | *.zst                    )
+			# -p: preserve file permissions
+			# -o: use the user and group of the user
+			#     running the program rather than those
+			#     specified in the archive
 			__COMMAND="bsdtar -p -o -C $SRC -xf $__LOCAL_FILENAME"
 			;;
 		*)
