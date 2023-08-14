@@ -45,10 +45,11 @@ fatal() {
 
 # shellcheck disable=2317
 interrupted() {
-  echo ""
-  error "Interrupted."
+  echo >&2 ""
+  echo >&2 "=======> Interrupted."
   exit $E_GENERAL
 }
+
 # shellcheck disable=2317
 atexit() {
   remove_work_dir
