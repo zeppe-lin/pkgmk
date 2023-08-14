@@ -16,7 +16,7 @@ readonly E_FOOTPRINT=7  # - footprint check failure
 readonly E_BUILD=8      # - error while running 'build()'
 
 ######################################################################
-# notification helpers                                               #
+# Notification helpers.                                              #
 ######################################################################
 
 info() {
@@ -37,7 +37,25 @@ fatal() {
 }
 
 ######################################################################
-# pkgmk's routines                                                   #
+# Exit hooks.                                                        #
+######################################################################
+
+# Don't warn about unreachable commands in these functions.
+# See trap(1p) for more information.
+
+# shellcheck disable=2317
+interrupted() {
+  echo ""
+  error "Interrupted."
+  exit 1
+}
+# shellcheck disable=2317
+atexit() {
+  remove_work_dir
+}
+
+######################################################################
+# Pkgmk routines.                                                    #
 ######################################################################
 
 get_filename() {
@@ -544,21 +562,8 @@ build_needed() {
 }
 
 ######################################################################
-# main && main helpers                                               #
+# Command-line helpers.                                              #
 ######################################################################
-
-# Don't warn about unreachable commands in these functions.
-# See trap(1p) for more information.
-# shellcheck disable=2317
-interrupted() {
-  echo ""
-  error "Interrupted."
-  exit 1
-}
-# shellcheck disable=2317
-atexit() {
-  remove_work_dir
-}
 
 print_help() {
   cat <<EOF
@@ -747,27 +752,21 @@ main() {
   exit 0
 }
 
+######################################################################
+
 # Set exit hooks.
 trap "interrupted" HUP  INT  QUIT  TERM
 trap "atexit"      EXIT
 
-######################################################################
-# default configuration                                              #
-######################################################################
-
+# Globals.
 export LC_ALL=C.UTF-8
-
 readonly PKGMK_ROOT="$PWD"
-
 PKGMK_CONFFILE="/etc/pkgmk.conf"
-
 PKGMK_SOURCE_MIRRORS=
 PKGMK_SOURCE_DIR="$PWD"
 PKGMK_PACKAGE_DIR="$PWD"
 PKGMK_WORK_DIR="$PWD/work"
-
 PKGMK_COMPRESSION_MODE="gz"
-
 PKGMK_DOWNLOAD="no"
 PKGMK_DOWNLOAD_ONLY="no"
 PKGMK_EXTRACT_ONLY="no"
@@ -781,6 +780,8 @@ PKGMK_IGNORE_MD5SUM="no"
 PKGMK_CHECK_MD5SUM="no"
 PKGMK_NO_STRIP="no"
 PKGMK_CLEAN="no"
+
+######################################################################
 
 main "$@"
 
