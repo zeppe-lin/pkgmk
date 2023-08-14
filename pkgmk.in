@@ -92,13 +92,13 @@ get_basename() {
 }
 
 check_pkgfile() {
-	if [ ! "$name" ]; then
+	if [ ! "${name}" ]; then
 		error "Variable 'name' not specified in Pkgfile."
 		exit $E_PKGFILE
-	elif [ ! "$version" ]; then
+	elif [ ! "${version}" ]; then
 		error "Variable 'version' not specified in Pkgfile."
 		exit $E_PKGFILE
-	elif [ ! "$release" ]; then
+	elif [ ! "${release}" ]; then
 		error "Variable 'release' not specified in Pkgfile."
 		exit $E_PKGFILE
 	elif ! command -V "build" 2>/dev/null | grep -qwi function; then
