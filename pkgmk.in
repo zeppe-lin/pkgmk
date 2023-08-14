@@ -24,15 +24,15 @@ info() {
 }
 
 warning() {
-	info "WARNING: $1" >&2
+	info "WARNING: $1" 1>&2
 }
 
 error() {
-	info "ERROR: $1" >&2
+	info "ERROR: $1" 1>&2
 }
 
 fatal() {
-	echo "pkgmk: $1" >&2
+	echo "pkgmk: $1" 1>&2
 	exit $E_GENERAL
 }
 
@@ -48,8 +48,8 @@ fatal() {
 
 # shellcheck disable=2317,2086
 interrupted() {
-	echo >&2 ""
-	echo >&2 "=======> Interrupted."
+	echo "" 1>&2
+	echo "=======> Interrupted." 1>&2
 	exit $E_GENERAL
 }
 
@@ -382,7 +382,7 @@ check_md5sum() {
 
 		if [ -s "$__FILE.md5sum.diff" ]; then
 			error "Md5sum mismatch found:"
-			cat "$__FILE.md5sum.diff" >&2
+			cat "$__FILE.md5sum.diff" 1>&2
 
 			remove_work_dir
 
@@ -485,7 +485,7 @@ check_footprint() {
 			if [ -s "$__FILE.footprint.diff" ]; then
 				BUILD_SUCCESSFUL="no"
 				error "Footprint mismatch found:"
-				cat "$__FILE.footprint.diff" >&2
+				cat "$__FILE.footprint.diff" 1>&2
 			fi
 		else
 			warning "Footprint not found, creating new."
