@@ -646,9 +646,7 @@ parse_options() {
 			PKGMK_KEEP_WORK="yes"
 			;;
 		-cf|--config-file)
-			[ "$2" ] ||
-				fatal "option $1 requires an argument"
-			PKGMK_CONFFILE="$2"
+			PKGMK_CONFFILE="${2:?option $1 requires an argument}"
 			shift
 			;;
 		-cf*|--config-file=*)
