@@ -313,6 +313,9 @@ check_md5sum() {
 		make_md5sum       > "$__FILE.md5sum"
 		sort -k 2 .md5sum > "$__FILE.md5sum.orig"
 
+		# -w: Ignore all whitespace
+		# -t: Expand tabs to spaces in output
+		# -U 0: Output 0 lines of unified context
 		diff -w -t -U 0           \
 		"$__FILE.md5sum.orig"     \
 		"$__FILE.md5sum"          \
