@@ -139,6 +139,7 @@ download_file() {
 	local __RESUME_OPTS=
 	local __BASENAME=
 	local __REPO=
+	local __ERROR=
 
 	case $1 in
 	*::http://* | *::https://* | *::ftp://* | *::file://* )
@@ -240,7 +241,7 @@ download_file() {
 		__RESUME_OPTS=$__RESUME_CMD
 	fi
 
-	error=1
+	__ERROR=1
 
 	__BASENAME=$(get_basename "$__LOCAL_FILENAME")
 	for __REPO in $PKGMK_SOURCE_MIRRORS; do
@@ -250,22 +251,22 @@ download_file() {
 		# shellcheck disable=2086
 		if $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS \
 		    "$__REPO/$__BASENAME"; then
-			error=0
+			__ERROR=0
 			break
 		else
-			error=$?
+			__ERROR=$?
 		fi
 	done
 
-	if [ $error != 0 ]; then
+	if [ $__ERROR != 0 ]; then
 		while true; do
 			# Intentional word splitting.
 			# shellcheck disable=2086
 			$__DOWNLOAD_CMD  $__DOWNLOAD_OPTS \
 			    $__RESUME_OPTS  "$__DOWNLOAD_URL"
 
-			error=$?
-			if [ $error != 0 ] && [ "$__RESUME_OPTS" ]; then
+			__ERROR=$?
+			if [ $__ERROR != 0 ] && [ "$__RESUME_OPTS" ]; then
 				info "Partial download failed, restarting"
 				rm -f "$__LOCAL_FILENAME_PARTIAL"
 				__RESUME_OPTS=""
@@ -275,7 +276,7 @@ download_file() {
 		done
 	fi
 
-	if [ $error != 0 ] || [ ! -f "$__LOCAL_FILENAME_PARTIAL" ]; then
+	if [ $__ERROR != 0 ] || [ ! -f "$__LOCAL_FILENAME_PARTIAL" ]; then
 		error "Downloading '$__DOWNLOAD_URL' failed."
 		exit $E_DOWNLOAD
 	fi
