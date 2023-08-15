@@ -2,30 +2,30 @@
 
 _pkgmk()
 {
-  local cur prev words cword split
-  _init_completion -s || return
+	local cur prev words cword split
+	_init_completion -s || return
 
-  case $prev in
-  --help|--version|-!(-*)[hv])
-    return
-    ;;
-  --up-to-date|-utd|--download-only|-do)
-    return
-    ;;
-  --config-file|-!(-*)cf)
-    _filedir
-    return
-    ;;
-  esac
+	case $prev in
+	--help|--version|-!(-*)[hv])
+		return
+		;;
+	--up-to-date|-utd|--download-only|-do)
+		return
+		;;
+	--config-file|-!(-*)cf)
+		_filedir
+		return
+		;;
+	esac
 
-  $split && return
+	$split && return
 
-  if [[ $cur == -* ]]; then
-    COMPREPLY=($(compgen -W '$(_parse_help "$1")' -- "$cur"))
-    [[ ${COMPREPLY-} == *= ]] && compopt -o nospace
-    return
-  fi
+	if [[ $cur == -* ]]; then
+		COMPREPLY=($(compgen -W '$(_parse_help "$1")' -- "$cur"))
+		[[ ${COMPREPLY-} == *= ]] && compopt -o nospace
+		return
+	fi
 } && complete -F _pkgmk pkgmk
 
-# vim:ft=bash:sw=2:ts=2:sts=2:et:cc=72
+# vim: ft=bash cc=72 tw=70
 # End of file.
