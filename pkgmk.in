@@ -1,4 +1,5 @@
 #!/bin/sh
+# pkgmk - make software package
 # See COPYING and COPYRIGHT files for corresponding information.
 
 ######################################################################
