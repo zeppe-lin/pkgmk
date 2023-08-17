@@ -14,7 +14,14 @@ manpages: ${MAN5} ${MAN8}
 		-s $(subst .,,$(suffix $@)) $< > $@
 
 %: %.in
-	sed "s/@VERSION@/${VERSION}/g" $< > $@
+	sed -e "s|@HOMEPAGE@|${HOMEPAGE}|" \
+	    -e "s|@BUGTRACKER@|${BUGTRACKER}|" \
+	    -e "s|@VERSION@|${VERSION}|" \
+	    -e "/^@COPYRIGHT & COPYING.BANNER@/{" \
+	    -e   "r ${CURDIR}/COPYRIGHT" \
+	    -e   "r ${CURDIR}/COPYING.BANNER" \
+	    -e   "d" \
+	    -e "}" $< > $@
 
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/sbin
