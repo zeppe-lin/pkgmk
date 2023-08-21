@@ -6,19 +6,17 @@ a software package.
 This distribution is a fork of CRUX' pkgmk utility (which is part of
 CRUX' pkgutils software) as of commit 9ca0da6 (Sat Nov 17 2018) with
 the following differences:
-- rewritten in POSIX sh(1p) with "local"s exception
-- added support of suckless' sbase utilities
-- added support of aria2c(1) downloader
-- the man pages have been rewritten in POD format
-- added Pkgfile(5) man page
-- added bash completion
-- removed "-i", "-u", and "-r" command-line options
-- removed signify(1) support since pkgsrc collection is distributed
-  through git(1) with signed commits
-- added GNU-style long options
-- refactored options parsing
-- added zst packages support
-- added support to rename downloaded tarballs
+- POSIX sh(1p) with "local"s exception instead of bash(1)
+- suckless' sbase support (see suckless.patch)
+- aria2c(1) downloader support
+- man page in POD format
+- Pkgfile(5) man page
+- bash completion
+- remove "-i", "-u", and "-r" command-line options
+- remove signify(1) support
+- command-line options/usage in GNU style
+- Zstd packages support
+- allow renaming downloaded tarballs
 
 See git log for complete/further differences.
 
