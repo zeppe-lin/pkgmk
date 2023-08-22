@@ -409,7 +409,7 @@ like:
 
 =head2 Pkgfile
 
-  # Description: Clear and concise description without articles
+  # Description: Concise description without articles and trailing dot
   # URL:         http://www.gnu.org/software/somelib/index.html
   # Maintainer:  Joe Maintainer, joe at myfantasticisp dot net
   # Depends on:  someotherlib coolness
