@@ -7,8 +7,8 @@ MAN8 = pkgmk.8
 all: ${BIN8} ${MAN5} ${MAN8}
 
 %: %.pod
-	pod2man -r "${NAME} ${VERSION}" -c ' ' -n $(basename $@) \
-		-s $(subst .,,$(suffix $@)) $< > $@
+	pod2man -r "${NAME} ${VERSION}" -c "Package Management" \
+		-n $(basename $@) -s $(subst .,,$(suffix $@)) $< > $@
 
 %: %.in
 	sed "s/@VERSION@/${VERSION}/" $< > $@
