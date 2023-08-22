@@ -2,6 +2,10 @@
 # pkgmk - make software package
 # See COPYING and COPYRIGHT files for corresponding information.
 
+# Intentional: allow "local"s declaration.
+# https://www.shellcheck.net/wiki/SC3043
+# shellcheck disable=SC3043
+
 ######################################################################
 # Error codes.                                                       #
 ######################################################################
@@ -47,14 +51,14 @@ fatal() {
 # https://www.shellcheck.net/wiki/SC2317
 # https://www.shellcheck.net/wiki/SC2086
 
-# shellcheck disable=2317,2086
+# shellcheck disable=SC2317,SC2086
 interrupted() {
 	echo "" 1>&2
 	echo "=======> Interrupted." 1>&2
 	exit $E_GENERAL
 }
 
-# shellcheck disable=2317
+# shellcheck disable=SC2317
 atexit() {
 	remove_work_dir
 }
@@ -130,7 +134,7 @@ check_file() {
 
 download_file() {
 	# https://www.shellcheck.net/wiki/SC2155
-	# shellcheck disable=2155
+	# shellcheck disable=SC2155
 	local __LOCAL_FILENAME="$(get_filename "$1")"
 	local __LOCAL_FILENAME_PARTIAL="$__LOCAL_FILENAME.partial"
 	local __DOWNLOAD_CMD="${PKGMK_DOWNLOAD_PROG:-curl}"
@@ -249,7 +253,8 @@ download_file() {
 		__REPO="$(echo "$__REPO" | sed 's|/$||')"
 
 		# Intentional word splitting.
-		# shellcheck disable=2086
+		# https://www.shellcheck.net/wiki/SC2086
+		# shellcheck disable=SC2086
 		if $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS \
 		    "$__REPO/$__BASENAME"; then
 			__ERROR=0
@@ -262,7 +267,8 @@ download_file() {
 	if [ $__ERROR != 0 ]; then
 		while true; do
 			# Intentional word splitting.
-			# shellcheck disable=2086
+			# https://www.shellcheck.net/wiki/SC2086
+			# shellcheck disable=SC2086
 			$__DOWNLOAD_CMD  $__DOWNLOAD_OPTS \
 			    $__RESUME_OPTS  "$__DOWNLOAD_URL"
 
@@ -350,7 +356,8 @@ make_md5sum() {
 		done
 
 		# Intentional word splitting.
-		# shellcheck disable=2086
+		# https://www.shellcheck.net/wiki/SC2086
+		# shellcheck disable=SC2086
 		md5sum $__LOCAL_FILENAMES | sed -e 's:  .*/:  :' | sort -k 2
 	fi
 }
@@ -533,11 +540,14 @@ build_package() {
 
 	(set -e -x; build)
 
-	# Intentional use.
+	# Intentional.
+	# https://www.shellcheck.net/wiki/SC2181
 	# shellcheck disable=SC2181
 	if [ $? = 0 ]; then
 
-		[ "$PKGMK_NO_STRIP" = "yes" ] || strip_files
+		if [ "$PKGMK_NO_STRIP" = "yes" ]; then
+			strip_files
+		fi
 
 		compress_manpages
 
@@ -766,8 +776,9 @@ main() {
 			exit $E_GENERAL
 		fi
 
-		# Intentional.
-		# shellcheck disable=1090
+		# Intentional: "can't follow non-constant source".
+		# https://www.shellcheck.net/wiki/SC1090
+		# shellcheck disable=SC1090
 		. "$__FILE"
 	done
 
