@@ -12,6 +12,7 @@ all: ${BIN8} ${MAN5} ${MAN8}
 
 %: %.in
 	sed "s/@VERSION@/${VERSION}/" $< > $@
+	chmod a+x $@
 
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/sbin
