@@ -15,7 +15,7 @@ the following differences:
 - remove "-i", "-u", and "-r" command-line options
 - remove signify(1) support
 - command-line options/usage in GNU style
-- Zstd packages support
+- support zstd packages
 - allow renaming downloaded tarballs
 
 See git log for complete/further differences.
