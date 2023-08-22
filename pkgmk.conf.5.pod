@@ -1,4 +1,4 @@
-# pkgmk.conf.5.pod - documentation for pkgmk.conf(5) manual page
+# pkgmk.conf(5) manual page
 # See COPYING and COPYRIGHT files for corresponding information.
 
 =pod
@@ -197,5 +197,5 @@ L<pkgmk(8)>, L<Pkgfile(5)>
 
 =cut
 
-# vim:sw=2:ts=2:sts=2:et:cc=72:tw=70
+# vim: cc=72 tw=70
 # End of file.

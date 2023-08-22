@@ -1,3 +1,4 @@
+# Pkgfile(5) manual page
 # See COPYING and COPYRIGHT files for corresponding information.
 
 =pod
@@ -26,10 +27,10 @@ In POSIX sh, C<local> is undefined.  You can adopt some convention to
 avoid accidentally overwriting variable names, e.g. prefixing with the
 function name:
 
-  build() {
-          _build_foo="bar"
-          ...
-  }
+	build() {
+		_build_foo="bar"
+		...
+	}
 
 However, C<local> is supported in many shells, including L<bash(1)>,
 L<ksh(1)>, L<dash(1)> (which is used in Zeppe-Lin), and BusyBox
@@ -184,11 +185,11 @@ in L<pkgmk(8)>.
 Use the I<$name> and I<$version> variables to make the package easier
 to update/maintain.  For example,
 
-  source=http://xyz.org/$name-$version.tar.gz
+	source=http://xyz.org/$name-$version.tar.gz
 
 is better than
 
-  source=http://xyz.org/prog-1.0.3.tar.gz
+	source=http://xyz.org/prog-1.0.3.tar.gz
 
 since the URL will automatically updated when you modify the
 I<$version> variable.
@@ -196,15 +197,15 @@ I<$version> variable.
 Note that I<source> variable is a string, where each item is separated
 by a whitespace.  If you want to specify multiple files, use quotes:
 
-  source="http://xyz.org/$name-$version.tar.gz
-          http://xyz.org/$name-$version.patch"
+	source="http://xyz.org/$name-$version.tar.gz
+		http://xyz.org/$name-$version.patch"
 
 By the way, while building packages, sometimes source tarballs have
 names that could collide with other sources.  So, L<pkgmk(8)> allows
 renaming the downloaded source by prefixing the URL, like this:
 
-  source="$name-$version.tar.gz::http://xyz.org/v$version.tar.gz
-          $name-$version.patch::http://xyz.org/$name.patch"
+	source="$name-$version.tar.gz::http://xyz.org/v$version.tar.gz
+		$name-$version.patch::http://xyz.org/$name.patch"
 
 =head2 Header
 
@@ -400,9 +401,9 @@ process.  There is no need to explicitly check the return codes.  If
 you need/want to handle a command failure you should use constructs
 like:
 
-  if ! command ... ; then ... ; fi
+	if ! command ... ; then ... ; fi
 
-  command || ...
+	command || ...
 
 =head1 EXAMPLES
 
@@ -476,5 +477,5 @@ L<pkgmk(8)>, L<pkgmk.conf(5)>
 
 =cut
 
-# vim:sw=2:ts=2:sts=2:et:cc=72:tw=70
+# vim: cc=72 tw=70
 # End of file.
