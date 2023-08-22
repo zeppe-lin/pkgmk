@@ -91,7 +91,9 @@ Keep temporary working directory.
 
 =item B<-cf>, B<--config-file>=I<FILE>
 
-Use alternative configuration file (default is F</etc/pkgmk.conf>).
+Specify an alternate configuration file.
+
+Default: F</etc/pkgmk.conf>.
 
 =item B<-v>, B<--version>
 
