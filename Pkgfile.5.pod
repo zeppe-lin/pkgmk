@@ -130,7 +130,7 @@ _
 =begin text
 
     Directory         | Description
-    ------------------|------------------------------------------------------
+    ------------------+------------------------------------------------------
     /usr/bin          | User command/application binaries
     /usr/sbin         | System binaries (e.g. daemons)
     /usr/lib          | Libraries
