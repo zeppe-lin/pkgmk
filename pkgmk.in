@@ -53,7 +53,7 @@ fatal() {
 
 # shellcheck disable=SC2317,SC2086
 interrupted() {
-	echo "" 1>&2
+	echo ""                      1>&2
 	echo "=======> Interrupted." 1>&2
 	exit $E_GENERAL
 }
