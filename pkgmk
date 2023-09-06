@@ -655,7 +655,7 @@ build_needed() {
 
 print_help() {
 	cat <<EOF
-Usage: pkgmk [OPTION]...
+Usage: pkgmk [option ...]
 Make software package.
 
 Mandatory arguments to long options are mandatory for short options too.
