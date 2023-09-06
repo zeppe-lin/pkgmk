@@ -1,34 +1,31 @@
+.POSIX:
+
 include config.mk
 
-BIN8 = pkgmk
-MAN5 = pkgmk.conf.5 Pkgfile.5
-MAN8 = pkgmk.8
+all:
 
-all: ${BIN8} ${MAN5} ${MAN8}
-
-%: %.in
-	sed "s/@VERSION@/${VERSION}/" $< > $@
-	chmod a+x $@
-
-%: %.pod
-	pod2man -r "${NAME} ${VERSION}" -c "Package Management" \
-		-n $(basename $@) -s $(subst .,,$(suffix $@)) $< > $@
-
-install: all
+install:
 	mkdir -p ${DESTDIR}${PREFIX}/sbin
 	mkdir -p ${DESTDIR}${MANPREFIX}/man5
 	mkdir -p ${DESTDIR}${MANPREFIX}/man8
-	cp -f ${BIN8} ${DESTDIR}${PREFIX}/sbin/
-	cp -f ${MAN5} ${DESTDIR}${MANPREFIX}/man5/
-	cp -f ${MAN8} ${DESTDIR}${MANPREFIX}/man8/
-	cd ${DESTDIR}${PREFIX}/sbin    && chmod 0755 ${BIN8}
-	cd ${DESTDIR}${MANPREFIX}/man5 && chmod 0644 ${MAN5}
-	cd ${DESTDIR}${MANPREFIX}/man8 && chmod 0644 ${MAN8}
+	sed "s/@VERSION@/${VERSION}/" pkgmk > \
+		${DESTDIR}${PREFIX}/sbin/pkgmk
+	sed "s/@VERSION@/${VERSION}/" pkgmk.conf.5 > \
+		${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
+	sed "s/@VERSION@/${VERSION}/" Pkgfile.5 > \
+		${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
+	sed "s/@VERSION@/${VERSION}/" pkgmk.8 > \
+		${DESTDIR}${MANPREFIX}/man8/pkgmk.8
+	chmod 0755 ${DESTDIR}${PREFIX}/sbin/pkgmk
+	chmod 0644 ${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
+	chmod 0644 ${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
+	chmod 0644 ${DESTDIR}${MANPREFIX}/man8/pkgmk.8
 
 uninstall:
-	cd ${DESTDIR}${PREFIX}/sbin    && rm -f ${BIN8}
-	cd ${DESTDIR}${MANPREFIX}/man5 && rm -f ${MAN5}
-	cd ${DESTDIR}${MANPREFIX}/man8 && rm -f ${MAN8}
+	rm -f ${DESTDIR}${PREFIX}/sbin/pkgmk
+	rm -f ${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
+	rm -f ${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
+	rm -f ${DESTDIR}${MANPREFIX}/man8/pkgmk.8
 
 install-bashcomp:
 	mkdir -p ${DESTDIR}${BASHCOMPDIR}
@@ -38,7 +35,6 @@ uninstall-bashcomp:
 	rm -f ${DESTDIR}${BASHCOMPDIR}/pkgmk
 
 clean:
-	rm -f ${BIN8} ${MAN5} ${MAN8}
 	rm -f ${DIST}.tar.gz
 
 dist: clean
