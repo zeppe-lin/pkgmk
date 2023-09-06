@@ -9,7 +9,7 @@ the following differences:
 - POSIX sh(1p) with "local"s exception instead of bash(1)
 - suckless' sbase support
 - aria2c(1) downloader support
-- man page in POD format
+- man page in mdoc(7) format
 - Pkgfile(5) man page
 - bash completion
 - remove "-i", "-u", and "-r" command-line options
@@ -28,9 +28,7 @@ The original sources can be downloaded from:
 REQUIREMENTS
 ------------
 **Build time**:
-- POSIX sh(1p) and "mandatory utilities"
-- GNU make(1)
-- pod2man(1pm) to build man pages
+- POSIX sh(1p), make(1p) and "mandatory utilities"
 
 **Runtime**:
 - POSIX sh(1p) with "local" support and "mandatory utilities"
