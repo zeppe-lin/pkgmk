@@ -1,0 +1,150 @@
+.\" pkgmk(8) manual page
+.\" See COPYING and COPYRIGHT files for corresponding information.
+.Dd September 6, 2023
+.Dt PKGMK 8
+.Os
+.Sh NAME
+.Nm pkgmk
+.Nd make software package
+.Sh SYNOPSIS
+.Nm pkgmk
+.Op Ar option ...
+.Sh DESCRIPTION
+.Nm
+is a package management utility, which makes a software package.
+A package is an archive of files
+.Po
+.Dq .pkg.tar.gz ,
+.Dq .pkg.tar.bz2
+or
+.Dq .pkg.tar.xz
+.Pc
+that can be installed using
+.Xr pkgadd 8 .
+.Pp
+To prepare to use
+.Nm ,
+you must write a file named
+.Pa Pkgfile ,
+that describes how the package should be build.
+See
+.Xr Pkgfile 5
+for more information how-to write
+.Pa Pkgfile Ns Pq s .
+Once a suitable
+.Pa Pkgfile
+exists, each time you change some source files, you simple execute
+.Nm
+to bring the package up to date.
+The
+.Nm
+program uses
+.Pa Pkgfile
+file and the last-modification times of the source files to decide if
+the package needs to be updated.
+Global configuration file is stored in
+.Pa /etc/pkgmk.conf .
+This file is read by
+.Nm
+at startup.
+.Pp
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl d , Fl \-download
+Download missing source files.
+.It Fl do , Fl \-download-only
+Do not build, only download missing source files.
+.It Fl utd , Fl \-up-to-date
+Do not build, only check if the package is up to date.
+.It Fl uf , Fl \-update-footprint
+Update footprint and treat last build as successful.
+.It Fl if , Fl \-ignore-footprint
+Build package without checking footprint.
+.It Fl in , Fl \-ignore-new
+Build package, ignore new files in a footprint mismatch.
+.It Fl um , Fl \-update-md5sum
+Update md5sum using the current source files.
+.It Fl im , Fl \-ignore-md5sum
+Build package without checking md5sum first.
+.It Fl cm , Fl \-check-md5sum
+Check md5sum without building the package.
+.It Fl ns , Fl \-no-strip
+Do not strip executable binaries or libraries.
+.It Fl f , Fl \-force
+Build package even if it appears to be up to date.
+.It Fl c , Fl \-clean
+Remove the (previously built) package and the downloaded source files.
+.It Fl kw , Fl \-keep-work
+Keep temporary working directory.
+.It Fl cf Ar conffile , Fl \-config-file Ns = Ns Ar conffile
+Specify an alternate configuration file instead of the default
+.Pa /etc/pkgmk.conf .
+.It Fl v , Fl \-version
+Print version and exit.
+.It Fl h , Fl \-help
+Print help and exit.
+.El
+.Sh FILES
+.Bl -tag -width Ds
+.It Pa Pkgfile
+Package build description.
+See
+.Xr Pkgfile 5
+for more information.
+.It Pa .footprint
+Package footprint (used for regression testing).
+.It Pa .md5sum
+MD5 checksum of source files.
+.It Pa /etc/pkgmk.conf
+Global package make configuration.
+See
+.Xr pkgmk.conf 5
+for more information.
+.El
+.Sh EXIT STATUS
+.Bl -tag -width Ds
+.It 0
+No error occurred.
+.It 1
+A general error has occurred.
+.It 2
+The
+.Pa Pkgfile
+is invalid.
+.It 3
+The source or build directory is missing or is lacking read/write
+permissions.
+.It 4
+An error occurred during the download of source files.
+.It 5
+An error occurred during unpacking of source files.
+.It 6
+An md5sum mismatch occurred.
+.It 7
+A footprint mismatch occurred.
+.It 8
+An error occurred while running the
+.Sy build
+function.
+.El
+.Sh SEE ALSO
+.Xr Pkgfile 5 ,
+.Xr pkgmk.conf 5
+.Sh AUTHORS
+The original implementation of
+.Nm
+was done by
+.An Per Lidén Aq Mt per@fukt.bth.se ,
+the author of
+.Lk http://crux.nu CRUX ,
+as part of
+.Dq pkgutils
+package, and was maintained for years (and still maintaining) by CRUX
+team.
+.Pp
+This implementation was extensively re-worked for
+.Lk http://zeppel.ink Zeppe-Lin
+by
+.An Alexandr Savca Aq Mt alexandr.savca89@gmail.com .
+.\" vim: cc=72 tw=70
+.\" End of file.

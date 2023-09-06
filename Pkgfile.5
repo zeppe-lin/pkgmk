@@ -1,0 +1,458 @@
+.\" Pkgfile(5) manual page
+.\" See COPYING and COPYRIGHT files for corresponding information.
+.Dd September 6, 2023
+.Dt PKGFILE 5
+.Os pkgmk @VERSION@
+.Sh NAME
+.Nm Pkgfile
+.Nd build file for pkgmk
+.Sh SYNOPSIS
+.Nm Pkgfile
+.Sh DESCRIPTION
+This manual page describes the format of the
+.Pa Pkgfile
+file.
+The file is a POSIX
+.Xr sh 1p
+script with some exceptions (see below), which defines a number of
+variables
+.Po
+.Em name ,
+.Em version ,
+.Em release
+and
+.Em source
+.Pc
+and a function
+.Po
+.Em build
+.Pc
+that should be executed in order to compile a package.
+.Ss POSIX Exceptions
+In POSIX sh,
+.Qo Li local Qc
+is undefined.
+You can adopt some convention to avoid accidentally overwriting variable
+names, e.g.
+prefixing with the function name:
+.Bd -literal -offset indent
+build() {
+        _build_foo="bar"
+        ...
+}
+.Ed
+.Pp
+However,
+.Qo Li local Qc
+is supported in many shells, including
+.Xr bash 1 ,
+.Xr ksh 1 ,
+.Xr dash 1
+(which is used in Zeppe-Lin), and BusyBox'
+.Xr ash 1 .
+So, strictly speaking, it's not POSIX, but since quite a lot of real
+world shells support this feature, prefixing variables is little ugly,
+and finding bugs with overwriting variables is a big headache for
+developers, it was decided to allow
+.Qo Li local Qc .
+In the end, the choice is yours to use or not.
+.Ss General Guidelines
+The name of a package should always be lowercase
+.Po e.g.,
+.Dq name=eterm
+and not
+.Dq name=Eterm
+.Pc .
+Dashes are also allowed.
+.Pp
+In case the package is added to the packages sources tree the exact same
+name should be used for the name of the directory in the packages
+sources structure
+.Po
+e.g.,
+.Em /usr/src/pkgsrc-???/eterm
+.Pc .
+.Pp
+Do not combine several separately distributed programs/libraries into
+one package.
+Make several packages instead.
+.Ss Directories
+In general packages should install files in these directories.
+Exceptions are of course allowed if there is a good reason.
+But try to follow the following directory structure as close as
+possible.
+.Bl -column "/usr/share/XXXXXX"
+.It Sy Directory Ta Sy Description
+.It Pa /usr/bin Ta
+User command/application binaries
+.It Pa /usr/sbin Ta
+System binaries (e.g. daemons)
+.It Pa /usr/lib Ta
+Libraries
+.It Pa /usr/include Ta
+Header files
+.It Pa /usr/lib/ Ns Ao prog Ac Ta
+Plug-ins, add-ons, etc
+.It Pa /usr/share/man Ta
+Man pages
+.It Pa /usr/share/ Ns Ao prog Ac Ta
+Data files
+.It Pa /usr/etc/ Ns Ao prog Ac Ta
+Configuration files
+.It Pa /etc Ta
+Configuration files for system software (daemons, etc)
+.El
+.Pp
+.Pa /opt
+directory is reserved for manually compiled/installed applications, or
+binary distributable packages.
+Good packages (built from sources) should never place anything there.
+.Pp
+.Pa /usr/libexec
+is not used, thus packages should never install anything there.
+Use
+.Dq /usr/lib/ Ns Aq prog
+instead.
+.Ss Junk Files
+Packages should not contain
+.Dq junk files .
+This includes info pages and other online documentation, man pages
+excluded
+.Po
+e.g.,
+.Dq /usr/share/doc ,
+.Dq README ,
+.Dq *.info ,
+.Dq *.html ,
+etc
+.Pc .
+.Pp
+Also should be removed:
+.Bl -bullet
+.It
+Files related to NLS (National Language Support), always use
+.Dq --disable-nls
+and similar build options when available and remove
+.Pa /usr/share/locale
+when not.
+.It
+Useless or obsolete binaries
+.Po
+e.g.,
+.Pa /usr/games/banner
+and
+.Pa /sbin/mkfs.minix
+.Pc .
+.El
+.Ss Variable Names
+Do not add new variables to the
+.Pa Pkgfile .
+Only in very few cases does this actually improve the readability or
+the quality of the package.
+Further, the only variables that are guaranteed to work with future
+versions of
+.Xr pkgmk 8
+are
+.Dq name ,
+.Dq version ,
+.Dq release ,
+and
+.Dq source .
+Other names could be in conflict with internal variables in
+.Xr pkgmk 8 .
+Use the
+.Dq $name
+and
+.Dq $version
+variables to make the package easier to update/maintain.
+For example,
+.Bd -literal -offset indent
+source=http://xyz.org/$name-$version.tar.gz
+.Ed
+.Pp
+is better than
+.Bd -literal -offset indent
+source=http://xyz.org/longprogramname-1.0.3.tar.gz
+.Ed
+.Pp
+since the URL will automatically updated when you modify the
+.Dq version
+variable.
+.Pp
+Note that
+.Dq source
+variable is a string, where each item is separated by a whitespace.
+If you want to specify multiple URIs/files, use quotes:
+.Bd -literal -offset indent
+source="http://xyz.org/$name-$version.tar.gz
+        http://xyz.org/$name-$version.patch"
+.Ed
+.Pp
+By the way, while building packages, sometimes source tarballs have
+names that could collide with other sources.
+So,
+.Xr pkgmk 8
+allows renaming the downloaded source by prefixing the URL like this:
+.Bd -literal -offset indent
+source="$name-$version.tar.gz::http://xyz.org/v$version.tar.gz
+        $name-$version.patch::http://xyz.org/$name.patch"
+.Ed
+.Ss Header
+Provide a header including the following fields:
+.Bl -column "Description"
+.It Sy Name Ta Sy Meaning
+.It Description Ta
+Short description of the package (keep it factual)
+.It Maintainer Ta
+Your full name and e-mail address (can be obfuscated)
+.It URL Ta
+Website with more information on this software package
+.It Depends on Ta
+List of dependencies, separated either by spaces
+.El
+.Pp
+.Dq Depends on
+can be omitted if there are no dependencies.
+.Ss Dependencies
+Dependencies are supported by
+.Xr pkgman 1 .
+The following rules should be respected:
+.Bl -bullet
+.It
+We list all linked runtime dependencies except for
+.Em gcc Pq libstdc++ ,
+.Em glibc ,
+.Em binutils ,
+and the package itself (to prevent cyclic dependencies).
+.It
+.Em core
+contains essential packages for a system, and our scripts and source
+packages expect the programs provided by
+.Em core
+to be installed.
+This means the following:
+.Bl -bullet
+.It
+Build dependencies provided by
+.Em core
+are not listed in the dependency header.
+.It
+Runtime dependencies from
+.Em core
+which aren't dynamically linked are not to be listed
+.Em with one exception :
+if the package provides a library for Perl/Python/etc and/or contains
+a specific interpreter version in its
+.Pa .footprint
+file.
+.El
+.El
+.Pp
+Examples:
+.Bl -tag -width Ds
+.It Em core/automake
+Does
+.Em not
+list
+.Dq perl ,
+because the program is a Perl script
+.Po there is no binary that links to
+.Dq libperl
+.Pc .
+.It Em core/bc
+.Em Does
+list
+.Dq readline ,
+because
+.Dq bc
+is linked to
+.Dq readline .
+.It Em core/py3-setuptools
+.Em Does
+list
+.Dq python3 ,
+because the package contains the specific interpreter version in its
+.Pa .footprint
+file.
+.El
+.Pp
+The reasoning for this policy is that you can use
+.Xr revdep 1
+to find packages that need to be updated if one of the dependent
+libraries has become binary incompatible.
+To find out what libraries a binary is linked to, use
+.Xr ldd 1
+or
+.Xr finddeps-linked 1 .
+.Pp
+Also, in the case of updating the major version of Perl/Python/etc, it
+will be useful that the libraries or programs that create Perl/Python
+bindings have a dependency on them.
+We will have to rebuild everything that depends on Perl/Python with
+one command.
+See
+.Xr pkgman-rdep 1 .
+.Ss RC Scripts
+The actual scripts that control services should be named
+.Dq rc. Ns Aq prog ,
+and installed to
+.Dq /etc/rc.d/ Ns Aq prog .
+See
+.Sx RC Script
+for template script for a package.
+.Ss Runscripts
+Runscripts are supported by
+.Xr pkgman 1 .
+Packages should be built with the idea in mind that people won't
+execute the
+.Dq pre-install ,
+.Dq post-install ,
+.Dq pre-remove ,
+and
+.Dq post-remove
+scripts.
+This is entirely true for
+.Dq Eo core Ec pkgsrc collection ,
+and varies from one to another collections.
+Such strict requirements for
+.Em core
+comes from the fact that the packages in this collection are designed
+to be installed in a separate root directory by
+.Xr pkgadd 1
+utility.
+.Pp
+If a package adds an user to the system using
+.Dq pre-install ,
+a
+.Dq pre-remove
+script must remove that user.
+.Pp
+What these scripts should
+.Em not
+do:
+.Bl -bullet
+.It
+Edit configuration files.
+.It
+Remove other packages.
+.It
+Restart servers.
+.It
+Request for user input.
+.El
+.Pp
+The above prohibitions apply only to packages in the official pkgsrc
+repositories.
+You may not follow them in your own collections if you need more
+sophisticated setups.
+Obviously enough.
+.Ss Environment
+The
+.Dq build
+function should use the
+.Dq $SRC
+variable whenever it needs to access the files listed in the
+.Dq source
+variable, and the
+.Dq $PKG
+variable as the root destination of the output files.
+.Pp
+Being a shell script executed in the context of
+.Xr pkgmk 8 ,
+the entire
+.Pa Pkgfile
+file has access to the variables initialized in
+.Pa pkgmk.conf
+and the default values set by
+.Xr pkgmk 8 .
+Also, as an undocumented side affect of how it is used by
+.Xr pkgmk 8 ,
+it can also change the behaviour of
+.Xr pkgmk 8
+by rewriting some of its functions and variables while the current
+package is built.
+However, the
+.Em build
+function has only read access to these mentioned above.
+.Ss Error Handling
+Most of the command failures in
+.Em build
+function will stop the build process.
+There is no need to explicitly check the return codes.
+If you need/want to handle a command failure you should use constructs
+like:
+.Bd -literal -offset indent
+if ! command ... ; then ... ; fi
+
+command || ...
+.Ed
+.Sh EXAMPLES
+.Ss Pkgfile
+.Bd -literal -offset indent
+# Description: Concise description without articles and trailing dot
+# URL:         http://www.gnu.org/software/somelib/index.html
+# Maintainer:  Joe Maintainer, joe at myfantasticisp dot net
+# Depends on:  someotherlib coolness
+
+name=somelib
+version=1.2.3
+release=1
+source="ftp://ftp.gnu.org/gnu/$name/$name-$version.tar.gz
+        Makefile.in.patch"
+
+build() {
+        cd $name-$version
+
+        patch -p1 -i ../Makefile.in.patch
+
+        ./configure --prefix=/usr
+
+        make V=1
+        make DESTDIR=$PKG install
+
+        rm -rf $PKG/usr/info
+}
+.Ed
+.Ss RC Script
+.Bd -literal -offset indent
+#!/bin/sh
+#
+# /etc/rc.d/daemon: start/stop daemon(8) daemon
+#
+
+SSD=/sbin/start-stop-daemon
+PROG=/usr/sbin/daemon
+PID=/run/daemon.pid
+OPTS="--some-opts"
+
+case $1 in
+start)
+        $SSD --start --pidfile $PID --exec $PROG -- $OPTS
+        ;;
+stop)
+        $SSD --stop --pidfile $PID --retry 10
+        ;;
+restart)
+        $0 stop
+        $0 start
+        ;;
+status)
+        $SSD --status --pidfile $PID
+        case $? in
+        0) echo "$PROG is running with pid $(cat $PID)" ;;
+        1) echo "$PROG is not running but the pid file $PID exists" ;;
+        3) echo "$PROG is not running" ;;
+        4) echo "Unable to determine the program status" ;;
+        esac
+*)
+        echo "usage: $0 [start|stop|restart|status]"
+        ;;
+esac
+
+# End of file.
+.Ed
+.Sh SEE ALSO
+.Xr pkgmk 8 ,
+.Xr pkgmk.conf 5
+.\" vim: cc=72 tw=70
+.\" End of file.
