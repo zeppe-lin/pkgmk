@@ -42,8 +42,8 @@ REQUIREMENTS
 
 INSTALL
 -------
-The shell commands `make && make install` should build and install
-this package.
+The shell command `make install` should install this package.
+See `config.mk` for configuration parameters.
 
 
 LICENSE
