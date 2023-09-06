@@ -1,8 +1,3 @@
-# build files and artefacts
-*.8
-*.5
-pkgmk
-
 # vim undo and swap files
 .*.un~
 *.swp
