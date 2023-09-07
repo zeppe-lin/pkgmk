@@ -3,11 +3,14 @@
 .Dd September 6, 2023
 .Dt PKGMK.CONF 5
 .Os pkgmk @VERSION@
+.\" ==================================================================
 .Sh NAME
 .Nm pkgmk.conf
 .Nd configuration file for pkgmk
+.\" ==================================================================
 .Sh SYNOPSIS
 .Nm /etc/pkgmk.conf
+.\" ==================================================================
 .Sh DESCRIPTION
 This manual page describes the format of the
 .Pa pkgmk.conf
@@ -119,12 +122,14 @@ Option to select the mode used to compress the packages.
 By default is set to
 .Dq gz .
 .El
+.\" ==================================================================
 .Sh FILES
 .Bl -tag -width Ds
 .It Pa /etc/pkgmk.conf
 Configuration file for
 .Xr pkgmk 8 .
 .El
+.\" ==================================================================
 .Sh EXAMPLES
 .Bd -literal -offset indent
 #
@@ -155,6 +160,7 @@ esac
 
 # End of file.
 .Ed
+.\" ==================================================================
 .Sh SEE ALSO
 .Xr Pkgfile 5 ,
 .Xr pkgmk 8
