@@ -3,11 +3,14 @@
 .Dd September 6, 2023
 .Dt PKGFILE 5
 .Os pkgmk @VERSION@
+.\" ==================================================================
 .Sh NAME
 .Nm Pkgfile
 .Nd build file for pkgmk
+.\" ==================================================================
 .Sh SYNOPSIS
 .Nm Pkgfile
+.\" ==================================================================
 .Sh DESCRIPTION
 This manual page describes the format of the
 .Pa Pkgfile
@@ -28,6 +31,7 @@ and a function
 .Em build
 .Pc
 that should be executed in order to compile a package.
+.\" ------------------------------------------------------------------
 .Ss POSIX Exceptions
 In POSIX sh,
 .Qo Li local Qc
@@ -56,6 +60,7 @@ and finding bugs with overwriting variables is a big headache for
 developers, it was decided to allow
 .Qo Li local Qc .
 In the end, the choice is yours to use or not.
+.\" ------------------------------------------------------------------
 .Ss General Guidelines
 The name of a package should always be lowercase
 .Po e.g.,
@@ -65,8 +70,8 @@ and not
 .Pc .
 Dashes are also allowed.
 .Pp
-In case the package is added to the packages sources tree the exact same
-name should be used for the name of the directory in the packages
+In case the package is added to the packages sources tree the exact
+same name should be used for the name of the directory in the packages
 sources structure
 .Po
 e.g.,
@@ -76,6 +81,7 @@ e.g.,
 Do not combine several separately distributed programs/libraries into
 one package.
 Make several packages instead.
+.\" ------------------------------------------------------------------
 .Ss Directories
 In general packages should install files in these directories.
 Exceptions are of course allowed if there is a good reason.
@@ -113,6 +119,7 @@ is not used, thus packages should never install anything there.
 Use
 .Dq /usr/lib/ Ns Aq prog
 instead.
+.\" ------------------------------------------------------------------
 .Ss Junk Files
 Packages should not contain
 .Dq junk files .
@@ -144,6 +151,7 @@ and
 .Pa /sbin/mkfs.minix
 .Pc .
 .El
+.\" ------------------------------------------------------------------
 .Ss Variable Names
 Do not add new variables to the
 .Pa Pkgfile .
@@ -197,6 +205,7 @@ allows renaming the downloaded source by prefixing the URL like this:
 source="$name-$version.tar.gz::http://xyz.org/v$version.tar.gz
         $name-$version.patch::http://xyz.org/$name.patch"
 .Ed
+.\" ------------------------------------------------------------------
 .Ss Header
 Provide a header including the following fields:
 .Bl -column "Description"
@@ -213,6 +222,7 @@ List of dependencies, separated either by spaces
 .Pp
 .Dq Depends on
 can be omitted if there are no dependencies.
+.\" ------------------------------------------------------------------
 .Ss Dependencies
 Dependencies are supported by
 .Xr pkgman 1 .
@@ -292,6 +302,7 @@ We will have to rebuild everything that depends on Perl/Python with
 one command.
 See
 .Xr pkgman-rdep 1 .
+.\" ------------------------------------------------------------------
 .Ss RC Scripts
 The actual scripts that control services should be named
 .Dq rc. Ns Aq prog ,
@@ -300,6 +311,7 @@ and installed to
 See
 .Sx RC Script
 for template script for a package.
+.\" ------------------------------------------------------------------
 .Ss Runscripts
 Runscripts are supported by
 .Xr pkgman 1 .
@@ -346,6 +358,7 @@ repositories.
 You may not follow them in your own collections if you need more
 sophisticated setups.
 Obviously enough.
+.\" ------------------------------------------------------------------
 .Ss Environment
 The
 .Dq build
@@ -374,6 +387,7 @@ package is built.
 However, the
 .Em build
 function has only read access to these mentioned above.
+.\" ------------------------------------------------------------------
 .Ss Error Handling
 Most of the command failures in
 .Em build
@@ -386,7 +400,9 @@ if ! command ... ; then ... ; fi
 
 command || ...
 .Ed
+.\" ==================================================================
 .Sh EXAMPLES
+.\" ------------------------------------------------------------------
 .Ss Pkgfile
 .Bd -literal -offset indent
 # Description: Concise description without articles and trailing dot
@@ -413,6 +429,7 @@ build() {
         rm -rf $PKG/usr/info
 }
 .Ed
+.\" ------------------------------------------------------------------
 .Ss RC Script
 .Bd -literal -offset indent
 #!/bin/sh
@@ -451,6 +468,7 @@ esac
 
 # End of file.
 .Ed
+.\" ==================================================================
 .Sh SEE ALSO
 .Xr pkgmk.conf 5 ,
 .Xr pkgmk 8
