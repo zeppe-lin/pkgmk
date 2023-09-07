@@ -3,12 +3,15 @@
 .Dd September 6, 2023
 .Dt PKGMK 8
 .Os pkgmk @VERSION@
+.\" ==================================================================
 .Sh NAME
 .Nm pkgmk
 .Nd make software package
+.\" ==================================================================
 .Sh SYNOPSIS
 .Nm pkgmk
 .Op Ar option ...
+.\" ==================================================================
 .Sh DESCRIPTION
 .Nm
 is a package management utility, which makes a software package.
@@ -86,6 +89,7 @@ Print version and exit.
 .It Fl h , Fl \-help
 Print help and exit.
 .El
+.\" ==================================================================
 .Sh FILES
 .Bl -tag -width Ds
 .It Pa Pkgfile
@@ -103,6 +107,7 @@ See
 .Xr pkgmk.conf 5
 for more information.
 .El
+.\" ==================================================================
 .Sh EXIT STATUS
 .Bl -tag -width Ds
 .It 0
@@ -129,9 +134,11 @@ An error occurred while running the
 .Sy build
 function.
 .El
+.\" ==================================================================
 .Sh SEE ALSO
 .Xr Pkgfile 5 ,
 .Xr pkgmk.conf 5
+.\" ==================================================================
 .Sh AUTHORS
 The original implementation of
 .Nm
