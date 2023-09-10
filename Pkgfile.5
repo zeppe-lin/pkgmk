@@ -34,11 +34,10 @@ that should be executed in order to compile a package.
 .\" ------------------------------------------------------------------
 .Ss POSIX Exceptions
 In POSIX sh,
-.Qo Li local Qc
+.Dq Li local
 is undefined.
-You can adopt some convention to avoid accidentally overwriting variable
-names, e.g.
-prefixing with the function name:
+You can adopt some convention to avoid accidentally overwriting
+variable names, e.g., prefixing with the function name:
 .Bd -literal -offset indent
 build() {
         _build_foo="bar"
@@ -47,7 +46,7 @@ build() {
 .Ed
 .Pp
 However,
-.Qo Li local Qc
+.Dq Li local
 is supported in many shells, including
 .Xr bash 1 ,
 .Xr ksh 1 ,
