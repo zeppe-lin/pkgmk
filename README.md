@@ -9,7 +9,7 @@ the following differences:
 - POSIX sh(1p) with "local"s exception instead of bash(1)
 - suckless' sbase support
 - aria2c(1) downloader support
-- man page in mdoc(7) format
+- man pages in mdoc(7) format
 - Pkgfile(5) man page
 - bash completion
 - remove "-i", "-u", and "-r" command-line options
