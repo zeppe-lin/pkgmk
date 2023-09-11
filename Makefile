@@ -10,12 +10,9 @@ install:
 	mkdir -p ${DESTDIR}${MANPREFIX}/man8
 	sed "s/@VERSION@/${VERSION}/" pkgmk \
 		> ${DESTDIR}${PREFIX}/sbin/pkgmk
-	sed "s/^\.Os/.Os ${NAME} ${VERSION}/" pkgmk.conf.5 \
-		> ${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
-	sed "s/^\.Os/.Os ${NAME} ${VERSION}/" Pkgfile.5 \
-		> ${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
-	sed "s/^\.Os/.Os ${NAME} ${VERSION}/" pkgmk.8 \
-		> ${DESTDIR}${MANPREFIX}/man8/pkgmk.8
+	cp -f pkgmk.conf.5 ${DESTDIR}${MANPREFIX}/man5/
+	cp -f Pkgfile.5    ${DESTDIR}${MANPREFIX}/man5/
+	cp -f pkgmk.8      ${DESTDIR}${MANPREFIX}/man8/
 	chmod 0755 ${DESTDIR}${PREFIX}/sbin/pkgmk
 	chmod 0644 ${DESTDIR}${MANPREFIX}/man5/pkgmk.conf.5
 	chmod 0644 ${DESTDIR}${MANPREFIX}/man5/Pkgfile.5
