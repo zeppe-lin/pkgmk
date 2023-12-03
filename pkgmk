@@ -297,7 +297,10 @@ download_source() {
 
 	for __FILE in ${source}; do
 		__LOCAL_FILENAME=$(get_filename "$__FILE")
-		[ -e "$__LOCAL_FILENAME" ] && continue
+
+		if [ -e "$__LOCAL_FILENAME" ]; then
+			continue
+		fi
 
 		if [ "$__LOCAL_FILENAME" = "$__FILE" ]; then
 			error "Source file '$__LOCAL_FILENAME' not found (can not be downloaded, URL not specified)."
@@ -451,7 +454,9 @@ compress_manpages() {
 	cd "$PKG"
 
 	find . -type f -path "*/man/man*/*" | while read -r __FILE; do
-		[ "$__FILE" = "${__FILE%%.gz}" ] && gzip -9 "$__FILE"
+		if [ "$__FILE" = "${__FILE%%.gz}" ]; then
+			gzip -9 "$__FILE"
+		fi
 	done
 
 	find . -type l -path "*/man/man*/*" | while read -r __FILE; do
@@ -462,7 +467,9 @@ compress_manpages() {
 		__FILE="${__FILE%%.gz}.gz"
 		__DIR=$(dirname "$__FILE")
 
-		[ -e "$__DIR/$__TARGET" ] && ln -sf "$__TARGET" "$__FILE"
+		if [ -e "$__DIR/$__TARGET" ]; then
+			ln -sf "$__TARGET" "$__FILE"
+		fi
 	done
 }
 
@@ -514,11 +521,15 @@ make_work_dir() {
 	rm -rf "$PKGMK_WORK_DIR" # must
 	mkdir -p "$SRC" "$PKG"
 
-	[ "$PKGMK_IGNORE_MD5SUM" = "no" ] && check_md5sum
+	if [ "$PKGMK_IGNORE_MD5SUM" = "no" ]; then
+		check_md5sum
+	fi
 }
 
 remove_work_dir() {
-	[ "$PKGMK_KEEP_WORK" = "no" ] && rm -rf "$PKGMK_WORK_DIR"
+	if [ "$PKGMK_KEEP_WORK" = "no" ]; then
+		rm -rf "$PKGMK_WORK_DIR"
+	fi
 }
 
 build_package() {
