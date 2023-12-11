@@ -12,10 +12,10 @@ the following differences:
 - man pages in mdoc(7) format
 - Pkgfile(5) man page
 - bash completion
-- remove "-i", "-u", and "-r" command-line options
-- remove signify(1) support
-- command-line options/usage in GNU style
-- support zstd packages
+- removed "-i", "-u", and "-r" command-line options
+- removed signify(1) support
+- GNU-style cmdline options/help/usage
+- zstd packages support
 - allow renaming downloaded tarballs
 
 See git log for complete/further differences.
