@@ -51,7 +51,7 @@ See `config.mk` for configuration parameters.
 
 LICENSE
 -------
-pkgmk is licensed through the GNU General Public License v2 or
-later <https://gnu.org/licenses/gpl.html>.
+pkgmk is licensed through the GNU General Public License v2
+or later <https://gnu.org/licenses/gpl.html>.
 Read the COPYING file for copying conditions.
 Read the COPYRIGHT file for copyright notices.
