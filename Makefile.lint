@@ -27,7 +27,7 @@ deadlinks:
 
 mancheck:
 	@echo "=======> Check man pages for syntax errors"
-	@mandoc -T lint Pkgfile.5 pkgmk.8 pkgmk.conf.5
+	@mandoc -T lint *.[1-9]
 
 podchecker:
 	@echo "=======> Check PODs for syntax errors"
