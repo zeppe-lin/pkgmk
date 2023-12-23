@@ -38,6 +38,7 @@ error() {
 
 fatal() {
 	echo "pkgmk: $1" 1>&2
+	echo "Try 'pkgmk --help' for more information." 1>&2
 	exit $E_GENERAL
 }
 
@@ -761,7 +762,7 @@ parse_options() {
 			exit 0
 			;;
 		*)
-			fatal "unknown option $1"
+			fatal "invalid option -- '$1'"
 			;;
 		esac
 		shift
