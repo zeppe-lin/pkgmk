@@ -9,8 +9,8 @@ part of CRUX' pkgutils software) as of commit 9ca0da6
 - POSIX sh(1p) with "local"s exception instead of bash(1)
 - suckless' sbase support
 - aria2c(1) downloader support
-- man pages in mdoc(7) format
-- Pkgfile(5) man page
+- manual pages in mdoc(7) format
+- new Pkgfile(5) manual page
 - bash completion
 - removed "-i", "-u", and "-r" command-line options
 - removed signify(1) support
