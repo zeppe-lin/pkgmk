@@ -14,7 +14,7 @@ part of CRUX' pkgutils software) as of commit 9ca0da6
 - bash completion
 - removed "-i", "-u", and "-r" command-line options
 - removed signify(1) support
-- GNU-style cmdline options/help/usage
+- GNU-style options/help/usage
 - zstd packages support
 - allow renaming downloaded tarballs
 
