@@ -534,8 +534,9 @@ remove_work_dir() {
 }
 
 build_package() {
-	BUILD_SUCCESSFUL="no" 
 	local __COMPRESSION=
+
+	BUILD_SUCCESSFUL="no" 
 
 	check_file "$TARGET"
 	make_work_dir
