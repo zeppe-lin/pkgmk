@@ -1,0 +1,47 @@
+#
+# /etc/pkgmk.conf: pkgmk(8) configuration
+#
+# See pkgmk.conf(5) for more information.
+#
+
+export CFLAGS="-O2 -march=x86-64 -pipe -fdiagnostics-color=always"
+export CXXFLAGS="$CFLAGS"
+export JOBS=$(nproc)
+export MAKEFLAGS="-j $JOBS"
+
+case $PKGMK_ARCH in
+"64"|"")
+	;;
+"32")
+	export CFLAGS="$CFLAGS -m32"
+	export CXXFLAGS="$CXXFLAGS -m32"
+	export LDFLAGS="$LDFLAGS -m32"
+	export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig"
+	;;
+*)
+	echo "Unknown architecture selected! Exiting."
+	exit 1
+	;;
+esac
+
+#PKGMK_SOURCE_MIRRORS=""
+#PKGMK_SOURCE_DIR=""
+#PKGMK_PACKAGE_DIR=""
+#PKGMK_WORK_DIR=""
+#PKGMK_DOWNLOAD="no"
+#PKGMK_DOWNLOAD_PROG="curl"
+#PKGMK_ARIA2C_OPTS=""
+#PKGMK_CURL_OPTS=""
+#PKGMK_WGET_OPTS=""
+#PKGMK_IGNORE_FOOTPRINT="no"
+#PKGMK_IGNORE_MD5SUM="no"
+#PKGMK_IGNORE_NEW="no"
+#PKGMK_NO_STRIP="no"
+#PKGMK_COMPRESSION_MODE="gz"
+#case "$PKGMK_COMPRESSION_MODE" in
+# xz) export TAR_WRITER_OPTIONS=xz:threads=$JOBS ;;
+#zst) export TAR_WRITER_OPTIONS=zstd:threads=$JOBS,zstd:compression-level=22 ;;
+#esac
+
+# vim: ft=sh
+# End of file.
