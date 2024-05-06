@@ -17,6 +17,7 @@ part of CRUX' pkgutils software) as of commit 9ca0da6
 - GNU-style options/help/usage
 - zstd packages support
 - allow renaming downloaded tarballs
+- ignore extended attributes when extracting tarballs
 
 See git log for complete/further differences.
 
