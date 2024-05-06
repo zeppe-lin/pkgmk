@@ -334,7 +334,15 @@ unpack_source() {
 			# -o: use the user and group of the user
 			#     running the program rather than those
 			#     specified in the archive
-			__COMMAND="bsdtar -p -o -C $SRC -xf $__LOCAL_FILENAME"
+			#
+			# Also, ignore extended attributes when
+			# extracting tarballs:
+			# --no-acls:         ignore POSIX.1e or NFSv4 ACLs
+			# --no-xattrs:       ignore extended file attributes
+			# --no-mac-metadata: ignore MacOS X extended ACLs
+			# --no-fflags:       ignore platform-specific file
+			#                    attributes or file flags
+			__COMMAND="bsdtar -p -o --no-acls --no-xattrs --no-mac-metadata --no-fflags -C $SRC -xf $__LOCAL_FILENAME"
 			;;
 		*)
 			__COMMAND="cp $__LOCAL_FILENAME $SRC"
