@@ -23,8 +23,7 @@ differences:
 See git log for complete/further differences.
 
 The original sources can be downloaded from:
-  1. git://crux.nu/tools/pkgutils.git                        (git)
-  2. https://crux.nu/gitweb/?p=tools/pkgutils.git;a=summary  (web)
+  * https://git.crux.nu/tools/pkgutils.git
 
 
 REQUIREMENTS
