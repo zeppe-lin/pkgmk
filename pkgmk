@@ -690,7 +690,7 @@ Mandatory arguments to long options are mandatory for short options too.
   -um,  --update-md5sum     update md5sum
   -im,  --ignore-md5sum     build package without checking md5sum
   -cm,  --check-md5sum      do not build, only check md5sum
-  -ns,  --no-strip          do not strip executable binaries or libraries
+  -ns,  --no-strip          do not strip executable binaries and/or libraries
   -f,   --force             build package even if it appears to be up to date
   -c,   --clean             remove package and downloaded files
   -kw,  --keep-work         keep temporary working directory
