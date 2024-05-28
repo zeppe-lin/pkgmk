@@ -6,26 +6,30 @@
 .\" ==================================================================
 .Sh NAME
 .Nm pkgmk
-.Nd make software package
+.Nd make an installable software package
 .\" ==================================================================
 .Sh SYNOPSIS
 .Nm pkgmk
 .Op Ar option ...
 .\" ==================================================================
 .Sh DESCRIPTION
+The
 .Nm
-is a package management utility, which makes a software package.
-A package is an archive of files
-.Po
-.Dq .pkg.tar.gz ,
-.Dq .pkg.tar.bz2 ,
-.Dq .pkg.tar.lz ,
-.Dq .pkg.tar.zst ,
-or
-.Dq .pkg.tar.xz
-.Pc
-that can be installed using
-.Xr pkgadd 8 .
+utility makes an installable software package to be used as input to
+the
+.Xr pkgadd 1
+command.
+The package itself is an archive of files, and its contents have a
+directory structure format.
+.Pp
+The following archive formats are supported:
+.Bl -tag -width XX -compact -offset XX
+.It \(bu .pkg.tar.gz
+.It \(bu .pkg.tar.bz2
+.It \(bu .pkg.tar.lz
+.It \(bu .pkg.tar.zst
+.It \(bu .pkg.tar.xz
+.El
 .Pp
 To prepare to use
 .Nm ,
