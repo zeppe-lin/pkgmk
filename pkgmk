@@ -24,18 +24,27 @@ readonly E_BUILD=8      # Error while running 'build()'
 # Notification helpers.                                              #
 ######################################################################
 
+# Print information message to stdout.
+#   arg $1: the message
 info() {
 	echo "=======> $1"
 }
 
+# Print warning message to stderr.
+#   arg $1: the message
 warning() {
 	info "WARNING: $1" 1>&2
 }
 
+# Print error message to stderr.
+#   arg $1: the message
 error() {
 	info "ERROR: $1" 1>&2
 }
 
+# Print error message and help reference to stderr and terminate the
+# program.
+#   arg $1: the message
 fatal() {
 	echo "pkgmk: $1" 1>&2
 	echo "Try 'pkgmk --help' for more information." 1>&2
