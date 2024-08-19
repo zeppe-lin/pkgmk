@@ -7,6 +7,7 @@ Next Release
   - [ ] document .nostrip files:
         https://github.com/zeppe-lin/pkgmk/issues/5
         May be need to reflect this change to handbook(7) too?
+  - [ ] document .md5sum files
 
 
 No milestone
