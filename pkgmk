@@ -789,6 +789,7 @@ parse_options() {
 }
 
 main() {
+	local __FILE=
 	TARGET=
 
 	if [ -f .32bit ]; then
@@ -798,8 +799,6 @@ main() {
 	fi
 
 	parse_options "$@"
-
-	local __FILE
 
 	for __FILE in $PKGMK_ROOT/Pkgfile $PKGMK_CONFFILE; do
 		if [ ! -f "$__FILE" ]; then
