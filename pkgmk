@@ -886,7 +886,7 @@ main() {
 trap "interrupted" HUP  INT  QUIT  TERM
 trap "atexit"      EXIT
 
-# Globals.
+# Globals defaults.
 export LC_ALL=C.UTF-8
 readonly PKGMK_ROOT="$PWD"
 PKGMK_CONFFILE="/etc/pkgmk.conf"
