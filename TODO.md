@@ -21,3 +21,5 @@ No milestone
 
   - [ ] Add pigz support for parallel compression to gzip?
         https://github.com/zeppe-lin/pkgmk/issues/1
+
+  - [ ] Colorize "footprint mismatch" messages like diff(1) does?
