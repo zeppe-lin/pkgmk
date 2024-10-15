@@ -17,6 +17,9 @@ Next Release
         Like https://git.crux.nu/tools/pkgutils/commit/a7d4a0f64f12b967072a1ab10c690b3d55f14550
         This definitely need to be reflected in manual pages and handbook
         section of making packages.
+        Btw, don't rely on Tim's patch on implementing this feature.  He just
+        replace X.Y.Z in the footprint, which may correspond to kernel version,
+        but may not. "Handle kernel-version better", lol.
 
 
 No milestone
