@@ -24,6 +24,9 @@ Next Release
 
 No milestone
 ------------
+  - [ ] add support of sha256 checksums `.sha256sum`?
+        Make priorities? Check all sum-files if exist more than one?
+
   - [ ] Pkgmk checks of directory permissions are too strict:
         https://github.com/zeppe-lin/pkgmk/issues/4
 
