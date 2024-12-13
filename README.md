@@ -4,9 +4,9 @@ OVERVIEW
 This directory contains pkgmk, a package management utility that makes a
 software package.
 
-This distribution is a fork of CRUX' pkgmk utility (which is part of CRUX'
-pkgutils software) as of commit 9ca0da6 (Sat Nov 17 2018) with the following
-differences:
+This distribution is a fork of CRUX' pkgmk utility (which is part of
+CRUX' pkgutils software) as of commit 9ca0da6 (Sat Nov 17 2018) with the
+following differences:
   * POSIX sh(1p) with "local"s exception instead of bash(1)
   * suckless' sbase support
   * aria2c(1) downloader support
