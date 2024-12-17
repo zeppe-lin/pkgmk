@@ -139,7 +139,7 @@ etc
 .Pc .
 .Pp
 Also should be removed:
-.Bl -bullet
+.Bl -bullet -offset 2.n -width 1.n
 .It
 Files related to NLS (National Language Support), always use
 .Dq --disable-nls
@@ -212,7 +212,7 @@ source="$name-$version.tar.gz::http://xyz.org/v$version.tar.gz
 .\" ------------------------------------------------------------------
 .Ss Header
 Provide a header including the following fields:
-.Bl -column "Description"
+.Bl -column "Description" -offset 2.n
 .It Sy Name Ta Sy Meaning
 .It Description Ta
 Short description of the package (keep it factual)
@@ -231,7 +231,7 @@ can be omitted if there are no dependencies.
 Dependencies are supported by
 .Xr pkgman 1 .
 The following rules should be respected:
-.Bl -bullet
+.Bl -bullet -offset 2.n -width 1.n
 .It
 We list all linked runtime dependencies except for
 .Em gcc Pq libstdc++ ,
@@ -245,7 +245,7 @@ packages expect the programs provided by
 .Em core
 to be installed.
 This means the following:
-.Bl -bullet
+.Bl -bullet -offset 2.n -width 1.n
 .It
 Build dependencies provided by
 .Em core
@@ -263,7 +263,7 @@ file.
 .El
 .Pp
 Examples:
-.Bl -tag -width Ds
+.Bl -tag -offset 2.n -width 1.n
 .It Em core/automake
 Does
 .Em not
@@ -344,9 +344,9 @@ a
 script must remove that user.
 .Pp
 What these scripts should
-.Em not
+.Em NOT
 do:
-.Bl -bullet
+.Bl -bullet -offset 2.n -width 1.n -compact
 .It
 Edit configuration files.
 .It
