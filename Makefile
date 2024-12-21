@@ -9,8 +9,7 @@ MAN8 = pkgmk.8
 all: pkgmk
 
 pkgmk:
-	cd src && sed "s/@VERSION@/${VERSION}/" pkgmk.in > pkgmk && \
-	chmod 0755 pkgmk
+	cd src && sed "s/@VERSION@/${VERSION}/" $@.in > $@ && chmod 0755 $@
 
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/sbin
@@ -42,4 +41,4 @@ clean:
 dist: clean
 	git archive --format=tar.gz -o ${DIST}.tar.gz --prefix=${DIST}/ HEAD
 
-.PHONY: all pkgmk install uninstall install_bashcomp uninstall_bashcomp clean dist
+.PHONY: all ${BIN8} install uninstall install_bashcomp uninstall_bashcomp clean dist
