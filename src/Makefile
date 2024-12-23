@@ -12,7 +12,7 @@ $(BIN8):
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/sbin
 	cp -f $(BIN8) $(DESTDIR)$(PREFIX)/sbin
-	cd $(DESTDIR)$(PREFIX)/sbin && chmod 0644 $(BIN8)
+	cd $(DESTDIR)$(PREFIX)/sbin && chmod 0755 $(BIN8)
 
 uninstall:
 	cd $(DESTDIR)$(PREFIX)/sbin && rm -f $(BIN8)
