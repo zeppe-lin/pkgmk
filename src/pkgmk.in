@@ -669,8 +669,16 @@ build_needed() {
 		for __FILE in $PKGMK_ROOT/Pkgfile ${source}; do
 			__FILE=$(get_filename "$__FILE")
 
-			if [ -e "$__FILE" ] \
-			&& ! test "$TARGET" -nt "$__FILE"; then
+			# Intentional: "In POSIX sh, -nt is undefined".
+			# https://www.shellcheck.net/wiki/SC3013
+			#
+			# Rationale: -nt is supported in many shells,
+			# including bash(1), ksh(1), and dash(1),
+			# which is used in Zeppe-Lin as default
+			# /bin/sh provider.
+			#
+			# shellcheck disable=3013
+			if [ -e "$__FILE" ] && ! test "$TARGET" -nt "$__FILE"; then
 				__NEEDED="yes"
 				break
 			fi
