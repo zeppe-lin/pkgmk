@@ -7,6 +7,9 @@ MAN8 = pkgmk.8
 
 all:
 
+lint:
+	mandoc -T lint $(MAN5) $(MAN8)
+
 install:
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man5
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man8
@@ -21,4 +24,4 @@ uninstall:
 
 clean:
 
-.PHONY: all install uninstall clean
+.PHONY: all lint install uninstall clean
