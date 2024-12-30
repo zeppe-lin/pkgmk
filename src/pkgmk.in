@@ -120,6 +120,11 @@ check_pkgfile() {
 		error "Function 'build' not specified in Pkgfile."
 		exit $E_PKGFILE
 	fi
+
+	if [ "$(get_basename "$PKGMK_ROOT")" != "${name}" ]; then
+		error "Variable 'name' does not match the directory name in which Pkgfile is located."
+		exit $E_PKGFILE
+	fi
 }
 
 check_directory() {
