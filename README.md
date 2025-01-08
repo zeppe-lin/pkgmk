@@ -19,6 +19,7 @@ the following differences:
   * zstd packages support
   * allow renaming downloaded tarballs
   * ignore extended attributes when extracting tarballs
+  * support specifying the format for the created archives
 
 See git log for complete/further differences.
 
