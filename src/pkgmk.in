@@ -601,7 +601,8 @@ build_package() {
 
 		# -t: List archive contents to stdout.
 		# -v: Produce output similar to that of ls(1).
-		if bsdtar --format=gnutar -c $__COMPRESSION -f "$TARGET" -- * \
+		if bsdtar --format="$PKGMK_ARCHIVE_FORMAT"  \
+			-c $__COMPRESSION -f "$TARGET" -- * \
 		&& bsdtar -t -v -f "$TARGET"; then
 			BUILD_SUCCESSFUL="yes"
 
@@ -718,6 +719,8 @@ Mandatory arguments to long options are mandatory for short options too.
   -f,   --force             build package even if it appears to be up to date
   -c,   --clean             remove package and downloaded files
   -kw,  --keep-work         keep temporary working directory
+  -af,  --archive-format=FORMAT
+                            use the specified format for the created archive
   -cf,  --config-file=FILE  use alternative configuration file
   -v,   --version           print version and exit
   -h,   --help              print help and exit
@@ -770,6 +773,16 @@ parse_options() {
 			;;
 		-kw|--keep-work)
 			PKGMK_KEEP_WORK="yes"
+			;;
+		-af|--archive-format)
+			PKGMK_ARCHIVE_FORMAT="$2"
+			shift
+			;;
+		-af*)
+			PKGMK_ARCHIVE_FORMAT="${1#-af}"
+			;;
+		--archive-format=*)
+			PKGMK_ARCHIVE_FORMAT="${1#--archive-format=}"
 			;;
 		-cf|--config-file)
 			PKGMK_CONFFILE="$2"
@@ -835,6 +848,17 @@ main() {
 	check_directory "$(dirname "$PKGMK_WORK_DIR")"
 
 	check_pkgfile
+
+	# Conform bsdtar(1) and libarchive-formats(5).
+	# See libarchive-formats(5) "Tar Formats" section.
+	case $PKGMK_ARCHIVE_FORMAT in
+	gnutar | pax | ustar | v7 )
+		;;
+	*)
+		error "Archive format '$PKGMK_ARCHIVE_FORMAT' not supported."
+		exit $E_GENERAL
+		;;
+	esac
 
 	case $PKGMK_COMPRESSION_MODE in
 	gz | bz2 | xz | lz | zst)
@@ -907,6 +931,7 @@ trap "atexit"      EXIT
 # Globals defaults.
 export LC_ALL=C.UTF-8
 readonly PKGMK_ROOT="$PWD"
+PKGMK_ARCHIVE_FORMAT="gnutar"
 PKGMK_CONFFILE="/etc/pkgmk.conf"
 PKGMK_SOURCE_MIRRORS=
 PKGMK_SOURCE_DIR="$PWD"
