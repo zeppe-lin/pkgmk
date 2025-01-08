@@ -121,6 +121,15 @@ By default is set to
 Option to select the mode used to compress the packages.
 By default is set to
 .Dq gz .
+.It Sy PKGMK_ARCHIVE_FORMAT Ns = Ns Aq gnutar | pax | ustar | v7
+Option to select the specified format for the created archive of
+package.
+By default is set to
+.Dq gnutar .
+.Pp
+See
+.Xr libarchive-formats 5
+for more information about currently-supported formats.
 .El
 .\" ==================================================================
 .Sh FILES
