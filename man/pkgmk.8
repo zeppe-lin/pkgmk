@@ -1,6 +1,6 @@
 .\" pkgmk(8) manual page
 .\" See COPYING and COPYRIGHT files for corresponding information.
-.Dd September 6, 2023
+.Dd January 8, 2025
 .Dt PKGMK 8
 .Os
 .\" ==================================================================
@@ -88,6 +88,20 @@ Keep temporary working directory.
 .It Fl cf Ar conffile , Fl \-config-file Ns = Ns Ar conffile
 Specify an alternate configuration file instead of the default
 .Pa /etc/pkgmk.conf .
+.It Fl af Ar format , Fl \-archive\-format Ns = Ns Ar format
+Use the specified format for the created archive instead of the
+default
+.Dq gnutar .
+.Pp
+Supported formats include
+.Dq gnutar ,
+.Dq pax ,
+.Dq ustar ,
+and
+.Dq v7 .
+See
+.Xr libarchive-formats 5
+for more information about currently-supported formats.
 .It Fl v , Fl \-version
 Print version and exit.
 .It Fl h , Fl \-help
