@@ -303,9 +303,14 @@ Also, in the case of updating the major version of Perl/Python/etc, it
 will be useful that the libraries or programs that create Perl/Python
 bindings have a dependency on them.
 We will have to rebuild everything that depends on Perl/Python with
-one command.
+one command, e.g.:
+.Bd -literal -offset indent
+pkgman update -fr --deps --depsort $(pkgman rdep perl)
+.Ed
+.Pp
 See
-.Xr pkgman-rdep 1 .
+.Xr pkgman-rdep 1
+for more information.
 .\" ------------------------------------------------------------------
 .Ss RC Scripts
 The actual scripts that control services should be named
