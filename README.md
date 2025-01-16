@@ -1,8 +1,8 @@
 OVERVIEW
 ========
 
-This directory contains pkgmk, a package management utility that makes
-a software package.
+This repository contains pkgmk, a package management utility that
+makes a software package.
 
 This distribution is a fork of CRUX' pkgmk utility (which is part of
 CRUX' pkgutils software) as of commit 9ca0da6 (Sat Nov 17 2018) with
