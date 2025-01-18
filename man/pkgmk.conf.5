@@ -124,6 +124,18 @@ By default is set to
 .It Sy PKGMK_ARCHIVE_FORMAT Ns = Ns Aq gnutar | pax | ustar | v7
 Option to select the specified format for the created archive of
 package.
+.Pp
+.Bl -tag -width Ds -compact
+.It gnutar
+GNU tar format.
+.It pax
+POSIX 1003.1-2001 (pax) format.
+.It ustar
+POSIX 1003.1-1988 (ustar) format.
+.It v7
+Old V7 tar format.
+.El
+.Pp
 By default is set to
 .Dq gnutar .
 .Pp
