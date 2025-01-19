@@ -27,6 +27,7 @@ Next Release
 No milestone
 ------------
   - [ ] rework command-line options? add `--compress-format <format>` option?
+        Note that these changes need update pkgman's manual pages.
 
   - [ ] add support of sha256 checksums `.sha256sum`?
         Make priorities? Check all sum-files if exist more than one?
