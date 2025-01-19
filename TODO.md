@@ -26,6 +26,8 @@ Next Release
 
 No milestone
 ------------
+  - [ ] rework command-line options? add `--compress-format <format>` option?
+
   - [ ] add support of sha256 checksums `.sha256sum`?
         Make priorities? Check all sum-files if exist more than one?
 
