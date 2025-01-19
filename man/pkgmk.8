@@ -22,34 +22,6 @@ command.
 The package itself is an archive of files, and its contents have a
 directory structure format.
 .Pp
-The following archive formats are supported:
-.Bl -column "XXXXXX"
-.It Sy Format Ta Sy Description
-.It gnutar Ta
-GNU tar format
-.It pax Ta
-POSIX 1003.1-2001 (pax) format
-.It ustar Ta
-POSIX 1003.1-1988 (ustar) format
-.It v7 Ta
-Old V7 tar format
-.El
-.Pp
-The following compression formats are supported:
-.Bl -column "XXXXXX" "XXXXXXXXX"
-.It Sy Format Ta Sy Compression Ta Sy Package-suffix
-.It gz Ta gzip Ta
-\&.pkg.tar.gz
-.It bz2 Ta bzip2 Ta
-\&.pkg.tar.bz2
-.It lz Ta lzip Ta
-\&.pkg.tar.lz
-.It zst Ta zstd Ta
-\&.pkg.tar.zst
-.It xz Ta xz Ta
-\&.pkg.tar.xz
-.El
-.Pp
 To prepare to use
 .Nm ,
 you must write a file named
@@ -110,14 +82,23 @@ Specify an alternate configuration file instead of the default
 .It Fl af Ar format , Fl \-archive\-format Ns = Ns Ar format
 Use the specified format for the created archive instead of the
 default
-.Dq gnutar .
+.Dq gnutar
+or the one defined in the configuration file as
+.Dq PKGMK_ARCHIVE_FORMAT .
 .Pp
-Supported formats include
-.Dq gnutar ,
-.Dq pax ,
-.Dq ustar ,
-and
-.Dq v7 .
+The following archive formats are supported:
+.Bl -column "XXXXXX"
+.It Sy Format Ta Sy Description
+.It gnutar Ta
+GNU tar format
+.It pax Ta
+POSIX 1003.1-2001 (pax) format
+.It ustar Ta
+POSIX 1003.1-1988 (ustar) format
+.It v7 Ta
+Old V7 tar format
+.El
+.Pp
 See
 .Xr libarchive-formats 5
 for more information about currently-supported formats.
