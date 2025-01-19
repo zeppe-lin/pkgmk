@@ -849,10 +849,10 @@ main() {
 
 	check_pkgfile
 
-	# Conform bsdtar(1) and libarchive-formats(5).
-	# See libarchive-formats(5) "Tar Formats" section.
 	case $PKGMK_ARCHIVE_FORMAT in
 	gnutar | pax | ustar | v7 )
+		# Valid conform bsdtar(1) and
+		# libarchive-formats(5)/"Tar Formats".
 		;;
 	*)
 		error "Archive format '$PKGMK_ARCHIVE_FORMAT' not supported."
