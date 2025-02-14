@@ -53,6 +53,23 @@ The shell command `make install` should install this package.
 See `config.mk` for configuration parameters.
 
 
+DOCUMENTATION
+=============
+
+Online documentation
+--------------------
+
+Manual pages:
+- [Pkgfile.5](https://zeppe-lin.github.io/Pkgfile.5.html)
+- [pkgmk.8](https://zeppe-lin.github.io/pkgmk.8.html)
+- [pkgmk.conf.5](https://zeppe-lin.github.io/pkgmk.conf.5.html)
+<!-- in progress
+- [pkgmk.footprint.5](https://zeppe-lin.github.io/pkgmk.footprint.5.html)
+- [pkgmk.md5sum.5](https://zeppe-lin.github.io/pkgmk.md5sum.5.html)
+- [pkgmk.nostrip.5](https://zeppe-lin.github.io/pkgmk.nostrip.5.html)
+-->
+
+
 LICENSE
 =======
 
