@@ -8,17 +8,27 @@ the pkgmk sources cloned from the Zeppe-Lin's source code repository.
 Coding style
 ------------
 
-  * Indent with tabs, align with spaces.
+* Indent with tabs, align with spaces.
 
-  * Variables declaration:
+* Variables declaration:
 
 ```
-  +----------------+-------------------------------------------+
-  | ${var}, ${VAR} | Global variable. External, declared in    |
-  |                | sourced files like Pkgfile or pkgmk.conf. |
-  +----------------+-------------------------------------------+
-  | $VAR           | Internal, global variable.                |
-  +----------------+-------------------------------------------+
-  | $__VAR         | Local variable.                           |
-  +----------------+-------------------------------------------+
++----------------+-------------------------------------------+
+| ${var}, ${VAR} | Global variable. External, declared in    |
+|                | sourced files like Pkgfile or pkgmk.conf. |
++----------------+-------------------------------------------+
+| $VAR           | Internal, global variable.                |
++----------------+-------------------------------------------+
+| $__VAR         | Local variable.                           |
++----------------+-------------------------------------------+
+```
+
+
+Documentation
+-------------
+
+* Generate online references to the manual pages in README.md from Vim:
+
+```
+:r!ls *.[0-9] | sed 's/^man\/\(.*\)/- \[\1\]\(https:\/\/zeppe-lin.github.io\/\1.html\)/g'
 ```
