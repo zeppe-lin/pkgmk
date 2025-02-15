@@ -1,24 +1,24 @@
-ABOUT
-=====
+HACKING
+=======
 
-This file attempts to describe the rules to use when hacking the pkgmk
-sources cloned from the Zeppe-Lin's source code repository.
+This file attempts to describe the rules and notes to use when hacking
+the pkgmk sources cloned from the Zeppe-Lin's source code repository.
 
 
-STYLE
-=====
+Coding style
+------------
 
   * Indent with tabs, align with spaces.
 
+  * Variables declaration:
 
-VARIABLES DECLARATION
-=====================
-
-+----------------+-------------------------------------------+
-| ${var}, ${VAR} | Global variable. External, declared in    |
-|                | sourced files like Pkgfile or pkgmk.conf. |
-+----------------+-------------------------------------------+
-| $VAR           | Internal, global variable.                |
-+----------------+-------------------------------------------+
-| $__VAR         | Local variable.                           |
-+----------------+-------------------------------------------+
+```
+  +----------------+-------------------------------------------+
+  | ${var}, ${VAR} | Global variable. External, declared in    |
+  |                | sourced files like Pkgfile or pkgmk.conf. |
+  +----------------+-------------------------------------------+
+  | $VAR           | Internal, global variable.                |
+  +----------------+-------------------------------------------+
+  | $__VAR         | Local variable.                           |
+  +----------------+-------------------------------------------+
+```
