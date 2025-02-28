@@ -48,6 +48,7 @@ error() {
 fatal() {
 	echo "pkgmk: $1" 1>&2
 	echo "Try 'pkgmk --help' for more information." 1>&2
+
 	exit $E_GENERAL
 }
 
