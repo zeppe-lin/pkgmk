@@ -65,6 +65,14 @@ fatal() {
 interrupted() {
 	echo ""                      1>&2
 	echo "=======> Interrupted." 1>&2
+
+	# XXX: Since the POSIX standard does not specify whether the
+	# EXIT trap should be executed, some shells don't run the EXIT
+	# trap if exit is called from a trap handler, while others
+	# don't run it in forked subshells. To resolve these issues
+	# (and many others), explicitly run atexit().
+	atexit
+
 	exit $E_GENERAL
 }
 
