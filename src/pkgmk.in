@@ -77,6 +77,9 @@ atexit() {
 # Pkgmk routines.                                                    #
 ######################################################################
 
+# XXX: -a/__ABSOLUTE is an artifact from CRUX's pkgmk, used by its
+# signify(1) to check signature of files.  Do we need it?  Should we
+# add signify(1) support later?
 get_filename() {
 	local __ABSOLUTE=
 
