@@ -7,44 +7,49 @@
 # shellcheck disable=SC3043
 
 ######################################################################
-# Error codes.                                                       #
+# Section: Error codes                                               #
+# Define error codes for script exit statuses.                       #
 ######################################################################
 
 readonly E_GENERAL=1    # Generic error code
-readonly E_PKGFILE=2    # Invalid Pkgfile
-readonly E_DIR_PERM=3   # Directory (source/build) missing or missing
-                        #   read/write permission
-readonly E_DOWNLOAD=4   # Error during download
-readonly E_UNPACK=5     # Error during unpacking of source file(s)
-readonly E_MD5=6        # MD5sum verification failed
-readonly E_FOOTPRINT=7  # Footprint check failure
-readonly E_BUILD=8      # Error while running 'build()'
+readonly E_PKGFILE=2    # Invalid Pkgfile (missing variables/functions)
+readonly E_DIR_PERM=3   # Directory permission error (source/build directories)
+readonly E_DOWNLOAD=4   # Error during source file download
+readonly E_UNPACK=5     # Error during source file unpacking
+readonly E_MD5=6        # MD5 checksum verification failed
+readonly E_FOOTPRINT=7  # Package footprint check failure
+readonly E_BUILD=8      # Error during package 'build()' function execution
 
 ######################################################################
-# Notification helpers.                                              #
+# Section: Notification helpers                                      #
+# Functions for displaying messages to the user.                     #
 ######################################################################
 
-# Print information message to stdout.
-#   arg $1: the message
+# info - Print an informational message to stdout.
+# Args:
+#   $1: The message string to print.
 info() {
 	echo "=======> $1"
 }
 
-# Print warning message to stderr.
-#   arg $1: the message
+# warning - Print a warning message to stderr.
+# Args:
+#   $1: The warning message string.
 warning() {
 	info "WARNING: $1" 1>&2
 }
 
-# Print error message to stderr.
-#   arg $1: the message
+# error - Print an error message to stderr.
+# Args:
+#   $1: The error message string.
 error() {
 	info "ERROR: $1" 1>&2
 }
 
-# Print error message and help reference to stderr and terminate the
-# program.
-#   arg $1: the message
+# fatal - Print an error message and help reference to stderr, then
+# exit.
+# Args:
+#   $1: The error message string.
 fatal() {
 	echo "pkgmk: $1" 1>&2
 	echo "Try 'pkgmk --help' for more information." 1>&2
@@ -53,7 +58,8 @@ fatal() {
 }
 
 ######################################################################
-# Exit hooks.                                                        #
+# Section: Exit hooks                                                #
+# Functions to handle script termination (interrupts, exit).         #
 ######################################################################
 
 # Don't warn about unreachable commands in these functions.
@@ -62,62 +68,81 @@ fatal() {
 # https://www.shellcheck.net/wiki/SC2317
 # https://www.shellcheck.net/wiki/SC2086
 
+# interrupted - Handle script interruption signals (HUP, INT, QUIT,
+# TERM).  Print an interruption message and call atexit before
+# exiting.
 # shellcheck disable=SC2317,SC2086
 interrupted() {
 	echo ""                      1>&2
 	echo "=======> Interrupted." 1>&2
-
-	# XXX: Since the POSIX standard does not specify whether the
-	# EXIT trap should be executed, some shells don't run the EXIT
-	# trap if exit is called from a trap handler, while others
-	# don't run it in forked subshells. To resolve these issues
-	# (and many others), explicitly run atexit().
+	# Explicitly call atexit() to ensure cleanup routines are
+	# executed on interrupt.
 	atexit
-
 	exit $E_GENERAL
 }
 
+# atexit - Cleanup function to be executed on script exit.
+# Deletes temporary working directories.
 # shellcheck disable=SC2317
 atexit() {
 	remove_work_dir
 }
 
 ######################################################################
-# Pkgmk routines.                                                    #
+# Section: Pkgmk routines                                            #
+# Core functions for package creation, checking, and management.     #
 ######################################################################
 
-# XXX: -a/__ABSOLUTE is an artifact from CRUX's pkgmk, used by its
-# signify(1) to check signature of files.  Do we need it?  Should we
-# add signify(1) support later?
+# get_filename - Extract a local filename from a URL or path.
+# Args:
+#   $1: URL or path string.  Can optionally start with '-a' flag.
+# Returns:
+#   The local filename to be used for the downloaded source, printed
+#   to stdout.
 get_filename() {
-	local __ABSOLUTE=
+	local __ABSOLUTE= # Flag to indicate absolute path (unused)
 
 	if [ "$1" = "-a" ]; then
 		__ABSOLUTE=1
-		shift
+		shift # remove the '-a' flag from arguments
 	fi
 
 	case $1 in
 	   http://*/* |    https://*/* |    ftp://*/* |    file://*/*)
+		# Extract filename from URL and prepend
+		# PKGMK_SOURCE_DIR
 		echo "$PKGMK_SOURCE_DIR/${1##*/}"
 		;;
 	*::http://*/* | *::https://*/* | *::ftp://*/* | *::file://*/*)
+		# Handle prefixed URLs (e.g., 'name.tar.gz::http://')
+		# - remove prefix and extract filename
 		echo "$PKGMK_SOURCE_DIR/${1%::*}"
 		;;
 	*)
+		# Handle local paths or filenames
 		if [ "$__ABSOLUTE" ]; then
+			# If -a was specified, treat as absolute path
+			# under PKGMK_ROOT
 			echo "$PKGMK_ROOT/$1"
 		else
+			# Otherwise, treat as relative filename
 			echo "$1"
 		fi
 		;;
 	esac
 }
 
+# get_basename - Extract the basename from a given path.
+# Args:
+#   $1: Path string.
+# Returns:
+#   The basename of the path, printed to stdout.
 get_basename() {
 	echo "${1##*/}"
 }
 
+# check_pkgfile - Validate the Pkgfile for required variables and
+# functions.
 check_pkgfile() {
 	if [ ! "${name}" ]; then
 		error "Variable 'name' not specified in Pkgfile."
@@ -139,6 +164,10 @@ check_pkgfile() {
 	fi
 }
 
+# check_directory - Check if a directory exists and has required
+# permissions.
+# Args:
+#   $1: Directory path to check.
 check_directory() {
 	if [ ! -d "$1" ]; then
 		error "Directory '$1' does not exist."
@@ -152,6 +181,9 @@ check_directory() {
 	fi
 }
 
+# check_file - Check if a file exists and is writable.
+# Args:
+#   $1: File path to check.
 check_file() {
 	if [ -e "$1" ] && [ ! -w "$1" ]; then
 		error "File '$1' is not writable."
@@ -159,6 +191,10 @@ check_file() {
 	fi
 }
 
+# download_file - Download a single file from a given URL, with resume
+# and mirror support.
+# Args:
+#   $1: Source URL or filename.
 download_file() {
 	# https://www.shellcheck.net/wiki/SC2155
 	# shellcheck disable=SC2155
@@ -185,7 +221,7 @@ download_file() {
 	esac
 
 	if ! command -v "$__DOWNLOAD_CMD" >/dev/null; then
-		error "Command '$__DOWNLOAD_CMD' not found."
+		error "Download command '$__DOWNLOAD_CMD' not found."
 		exit $E_GENERAL
 	fi
 
@@ -285,7 +321,7 @@ download_file() {
 		if $__DOWNLOAD_CMD  $__DOWNLOAD_OPTS  $__RESUME_OPTS \
 		    "$__REPO/$__BASENAME"; then
 			__ERROR=0
-			break
+			break # exit mirror loop on success
 		else
 			__ERROR=$?
 		fi
@@ -318,6 +354,8 @@ download_file() {
 	mv -f "$__LOCAL_FILENAME_PARTIAL" "$__LOCAL_FILENAME"
 }
 
+# download_source - Download multiple source files listed in the
+# 'source' variable
 download_source() {
 	local __FILE=
 	local __LOCAL_FILENAME=
@@ -326,7 +364,7 @@ download_source() {
 		__LOCAL_FILENAME=$(get_filename "$__FILE")
 
 		if [ -e "$__LOCAL_FILENAME" ]; then
-			continue
+			continue # Skip download if file already exists
 		fi
 
 		if [ "$__LOCAL_FILENAME" = "$__FILE" ]; then
@@ -343,6 +381,8 @@ download_source() {
 	done
 }
 
+# unpack_source - Unpack downloaded source files based on their
+# extensions.
 unpack_source() {
 	local __FILE=
 	local __LOCAL_FILENAME=
@@ -356,6 +396,9 @@ unpack_source() {
 		*.tbz2    | *.tar.xz | *.txz   | *.tar.lzma | *.tar.lz  | \
 		*.tar.zst | *.tzst   | *.zst   | *.zip      | *.rpm     | \
 		*.7z)
+			# Unpack common archive formats using
+			# bsdtar(1) with options:
+			#
 			# -p: Preserve file permissions.
 			# -o: Use the user and group of the user
 			#     running the program rather than those
@@ -371,13 +414,14 @@ unpack_source() {
 			__COMMAND="bsdtar -p -o --no-acls --no-xattrs --no-mac-metadata --no-fflags -C $SRC -xf $__LOCAL_FILENAME"
 			;;
 		*)
+			# For other files, just copy to SRC directory
 			__COMMAND="cp $__LOCAL_FILENAME $SRC"
 			;;
 		esac
 
-		echo "$__COMMAND"
+		echo "$__COMMAND" # Log the unpack command
 
-		if ! $__COMMAND; then
+		if ! $__COMMAND; then # Execute the unpack command
 			remove_work_dir
 			error "Building '$TARGET' failed."
 			exit $E_UNPACK
@@ -385,6 +429,7 @@ unpack_source() {
 	done
 }
 
+# make_md5sum - Compute and print out MD5 checksums of source files.
 make_md5sum() {
 	local __FILE=
 	local __LOCAL_FILENAMES=
@@ -401,10 +446,13 @@ make_md5sum() {
 	fi
 }
 
+# make_footprint - Print out package footprint
 make_footprint() {
 	pkginfo --footprint "$TARGET"
 }
 
+# check_md5sum - Check MD5 checksums of source files against a .md5sum
+# file.
 check_md5sum() {
 	local __FILE="$PKGMK_WORK_DIR"/.tmp
 
@@ -414,6 +462,8 @@ check_md5sum() {
 		make_md5sum       > "$__FILE.md5sum"
 		sort -k 2 .md5sum > "$__FILE.md5sum.orig"
 
+		# Compare generated and original md5sum files with the
+		# following options:
 		# -w:   Ignore all whitespace.
 		# -t:   Expand tabs to spaces in output.
 		# -U 0: Output 0 lines of unified context.
@@ -459,15 +509,21 @@ check_md5sum() {
 	fi
 }
 
+# strip_files - Strip debug symbols from executables and libraries in
+# the package directory.
 strip_files() {
-	local __FILTER="cat"
+	local __FILTER="cat" # Default filter to include all files
 
 	if [ -f "$PKGMK_ROOT/.nostrip" ]; then
+		# Filter out files listed in .nostrip
 		__FILTER="grep -v -f $PKGMK_ROOT/.nostrip"
 	fi
 
 	cd "$PKG"
 
+	# Find all files, print null-terminated names for safety.
+	# Filter filenames based on .nostrip list.
+	# Process files in parallel (up to JOBS)
 	find . -type f -printf "%P\n"                 \
 	| $__FILTER                                   \
 	| xargs -r -L10 -P"${JOBS:-1}"                \
@@ -482,6 +538,8 @@ $2 == "current ar archive"              { print "--strip-debug    \"" $1 "\"" }
 '	| xargs -r -L1 -P"${JOBS:-1}" strip
 }
 
+# compress_manpages - Compress manual pages within the package
+# directory using gzip.
 compress_manpages() {
 	local __FILE=
 	local __TARGET=
@@ -489,12 +547,14 @@ compress_manpages() {
 
 	cd "$PKG"
 
+	# Compress regular manpage files
 	find . -type f -path "*/man/man*/*" | while read -r __FILE; do
 		if [ "$__FILE" = "${__FILE%%.gz}" ]; then
 			gzip -9 "$__FILE"
 		fi
 	done
 
+	# Re-link manpage symlinks to point to compressed versions
 	find . -type l -path "*/man/man*/*" | while read -r __FILE; do
 		__TARGET=$(readlink -n "$__FILE")
 		__TARGET="${__TARGET##*/}"
@@ -509,17 +569,23 @@ compress_manpages() {
 	done
 }
 
+# check_footprint - Check package footprint against a .footprint file
+# for regressions.
 check_footprint() {
 	local __FILE="$PKGMK_WORK_DIR/.tmp"
 
 	cd "$PKGMK_ROOT"
 
 	if [ -f "$TARGET" ]; then
+		# Generate current footprint
 		make_footprint > "$__FILE.footprint"
 
 		if [ -f .footprint ]; then
+			# Backup original footprint
 			cp .footprint "$__FILE.footprint.orig"
 
+			# Compare original and generated footprint
+			# files, with the following options:
 			# -w:   Ignore all whitespace.
 			# -t:   Expand tabs to spaces in output.
 			# -U 0: Output 0 lines of unified context.
@@ -534,40 +600,59 @@ check_footprint() {
 			> "$__FILE.footprint.diff"
 
 			if [ -s "$__FILE.footprint.diff" ]; then
+				# Mark build as not successful due to
+				# footprint mismatch
 				BUILD_SUCCESSFUL="no"
+
 				error "Footprint mismatch found:"
 				cat "$__FILE.footprint.diff" 1>&2
 			fi
 		else
 			warning "Footprint not found, creating new."
+
+			# Move generated footprint to .footprint if
+			# original not found
 			mv "$__FILE.footprint" .footprint
 		fi
 	else
+		# Mark build as not successful if package file is
+		# missing
 		BUILD_SUCCESSFUL="no"
+
 		error "Package '$TARGET' was not found."
 	fi
 }
 
+# make_work_dir - Create temporary working directories for package
+# building.
 make_work_dir() {
-	PKG="$PKGMK_WORK_DIR/pkg"
-	SRC="$PKGMK_WORK_DIR/src"
-	umask 022
+	PKG="$PKGMK_WORK_DIR/pkg" # Package staging directory
+	SRC="$PKGMK_WORK_DIR/src" # Source extraction directory
+	umask 022 # Set default umask for created files and directories
 
 	cd "$PKGMK_ROOT"
-	rm -rf "$PKGMK_WORK_DIR" # must
+
+	# Ensure clean work directory by removing existing one
+	rm -rf "$PKGMK_WORK_DIR"
+
 	mkdir -p "$SRC" "$PKG"
 
+	# Run MD5 checksum check if not ignored
 	if [ "$PKGMK_IGNORE_MD5SUM" = "no" ]; then
 		check_md5sum
 	fi
 }
 
+# remove_work_dir - Remove the temporary working directory
 remove_work_dir() {
+	# Remove work directory unless keeping working directory is
+	# not specified
 	if [ "$PKGMK_KEEP_WORK" = "no" ]; then
 		rm -rf "$PKGMK_WORK_DIR"
 	fi
 }
 
+# build_package - Orchestrate the entire package build process.
 build_package() {
 	local __COMPRESSION=
 
@@ -582,12 +667,17 @@ build_package() {
 
 	info "Building '$TARGET' started $(date)."
 
+	# Unpack source files into SRC directory
 	unpack_source
 
+	# Change current directory to SRC for build function execution
 	cd "$SRC"
 
+	# Execute the 'build' function from Pkgfile in a subshell with
+	# -e (exit on error) and -x (xtrace)
 	(set -e -x; build)
 
+	# Check exit status of the build command
 	# Intentional.
 	# https://www.shellcheck.net/wiki/SC2181
 	# shellcheck disable=SC2181
@@ -599,10 +689,13 @@ build_package() {
 
 		compress_manpages
 
+		# Change directory to PKG for archive creation
 		cd "$PKG"
 
 		info "Build result:"
 
+		# Determine compression extension based on
+		# PKGMK_COMPRESSION_MODE
 		case $PKGMK_COMPRESSION_MODE in
 		 gz) __COMPRESSION="-z"     ;;
 		bz2) __COMPRESSION="-j"     ;;
@@ -611,16 +704,23 @@ build_package() {
 		zst) __COMPRESSION="--zstd" ;;
 		esac
 
+		# Create package archive using bsdtar and specified
+		# format and compression with the following options:
 		# -t: List archive contents to stdout.
 		# -v: Produce output similar to that of ls(1).
 		if bsdtar --format="$PKGMK_ARCHIVE_FORMAT"  \
 			-c $__COMPRESSION -f "$TARGET" -- * \
 		&& bsdtar -t -v -f "$TARGET"; then
+
+			# Mark build as successful
 			BUILD_SUCCESSFUL="yes"
 
+			### XXX revise
 			if [ "$PKGMK_IGNORE_FOOTPRINT" = "yes" ]; then
 				warning "Footprint ignored."
 			else
+				# Check package footprint unless
+				# ignored
 				check_footprint
 				if [ "$BUILD_SUCCESSFUL" = "no" ]; then
 					remove_work_dir
@@ -630,12 +730,15 @@ build_package() {
 		fi
 	fi
 
-	remove_work_dir
+	remove_work_dir # Cleanup working directory after build
 
 	if [ "$BUILD_SUCCESSFUL" = "yes" ]; then
 		info "Building '$TARGET' succeeded $(date)."
 	else
 		if [ -f "$TARGET" ]; then
+			# Update timestamp of target package to match
+			# Pkgfile in case of failure, for build_needed
+			# logic
 			touch -r "$PKGMK_ROOT/Pkgfile" "$TARGET" \
 				>/dev/null 2>&1
 		fi
@@ -645,13 +748,14 @@ build_package() {
 	fi
 }
 
+# clean - Remove the build package and downloaded source files.
 clean() {
 	local __FILE=
 	local __LOCAL_FILENAME=
 
 	if [ -f "$TARGET" ]; then
 		info "Removing $TARGET"
-		rm -f "$TARGET"
+		rm -f "$TARGET" # Remove package file
 	fi
 
 	for __FILE in ${source}; do
@@ -660,33 +764,45 @@ clean() {
 		if [ -e "$__LOCAL_FILENAME"              ] \
 		&& [    "$__LOCAL_FILENAME" != "$__FILE" ]; then
 			info "Removing $__LOCAL_FILENAME"
+			# Remove downloaded source file
 			rm -f "$__LOCAL_FILENAME"
 		fi
 	done
 }
 
+# update_footprint - Update the .footprint file using the last built
+# package.
 update_footprint() {
 	if [ ! -f "$TARGET" ]; then
 		error "Unable to update footprint. File '$TARGET' not found."
 		exit $E_GENERAL
 	fi
 
-	check_file       .footprint
-	make_footprint > .footprint
-	touch "$TARGET"
+	check_file       .footprint  # Check if .footprint is writeable
+	make_footprint > .footprint  # Generate new footprint
+	touch "$TARGET"              # Update timestamp of package
 
 	info "Footprint updated."
 }
 
+# build_needed - Check if a package rebuild is needed based on
+# timestamps.  Compares package file timestamp with Pkgfile and source
+# files.
 build_needed() {
 	local __FILE=
-	local __NEEDED="yes"
+	local __NEEDED="yes" # Assume rebuild is needed initially
 
 	if [ -f "$TARGET" ]; then
+		# If package exists, assume no rebuild needed unless
+		# proven otherwise
 		__NEEDED="no"
+
 		for __FILE in $PKGMK_ROOT/Pkgfile ${source}; do
 			__FILE=$(get_filename "$__FILE")
 
+			# Check if source file is newer than target
+			# package file.
+			#
 			# Intentional: "In POSIX sh, -nt is undefined".
 			# https://www.shellcheck.net/wiki/SC3013
 			#
@@ -697,21 +813,28 @@ build_needed() {
 			#
 			# shellcheck disable=3013
 			if [ -e "$__FILE" ] && ! test "$TARGET" -nt "$__FILE"; then
+				# Rebuild needed if any source file is
+				# newer
 				__NEEDED="yes"
+
+				# No need to check further source
+				# files
 				break
 			fi
 		done
 	fi
 
 	if [ "$__NEEDED" != yes ]; then
-		return 1
+		return 1 # Indicate build not needed with exit code 1
 	fi
 }
 
 ######################################################################
-# Command-line helpers.                                              #
+# Section: Command-line helpers                                      #
+# Functions for handling command-line arguments and options.         #
 ######################################################################
 
+# print_help - Print the help message to stdout.
 print_help() {
 	cat <<EOF
 Usage: pkgmk [option ...]
@@ -739,10 +862,15 @@ Mandatory arguments to long options are mandatory for short options too.
 EOF
 }
 
+# print_version - Print the script version to stdout.
 print_version() {
-	echo "pkgmk @VERSION@"
+	echo "pkgmk @VERSION@" # Placeholder for version string
 }
 
+# parse_options - Parse command-line options and set corresponding
+# PKGMK_* variables.
+# Args:
+#   $@: Command-line arguments passed to the script.
 parse_options() {
 	while [ "$1" ]; do
 		case $1 in
@@ -827,44 +955,67 @@ parse_options() {
 			fatal "invalid option -- '$1'"
 			;;
 		esac
-		shift
+		shift # Move to the next argument
 	done
 }
 
+######################################################################
+# Section: Main execution logic                                      #
+# Main function and script initialization.                           #
+######################################################################
+
+# main - Main function of the pkgmk script.
+# Args:
+#   $@: Command-line arguments.
 main() {
 	local __FILE=
+
+	# Variable to store target package filename, global scope
+	# within main()
 	TARGET=
 
+	# Determine architecture (32 or 64 bit) based on '.32bit' file
+	# presence
 	if [ -f .32bit ]; then
 		export PKGMK_ARCH=32
 	else
-		export PKGMK_ARCH=64 # multilib
+		export PKGMK_ARCH=64 # Default to 64-bit (multilib consideration)
 	fi
 
+	# Parse command-line options.
 	parse_options "$@"
 
+	# Load configuration files (Pkgfile and optional config file)
 	for __FILE in $PKGMK_ROOT/Pkgfile $PKGMK_CONFFILE; do
 		if [ ! -f "$__FILE" ]; then
 			error "File '$__FILE' not found."
 			exit $E_GENERAL
 		fi
 
+		# Source the configuration file to load variables and
+		# functions.
+		#
 		# Intentional: "can't follow non-constant source".
 		# https://www.shellcheck.net/wiki/SC1090
 		# shellcheck disable=SC1090
 		. "$__FILE"
 	done
 
+	# Check required directories for existence and permissions
 	check_directory "$PKGMK_SOURCE_DIR"
 	check_directory "$PKGMK_PACKAGE_DIR"
+	# Check parent directory of work directory
 	check_directory "$(dirname "$PKGMK_WORK_DIR")"
 
+	# Validate Pkgfile content
 	check_pkgfile
 
+	# Validate archive format against supported formats
 	case $PKGMK_ARCHIVE_FORMAT in
 	gnutar | pax | ustar | v7 )
-		# Valid archive formats conform bsdtar(1) and
-		# libarchive-formats(5)/"Tar Formats".  Pass through.
+		# Valid formats conform bsdtar(1) and
+		# libarchive-formats(5)/"Tar Formats":
+		# - pass through
 		;;
 	*)
 		error "Archive format '$PKGMK_ARCHIVE_FORMAT' not supported."
@@ -872,6 +1023,8 @@ main() {
 		;;
 	esac
 
+	# Construct target package filename based on compression mode
+	# and package info
 	case $PKGMK_COMPRESSION_MODE in
 	gz | bz2 | xz | lz | zst)
 		TARGET="$PKGMK_PACKAGE_DIR/$name#$version-$release.pkg.tar.$PKGMK_COMPRESSION_MODE"
@@ -882,34 +1035,35 @@ main() {
 		;;
 	esac
 
+	# Handle command-line actions based on flags
 	if [ "$PKGMK_CLEAN" = "yes" ]; then
-		clean
+		clean # Remove package and downloaded sources
 		exit 0
 	fi
 
 	if [ "$PKGMK_UPDATE_FOOTPRINT" = "yes" ]; then
-		update_footprint
+		update_footprint # Update footprint file
 		exit 0
 	fi
 
 	if [ "$PKGMK_UPDATE_MD5SUM" = "yes" ]; then
-		download_source
-		check_file    .md5sum
-		make_md5sum > .md5sum
+		download_source # Download sources (required for md5sum update)
+		check_file    .md5sum # Check if .md5sum is writable
+		make_md5sum > .md5sum # Generate new md5sum file
 		info "Md5sum updated."
 		exit 0
 	fi
 
 	if [ "$PKGMK_DOWNLOAD_ONLY" = "yes" ]; then
-		download_source
+		download_source # Only download source files
 		exit 0
 	fi
 
 	if [ "$PKGMK_EXTRACT_ONLY" = "yes" ]; then
-		download_source
-		make_work_dir
+		download_source # Download source files
+		make_work_dir # Create work directory
 		info "Extracting sources of package '$name-$version'."
-		unpack_source
+		unpack_source # Extract source files
 		exit 0
 	fi
 
@@ -922,51 +1076,103 @@ main() {
 		exit 0
 	fi
 
+	# Default build process if no special flags are set
 	if ! build_needed \
 	&& [ "$PKGMK_FORCE" = "no"        ] \
 	&& [ "$PKGMK_CHECK_MD5SUM" = "no" ]; then
 		info "Package '$TARGET' is up to date."
 	else
-		download_source
-		build_package
+		download_source # Download source files
+		build_package # Build the package
 	fi
 
 	exit 0
 }
 
 ######################################################################
+# Section: Script initialization                                     #
+# Set traps and default global variables.                            #
+######################################################################
 
-# Set exit hooks.
-trap "interrupted" HUP  INT  QUIT  TERM
-trap "atexit"      EXIT
+# Set trap handlers for interrupt signals and exit.
+trap "interrupted" HUP  INT  QUIT  TERM # Handle interrupt signals
+trap "atexit"      EXIT                 # Call atexit on script exit
 
-# Globals defaults.
+# Globals variable defaults - PKGMK_* variables control script
+# behaviour:
+
+# Set locale to C.UTF-8 for consistent string operations
 export LC_ALL=C.UTF-8
+
+# Root directory of the package build process (current working directory)
 readonly PKGMK_ROOT="$PWD"
+
+# Default archive format (gnutar, pax, ustar, v7)
 PKGMK_ARCHIVE_FORMAT="gnutar"
+
+# Default path for global configuration file
 PKGMK_CONFFILE="/etc/pkgmk.conf"
+
+# Default source mirror URLs (empty by default)
 PKGMK_SOURCE_MIRRORS=
+
+# Default source download directory (current working directory)
 PKGMK_SOURCE_DIR="$PWD"
+
+# Default package output directory (current working directory)
 PKGMK_PACKAGE_DIR="$PWD"
+
+# Default temporary working directory
 PKGMK_WORK_DIR="$PWD/work"
+
+# Default compression mode for package archives (gz, bz2, xz, lz, zst)
 PKGMK_COMPRESSION_MODE="gz"
+
+# Flag to enable/disable automatic source download
 PKGMK_DOWNLOAD="no"
+
+# Flag for download-only mode
 PKGMK_DOWNLOAD_ONLY="no"
+
+# Flag for extract-only mode
 PKGMK_EXTRACT_ONLY="no"
+
+# Flag for up-to-date check mode
 PKGMK_UP_TO_DATE="no"
+
+# Flag to update footprint file
 PKGMK_UPDATE_FOOTPRINT="no"
+
+# Flag to ignore footprint check during build
 PKGMK_IGNORE_FOOTPRINT="no"
+
+# Flag to force build even if package is up-to-date
 PKGMK_FORCE="no"
+
+# Flag to keep working directory after build
 PKGMK_KEEP_WORK="no"
+
+# Flag to update MD5 checksum file
 PKGMK_UPDATE_MD5SUM="no"
+
+# Flag to ignore MD5 checksum check during build
 PKGMK_IGNORE_MD5SUM="no"
+
+# Flag for checksum-only check mode
 PKGMK_CHECK_MD5SUM="no"
+
+# Flag to disable stripping of binaries and libraries
 PKGMK_NO_STRIP="no"
+
+# Flag for clean mode (remove package and sources)
 PKGMK_CLEAN="no"
 
 ######################################################################
+# Section: Script execution                                          #
+# Invoke the main function with command-line arguments.              #
+######################################################################
 
-main "$@"
+main "$@" # Execute the main function, passing command line arguments
 
 # vim: ft=sh cc=72 tw=70
 # End of file.
