@@ -12,14 +12,14 @@
 ######################################################################
 
 # https://tldp.org/LDP/abs/html/exitcodes.html
-readonly E_GENERAL=1    # General error
-readonly E_PKGFILE=2    # Invalid Pkgfile (missing variables/functions)
-readonly E_DIR_PERM=3   # Directory missing or permission error (source/build directories)
-readonly E_DOWNLOAD=4   # Error during source file download
-readonly E_UNPACK=5     # Error during source file unpacking
-readonly E_MD5=6        # MD5 checksum verification failed
-readonly E_FOOTPRINT=7  # Footprint check failure
-readonly E_BUILD=8      # Error during package 'build()' function execution
+readonly E_GENERAL=1     # General error
+readonly E_PKGFILE=2     # Invalid Pkgfile (missing variables/functions)
+readonly E_DIR_PERM=3    # Directory missing or permission error (source/build directories)
+readonly E_DOWNLOAD=4    # Error during source file download
+readonly E_UNPACK=5      # Error during source file unpacking
+readonly E_MD5=6         # MD5 checksum verification failed
+readonly E_FOOTPRINT=7   # Footprint check failure
+readonly E_BUILD=8       # Error during package 'build()' function execution
 #readonly E_CMDEXEC=126  # Command invoked cannot execute
 readonly E_INTERRUPT=130 # Script interrupted or terminated by C-c
 
@@ -86,8 +86,8 @@ interrupted() {
 	exit $E_INTERRUPT
 }
 
-# atexit - Cleanup function to be executed on script exit.
-# Deletes temporary working directories.
+# atexit - Cleanup function to be executed on script exit: delete
+# temporary working directories.
 # shellcheck disable=SC2317
 atexit() {
 	remove_work_dir
@@ -365,7 +365,7 @@ download_file() {
 }
 
 # download_source - Download multiple source files listed in the
-# 'source' variable
+# 'source' variable.
 download_source() {
 	local __FILE=
 	local __LOCAL_FILENAME=
@@ -454,11 +454,6 @@ make_md5sum() {
 		# shellcheck disable=SC2086
 		md5sum $__LOCAL_FILENAMES | sed -e 's:  .*/:  :' | sort -k 2
 	fi
-}
-
-# make_footprint - Print out package footprint
-make_footprint() {
-	pkginfo --footprint "$TARGET"
 }
 
 # check_md5sum - Check MD5 checksums of source files against a .md5sum
@@ -577,6 +572,11 @@ compress_manpages() {
 			ln -sf "$__TARGET" "$__FILE"
 		fi
 	done
+}
+
+# make_footprint - Print out package footprint.
+make_footprint() {
+	pkginfo --footprint "$TARGET"
 }
 
 # check_footprint - Check package footprint against a .footprint file
@@ -705,8 +705,8 @@ build_package() {
 
 		info "Build result:"
 
-		# Determine compression extension based on
-		# PKGMK_COMPRESSION_MODE
+		# Determine compression extension based on specified
+		# PKGMK_COMPRESSION_MODE:
 		case $PKGMK_COMPRESSION_MODE in
 		 gz) __COMPRESSION="-z"     ;;
 		bz2) __COMPRESSION="-j"     ;;
@@ -1073,9 +1073,9 @@ main() {
 
 	if [ "$PKGMK_EXTRACT_ONLY" = "yes" ]; then
 		download_source # Download source files
-		make_work_dir # Create work directory
+		make_work_dir   # Create work directory
 		info "Extracting sources of package '$name-$version' to work directory"
-		unpack_source # Extract source files
+		unpack_source   # Extract source files
 		exit 0
 	fi
 
@@ -1104,7 +1104,7 @@ main() {
 # Set traps and default global variables.                            #
 ######################################################################
 
-# Set trap handlers for interrupt signals and exit.
+# Set trap handlers for interrupt signals and exit
 trap "interrupted" HUP  INT  QUIT  TERM # Handle interrupt signals
 trap "atexit"      EXIT                 # Call atexit on script exit
 
