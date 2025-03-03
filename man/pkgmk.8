@@ -133,28 +133,23 @@ for more information.
 .Sh EXIT STATUS
 .Bl -tag -width 2n -compact
 .It 0
-No error occurred.
+Success.
 .It 1
-A general error has occurred.
+General error.
 .It 2
-The
-.Pa Pkgfile
-is invalid.
+Invalid Pkgfile (missing variables/functions).
 .It 3
-The source or build directory is missing or is lacking read/write
-permissions.
+Directory missing or permission error (source/build directories).
 .It 4
-An error occurred during the download of source files.
+Error during source file download.
 .It 5
-An error occurred during unpacking of source files.
+Error during source file unpacking.
 .It 6
-An md5sum mismatch occurred.
+MD5 checksum verification failed.
 .It 7
-A footprint mismatch occurred.
+Package footprint check failure.
 .It 8
-An error occurred while running the
-.Sy build
-function.
+Error during package 'build()' function execution.
 .El
 .\" ==================================================================
 .Sh SEE ALSO
