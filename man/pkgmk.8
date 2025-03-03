@@ -131,7 +131,7 @@ for more information.
 .El
 .\" ==================================================================
 .Sh EXIT STATUS
-.Bl -tag -width 2n -compact
+.Bl -tag -width 3n -compact
 .It 0
 Success.
 .It 1
@@ -150,6 +150,11 @@ MD5 checksum verification failed.
 Package footprint check failure.
 .It 8
 Error during package 'build()' function execution.
+.\".It 126
+.\"Command invoked cannot execute.
+.It 130
+Script interrupted or terminated by
+.Ic C-c .
 .El
 .\" ==================================================================
 .Sh SEE ALSO
