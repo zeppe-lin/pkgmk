@@ -104,7 +104,7 @@ get_filename() {
 
 	if [ "$1" = "-a" ]; then
 		__ABSOLUTE=1
-		shift # remove the '-a' flag from arguments
+		shift # Remove the '-a' flag from arguments
 	fi
 
 	case $1 in
@@ -159,7 +159,7 @@ check_pkgfile() {
 	fi
 
 	if [ "$(get_basename "$PKGMK_ROOT")" != "${name}" ]; then
-		error "Variable 'name' does not match the directory name in which Pkgfile is located."
+		error "Variable 'name' in Pkgfile does not match the package directory name."
 		exit $E_PKGFILE
 	fi
 }
@@ -176,7 +176,7 @@ check_directory() {
 		error "Directory '$1' not writable."
 		exit $E_DIR_PERM
 	elif [ ! -x "$1" ] || [ ! -r "$1" ]; then
-		error "Directory '$1' not readable."
+		error "Directory '$1' not readable or executable."
 		exit $E_DIR_PERM
 	fi
 }
@@ -339,8 +339,13 @@ download_file() {
 			if [ $__ERROR != 0 ] && [ "$__RESUME_OPTS" ]; then
 				info "Partial download failed, restarting"
 				rm -f "$__LOCAL_FILENAME_PARTIAL"
+
+				# Clear resume options for fresh
+				# download
 				__RESUME_OPTS=""
 			else
+				# Exit retry loop on non-resume
+				# failure or success
 				break
 			fi
 		done
@@ -368,13 +373,13 @@ download_source() {
 		fi
 
 		if [ "$__LOCAL_FILENAME" = "$__FILE" ]; then
-			error "Source file '$__LOCAL_FILENAME' not found (can not be downloaded, URL not specified)."
+			error "Source file '$__LOCAL_FILENAME' not found (cannot download, URL not specified)."
 			exit $E_DOWNLOAD
 		else
 			if [ "$PKGMK_DOWNLOAD" = "yes" ]; then
 				download_file "$__FILE"
 			else
-				error "Source file '$__LOCAL_FILENAME' not found (use option -d to download)."
+				error "Source file '$__LOCAL_FILENAME' not found (use -d option to download)."
 				exit $E_DOWNLOAD
 			fi
 		fi
@@ -423,7 +428,7 @@ unpack_source() {
 
 		if ! $__COMMAND; then # Execute the unpack command
 			remove_work_dir
-			error "Building '$TARGET' failed."
+			error "Unpacking source file '$__LOCAL_FILENAME' failed."
 			exit $E_UNPACK
 		fi
 	done
@@ -478,33 +483,33 @@ check_md5sum() {
 		> "$__FILE.md5sum.diff"
 
 		if [ -s "$__FILE.md5sum.diff" ]; then
-			error "Md5sum mismatch found:"
+			error "MD5 checksum mismatch found:"
 			cat "$__FILE.md5sum.diff" 1>&2
 
 			remove_work_dir
 
 			if [ "$PKGMK_CHECK_MD5SUM" = "yes" ]; then
-				error "Md5sum not ok."
+				error "MD5 checksum verification failed."
 				exit $E_MD5
 			fi
 
-			error "Building '$TARGET' failed."
+			error "Building '$TARGET' failed due to MD5 checksum mismatch (non-fatal, MD5 check ignored)."
 			exit $E_MD5
 		fi
 	else
 		if [ "$PKGMK_CHECK_MD5SUM" = "yes" ]; then
 			remove_work_dir
-			info "Md5sum not found."
+			info "MD5 checksum file '.md5sum' not found"
 			exit $E_MD5
 		fi
 
-		warning "Md5sum not found, creating new."
+		warning "MD5 checksum file '.md5sum' not found, creating a new one"
 		make_md5sum > .md5sum
 	fi
 
 	if [ "$PKGMK_CHECK_MD5SUM" = "yes" ]; then
 		remove_work_dir
-		info "Md5sum ok."
+		info "MD5 checksum verification passed"
 		exit 0
 	fi
 }
@@ -608,7 +613,7 @@ check_footprint() {
 				cat "$__FILE.footprint.diff" 1>&2
 			fi
 		else
-			warning "Footprint not found, creating new."
+			warning "Footprint file '.footprint' not found, creating a new one"
 
 			# Move generated footprint to .footprint if
 			# original not found
@@ -662,10 +667,11 @@ build_package() {
 	make_work_dir
 
 	if [ "$(id -u)" != 0 ]; then
-		warning "Packages should be built as root."
+		warning "Packages should ideally built as root for proper permissions"
 	fi
 
-	info "Building '$TARGET' started $(date)."
+	# Log build start time
+	info "Building '$TARGET' started $(date)"
 
 	# Unpack source files into SRC directory
 	unpack_source
@@ -717,7 +723,7 @@ build_package() {
 
 			### XXX revise
 			if [ "$PKGMK_IGNORE_FOOTPRINT" = "yes" ]; then
-				warning "Footprint ignored."
+				warning "Footprint check is ignored"
 			else
 				# Check package footprint unless
 				# ignored
@@ -733,7 +739,8 @@ build_package() {
 	remove_work_dir # Cleanup working directory after build
 
 	if [ "$BUILD_SUCCESSFUL" = "yes" ]; then
-		info "Building '$TARGET' succeeded $(date)."
+		# Log build end time
+		info "Building '$TARGET' succeeded $(date)"
 	else
 		if [ -f "$TARGET" ]; then
 			# Update timestamp of target package to match
@@ -774,7 +781,7 @@ clean() {
 # package.
 update_footprint() {
 	if [ ! -f "$TARGET" ]; then
-		error "Unable to update footprint. File '$TARGET' not found."
+		error "Unable to update footprint.  File '$TARGET' not found."
 		exit $E_GENERAL
 	fi
 
@@ -782,7 +789,7 @@ update_footprint() {
 	make_footprint > .footprint  # Generate new footprint
 	touch "$TARGET"              # Update timestamp of package
 
-	info "Footprint updated."
+	info "Footprint updated"
 }
 
 # build_needed - Check if a package rebuild is needed based on
@@ -1018,7 +1025,7 @@ main() {
 		# - pass through
 		;;
 	*)
-		error "Archive format '$PKGMK_ARCHIVE_FORMAT' not supported."
+		error "Archive format '$PKGMK_ARCHIVE_FORMAT' is not supported."
 		exit $E_GENERAL
 		;;
 	esac
@@ -1030,7 +1037,7 @@ main() {
 		TARGET="$PKGMK_PACKAGE_DIR/$name#$version-$release.pkg.tar.$PKGMK_COMPRESSION_MODE"
 		;;
 	*)
-		error "Compression mode '$PKGMK_COMPRESSION_MODE' not supported."
+		error "Compression mode '$PKGMK_COMPRESSION_MODE' is not supported."
 		exit $E_GENERAL
 		;;
 	esac
@@ -1050,7 +1057,7 @@ main() {
 		download_source # Download sources (required for md5sum update)
 		check_file    .md5sum # Check if .md5sum is writable
 		make_md5sum > .md5sum # Generate new md5sum file
-		info "Md5sum updated."
+		info "MD5 checksum file '.md5sum' updated"
 		exit 0
 	fi
 
@@ -1062,28 +1069,26 @@ main() {
 	if [ "$PKGMK_EXTRACT_ONLY" = "yes" ]; then
 		download_source # Download source files
 		make_work_dir # Create work directory
-		info "Extracting sources of package '$name-$version'."
+		info "Extracting sources of package '$name-$version' to work directory"
 		unpack_source # Extract source files
 		exit 0
 	fi
 
 	if [ "$PKGMK_UP_TO_DATE" = "yes" ]; then
 		if build_needed; then
-			info "Package '$TARGET' is not up to date."
+			info "Package '$TARGET' is not up to date"
 		else
-			info "Package '$TARGET' is up to date."
+			info "Package '$TARGET' is up to date"
 		fi
 		exit 0
 	fi
 
 	# Default build process if no special flags are set
-	if ! build_needed \
-	&& [ "$PKGMK_FORCE" = "no"        ] \
-	&& [ "$PKGMK_CHECK_MD5SUM" = "no" ]; then
-		info "Package '$TARGET' is up to date."
+	if ! build_needed && [ "$PKGMK_FORCE" = "no" ] && [ "$PKGMK_CHECK_MD5SUM" = "no" ]; then
+		info "Package '$TARGET' is up to date (use -f/--force to force rebuild)"
 	else
-		download_source # Download source files
-		build_package # Build the package
+		download_source
+		build_package
 	fi
 
 	exit 0
