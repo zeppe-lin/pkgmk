@@ -11,13 +11,13 @@
 # Define error codes for script exit statuses.                       #
 ######################################################################
 
-readonly E_GENERAL=1    # Generic error code
+readonly E_GENERAL=1    # General error
 readonly E_PKGFILE=2    # Invalid Pkgfile (missing variables/functions)
-readonly E_DIR_PERM=3   # Directory permission error (source/build directories)
+readonly E_DIR_PERM=3   # Directory missing or permission error (source/build directories)
 readonly E_DOWNLOAD=4   # Error during source file download
 readonly E_UNPACK=5     # Error during source file unpacking
 readonly E_MD5=6        # MD5 checksum verification failed
-readonly E_FOOTPRINT=7  # Package footprint check failure
+readonly E_FOOTPRINT=7  # Footprint check failure
 readonly E_BUILD=8      # Error during package 'build()' function execution
 
 ######################################################################
