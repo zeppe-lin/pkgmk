@@ -786,7 +786,7 @@ clean() {
 # package.
 update_footprint() {
 	if [ ! -f "$TARGET" ]; then
-		error "Unable to update footprint.  File '$TARGET' not found."
+		error "Unable to update footprint file.  Package '$TARGET' not found."
 		exit $E_GENERAL
 	fi
 
@@ -794,7 +794,7 @@ update_footprint() {
 	make_footprint > .footprint  # Generate new footprint
 	touch "$TARGET"              # Update timestamp of package
 
-	info "Footprint updated"
+	info "Footprint file updated"
 }
 
 # build_needed - Check if a package rebuild is needed based on
