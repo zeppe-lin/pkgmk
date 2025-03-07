@@ -499,11 +499,11 @@ check_md5sum() {
 	else
 		if [ "$PKGMK_CHECK_MD5SUM" = "yes" ]; then
 			remove_work_dir
-			info "MD5 checksum file '.md5sum' not found"
+			info "MD5 checksum file not found"
 			exit $E_MD5
 		fi
 
-		warning "MD5 checksum file '.md5sum' not found, creating a new one"
+		warning "MD5 checksum file not found, creating a new one"
 		make_md5sum > .md5sum
 	fi
 
@@ -618,7 +618,7 @@ check_footprint() {
 				cat "$__FILE.footprint.diff" 1>&2
 			fi
 		else
-			warning "Footprint file '.footprint' not found, creating a new one"
+			warning "Footprint file not found, creating a new one"
 
 			# Move generated footprint to .footprint if
 			# original not found
@@ -1062,7 +1062,7 @@ main() {
 		download_source # Download sources (required for md5sum update)
 		check_file    .md5sum # Check if .md5sum is writable
 		make_md5sum > .md5sum # Generate new md5sum file
-		info "MD5 checksum file '.md5sum' updated"
+		info "MD5 checksum file updated"
 		exit 0
 	fi
 
