@@ -990,8 +990,17 @@ main() {
 	# presence
 	if [ -f .32bit ]; then
 		export PKGMK_ARCH=32
+
+		# Also, define default build options to enable
+		# execution without requiring a configuration file
+		# (e.g., use -cf /dev/null)
+		export CFLAGS="$CFLAGS -m32"
+		export CXXFLAGS="$CXXFLAGS -m32"
+		export LDFLAGS="$LDFLAGS -m32"
+		export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig"
 	else
-		export PKGMK_ARCH=64 # Default to 64-bit (multilib consideration)
+		# Default to 64-bit (multilib consideration)
+		export PKGMK_ARCH=64
 	fi
 
 	# Parse command-line options.
@@ -999,7 +1008,7 @@ main() {
 
 	# Load configuration files (Pkgfile and optional config file)
 	for __FILE in $PKGMK_ROOT/Pkgfile $PKGMK_CONFFILE; do
-		if [ ! -f "$__FILE" ]; then
+		if [ ! -e "$__FILE" ]; then
 			error "File '$__FILE' not found."
 			exit $E_GENERAL
 		fi
