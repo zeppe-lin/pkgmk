@@ -937,20 +937,20 @@ parse_options() {
 			PKGMK_ARCHIVE_FORMAT="${1#--archive-format=}"
 			;;
 		-cf|--config-file)
-			PKGMK_CONFFILE="$2"
+			PKGMK_CONFFILE="$(readlink -f "$2")"
 			if [ ! "$PKGMK_CONFFILE" ]; then
 				fatal "option $1 requires an argument"
 			fi
 			shift
 			;;
 		-cf*)
-			PKGMK_CONFFILE="${1#-cf}"
+			PKGMK_CONFFILE="$(readlink -f "${1#-cf}")"
 			if [ ! "$PKGMK_CONFFILE" ]; then
 				fatal "option -cf requires an argument"
 			fi
 			;;
 		--config-file=*)
-			PKGMK_CONFFILE="${1#--config-file=}"
+			PKGMK_CONFFILE="$(readlink -f "${1#--config-file=}")"
 			if [ ! "$PKGMK_CONFFILE" ]; then
 				fatal "option --config-file requires an argument"
 			fi
