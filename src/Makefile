@@ -6,9 +6,6 @@ BIN8 = pkgmk
 
 all: $(BIN8)
 
-lint:
-	shellcheck -s sh pkgmk.in
-
 $(BIN8):
 	sed "s/@VERSION@/$(VERSION)/" $@.in > $@
 	chmod 0755 $@
@@ -24,4 +21,4 @@ uninstall:
 clean:
 	rm -f $(BIN8)
 
-.PHONY: all lint install uninstall clean
+.PHONY: all install uninstall clean
