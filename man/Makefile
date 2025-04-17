@@ -8,6 +8,9 @@ MAN8 = pkgmk.8
 
 all: $(MAN5) $(MAN8)
 
+$(MAN5) $(MAN8):
+	scdoc < $@.scdoc > $@
+
 install: all
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man5
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man8
