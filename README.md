@@ -10,8 +10,13 @@ the following differences:
   * POSIX sh(1p) with "local"s exception instead of bash(1)
   * suckless' sbase support
   * aria2c(1) downloader support
-  * manual pages in mdoc(7) format
-  * new Pkgfile(5) manual page
+  * manual pages in scdoc(5) format
+  * new manual pages:
+    * pkgmk.Pkgfile(5)
+    * pkgmk.32bit(5)
+    * pkgmk.footprint(5)
+    * pkgmk.md5sum(5)
+    * pkgmk.nostrip(5)
   * bash completion
   * removed "-i", "-u", and "-r" command-line options
   * removed signify(1) support
@@ -33,6 +38,7 @@ REQUIREMENTS
 Build time
 ----------
   * POSIX sh(1p), make(1p) and "mandatory utilities"
+  * scdoc(1) to build manual pages
 
 Runtime
 -------
@@ -48,26 +54,17 @@ Runtime
 INSTALL
 =======
 
-The shell command `make install` should install this package.
+To install this package, run:
 
-See `config.mk` for configuration parameters.
+    make install
+
+See config.mk file for configuration parameters.
 
 
 DOCUMENTATION
 =============
 
-Online documentation
---------------------
-
-Manual pages:
-- [Pkgfile.5](https://zeppe-lin.github.io/Pkgfile.5.html)
-- [pkgmk.8](https://zeppe-lin.github.io/pkgmk.8.html)
-- [pkgmk.conf.5](https://zeppe-lin.github.io/pkgmk.conf.5.html)
-<!-- in progress
-- [pkgmk.footprint.5](https://zeppe-lin.github.io/pkgmk.footprint.5.html)
-- [pkgmk.md5sum.5](https://zeppe-lin.github.io/pkgmk.md5sum.5.html)
-- [pkgmk.nostrip.5](https://zeppe-lin.github.io/pkgmk.nostrip.5.html)
--->
+See /man directory for manual pages.
 
 
 LICENSE
