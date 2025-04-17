@@ -1,0 +1,110 @@
+PKGMK.FOOTPRINT(5)
+
+# NAME
+
+pkgmk.footprint - package footprint file for pkgmk regression detection
+
+# SYNOPSIS
+
+*.footprint*
+
+# DESCRIPTION
+
+The _.footprint_ file records the list of files installed by a package
+and is used by *pkgmk*(8) to detect changes or regressions between
+builds.  After a successful build, *pkgmk*(8) generates a _.footprint_
+file containing the file paths and metadata of the installed files.
+On subsequent builds, *pkgmk*(8) compares the new footprint against
+the saved _.footprint_ file to identify discrepancies, such as missing
+or new files.
+
+The _.footprint_ check is controlled by:
+
+*-if*, *--ignore-footprint*
+	Skip the footprint comparison.
+
+*-uf*, *--update-footprint*
+	Generate and update the _.footprint_ file with the latest file
+	list.
+
+*PKGMK_IGNORE_FOOTPRINT*=<yes | no>
+	When not set to yes, *pkgmk*(8) performs a footprint check.
+
+	Default: no.
+
+If no _.footprint_ file exists during a build (and footprint checking
+is enabled), *pkgmk*(8) will warn and create a new _.footprint_ file
+using the current build's file list.
+
+When a mismatch is detected, *pkgmk*(8) outputs a diff-like report
+showing files that are *NEW* (present in the current build but missing
+in the saved _.footprint_) or *MISSING* (present in the saved file but
+absent in the new build) and exits with a non-zero error code
+(*E_FOOTPRINT*).
+
+# FORMAT
+
+The _.footprint_ file is a plain text file where each line represents
+one installed file or directory.  A typical line format is:
+
+```
+permissions    owner/group    path
+```
+
+Additional details, such as symlink targets, may appear.  Entries are
+usually sorted by file path for consistency.
+
+# EXAMPLES
+
+A _.footprint_ file for the sed package might look like:
+
+```
+drwxr-xr-x    root/root    bin/
+-rwxr-xr-x    root/root    bin/sed
+drwxr-xr-x    root/root    usr/
+drwxr-xr-x    root/root    usr/share/
+drwxr-xr-x    root/root    usr/share/man/
+drwxr-xr-x    root/root    usr/share/man/man1/
+-rw-r--r--    root/root    usr/share/man/man1/sed.1.gz
+```
+
+Similarly, a _.footprint_ file for the ed package showing symlink
+targets:
+
+```
+drwxr-xr-x    root/root    bin/
+-rwxr-xr-x    root/root    bin/ed
+-rwxr-xr-x    root/root    bin/red
+drwxr-xr-x    root/root    usr/
+drwxr-xr-x    root/root    usr/share/
+drwxr-xr-x    root/root    usr/share/man/
+drwxr-xr-x    root/root    usr/share/man/man1/
+-rw-r--r--    root/root    usr/share/man/man1/ed.1.gz
+lrwxrwxrwx    root/root    usr/share/man/man1/red.1.gz -> ed.1.gz
+```
+
+# FILES
+
+*$PKGMK_ROOT*/_.footprint_
+	The _.footprint_ file is expected to be located in the package
+	root directory, adjacent to the _Pkgfile_.
+
+# SEE ALSO
+
+*pkginfo*(1),
+*Pkgfile*(5),
+*pkgmk*(8)
+
+# NOTES
+
+The format of the _.footprint_ file is determined by
+*pkginfo --footprint*.
+
+; # BUGS
+; The format of the _.footprint_ file is determined by
+; *pkginfo --footprint*, which may vary between systems or
+; *pkginfo*(1) versions.
+; *pkgmk*(8) performs a simple line-by-line comparison that may not
+; handle complex format differences.
+
+; vim: ft=scdoc cc=72 tw=70

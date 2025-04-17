@@ -2,15 +2,13 @@
 
 include ../config.mk
 
-MAN5 = Pkgfile.5 pkgmk.conf.5
+MAN5 = pkgmk.32bit.5 pkgmk.conf.5 pkgmk.footprint.5 pkgmk.md5sum.5 \
+       pkgmk.nostrip.5 pkgmk.Pkgfile.5
 MAN8 = pkgmk.8
 
-all:
+all: $(MAN5) $(MAN8)
 
-lint:
-	mandoc -T lint $(MAN5) $(MAN8)
-
-install:
+install: all
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man5
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man8
 	cp -f $(MAN5) $(DESTDIR)$(MANPREFIX)/man5
@@ -23,5 +21,6 @@ uninstall:
 	cd $(DESTDIR)$(MANPREFIX)/man8 && rm -f $(MAN8)
 
 clean:
+	rm -f $(MAN5) $(MAN8)
 
-.PHONY: all lint install uninstall clean
+.PHONY: all install uninstall clean

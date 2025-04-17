@@ -1,0 +1,156 @@
+PKGMK(8)
+
+# NAME
+
+pkgmk - make an installable software package
+
+# SYNOPSIS
+
+*pkgmk* [_option_ ...]
+
+# DESCRIPTION
+
+*pkgmk* creates installable software package for use with *pkgadd*(8).
+Packages are archives with a defined directory structure.
+
+To use *pkgmk*, you need a _Pkgfile_ describing the build process.
+See *pkgmk.Pkgfile*(5).  After creating a _Pkgfile_, run *pkgmk* to
+build a package.  To update the package after changes, simply run
+*pkgmk*.  It will rebuild if the source files or the Pkgfile have been
+modified since the last successful build.
+
+Global configuration is read from _/etc/pkgmk.conf_ at startup.
+
+The options are as follows:
+
+*-d*, *--download*
+	Download missing source files.
+
+*-do*, *--download-only*
+	Download missing sources only, do not build.
+
+*-utd*, *--up-to-date*
+	Check if package is up-to-date, do not build.
+
+*-uf*, *--update-footprint*
+	Update footprint and mark last build as successful.
+
+*-if*, *--ignore-footprint*
+	Build without checking footprint.
+
+*-in*, *--ignore-new*
+	Build, ignore new files in footprint mismatch.
+
+*-um*, *--update-md5sum*
+	Update md5sum using the current source files.
+
+*-im*, *--ignore-md5sum*
+	Build without checking md5sum first.
+
+*-cm*, *--check-md5sum*
+	Check md5sum, do not build.
+
+*-ns*, *--no-strip*
+	Do not strip binaries/libraries.
+
+*-f*, *--force*
+	Force build even if up-to-date.
+
+*-c*, *--clean*
+	Remove build package and downloaded source files.
+
+*-kw*, *--keep-work*
+	Keep temporary working directory.
+
+*-cf* _conffile_, *--config-file*=_conffile_
+	Use alternate configuration file _conffile_ instead of
+	_/etc/pkgmk.conf_.
+
+*-af* _format_, *--archive-format*=_format_
+	Use _format_ as archive format for the package instead of the
+	default "gnutar" or the value defined by
+	*PKGMK_ARCHIVE_FORMAT* in the _/etc/pkgmk.conf_.
+
+	The following archive formats are supported:
+
+	gnutar
+		GNU tar format.
+	pax
+		POSIX 1003.1-2001 (pax) format.
+	ustar
+		POSIX 1003.1-1988 (ustar) format.
+	v7
+		Old V7 tar format.
+
+	See *libarchive-formats*(5) for more information about
+	currently-supported formats.
+
+*-v*, *--version*
+	Print version and exit.
+
+*-h*, *--help*
+	Print help and exit.
+
+# FILES
+
+_Pkgfile_
+	Package build description and instructions.
+	See *pkgmk.Pkgfile*(5).
+
+_.nostrip_
+	Exceptions for *strip*(1) on binaries/libraries.
+	See *pkgmk.nostrip*(5).
+
+_.footprint_
+	Package footprint (used for regression testing).
+	See *pkgmk.footprint*(5).
+
+_.md5sum_
+	MD5 checksum of source files.
+	See *pkgmk.md5sum*(5).
+
+_.32bit_
+	Flag file to trigger 32-bit build mode in *pkgmk*.
+	See *pkgmk.32bit*(5).
+
+_/etc/pkgmk.conf_
+	Global configuration file for *pkgmk*.
+	See *pkgmk.conf*(5).
+
+# EXIT STATUS
+*0*
+	Success.
+*1*
+	General error.
+*2*
+	Invalid _Pkgfile_ (missing required variables or functions).
+*3*
+	Directory missing or permission error
+	(source/build directories).
+*4*
+	Error during source file download.
+*5*
+	Error during source file unpacking.
+*6*
+	MD5 checksum verification failed.
+*7*
+	Package footprint check failure.
+*8*
+	Error during package "build()" function execution.
+*130*
+	Script interrupted or terminated by *C-c*.
+
+# SEE ALSO
+
+*Pkgfile*(5),
+*pkgmk.conf*(5)
+
+# AUTHORS
+
+Originally written by Per Lidén <per@fukt.bth.se> as part of
+*pkgutils* for CRUX: http://crux.nu.
+
+This implementation was extensively re-worked for Zeppe-Lin by
+Alexandr Savca <alexandr.savca89@gmail.com>.
+
+; vim: ft=scdoc cc=72 tw=70

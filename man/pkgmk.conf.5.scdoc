@@ -1,0 +1,191 @@
+PKGMK.CONF(5)
+
+# NAME
+
+pkgmk.conf - configuration file for pkgmk
+
+# SYNOPSIS
+
+*/etc/pkgmk.conf*
+
+# DESCRIPTION
+
+This manual page describes the format of the *pkgmk.conf* file.  This
+file is a simple shell file that configures *pkgmk*(8).  The file
+consists of a number of variable assignments of the form
+*option=value*.  Comments can be specified by putting a hash ('*#*')
+symbol as the first character on the line.
+
+If an option is not set (commented out or absent), *pkgmk*(8) uses a
+default value.
+
+The configuration options are as follows:
+
+*export CFLAGS*=<STRING>
+	Set C compiler options.
+
+	Default: unset.
+
+*export CXXFLAGS*=<STRING>
+	Set C++ compiler options.
+
+	Default: unset.
+
+*export JOBS*=<NUMBER>
+	Set the number of commands to run simultaneously when building
+	a package.
+
+	Default: unset.
+
+*export MAKEFLAGS*=<STRING>
+	Set *make*(1) options.
+
+	Default: unset.
+
+*PKGMK_SOURCE_MIRRORS*=<URI ...>
+	Set mirror URIs for downloaded source files.  Replace spaces
+	in URIs with '%20'.
+
+	Default: unset.
+
+*PKGMK_SOURCE_DIR*=<DIR>
+	Set directory for downloaded source files.
+
+	Default: current directory of _Pkgfile_.
+
+*PKGMK_PACKAGE_DIR*=<DIR>
+	Set directory for built packages.
+
+	Default: current directory of _Pkgfile_.
+
+*PKGMK_WORK_DIR*=<DIR>
+	Set directory for building packages.
+
+	Default: "_foo_/work", where _foo_ is the current directory of
+	_Pkgfile_.
+
+*PKGMK_DOWNLOAD*=<yes | no>
+	Download the source files if necessary.
+
+	Default: no.
+
+*PKGMK_DOWNLOAD_PROG*=<aria2c | curl | wget>
+	Use specified program to download source files.
+
+	Default: curl.
+
+*PKGMK_ARIA2C_OPTS*=<STRING>
+	Additional options for *aria2c*(1).
+
+	Default: unset.
+
+*PKGMK_CURL_OPTS*=<STRING>
+	Additional options for *curl*(1).
+
+	Default: unset.
+
+*PKGMK_WGET_OPTS*=<STRING>
+	Additional options for *wget*(1).
+
+	Default: unset.
+
+*PKGMK_IGNORE_FOOTPRINT*=<yes | no>
+	Skip footprint check of the build package.
+
+	Default: no.
+
+*PKGMK_IGNORE_MD5SUM*=<yes | no>
+	Skip md5sum check of source files.
+
+	Default: no.
+
+*PKGMK_IGNORE_NEW*=<yes | no>
+	Ignore new files causing footprint mismatch.
+
+	Default: no.
+
+*PKGMK_NO_STRIP*=<yes | no>
+	If set to "no", *pkgmk*(8) will strip built
+	binaries/libraries.
+
+	Default: no.
+
+*PKGMK_COMPRESSION_MODE*=<gz | bz2 | xz | lz | zst>
+	Set the compression mode for packages.
+
+	The following compression modes are supported:
+
+	```
+	Mode   Compression format   Package extension
+	gz     gzip                 .pkg.tar.gz
+	bz2    bzip2                .pkg.tar.bz2
+	xz     xz                   .pkg.tar.xz
+	lz     lzip                 .pkg.tar.lz
+	zst    zstd                 .pkg.tar.zst
+	```
+
+	Default: gz.
+
+*PKGMK_ARCHIVE_FORMAT*=<gnutar | pax | ustar | v7>
+	Set the archive format for packages.
+
+	The following archive formats are supported:
+
+	```
+	Format    Description
+	gnutar    GNU tar format
+	pax       POSIX 1003.1-2001 (pax) format
+	ustar     POSIX 1003.1-1988 (ustar) format
+	v7        Old V7 tar format
+	```
+
+	Default: gnutar.
+
+	See *libarchive-formats*(5) for more information about
+	currently-supported formats.
+
+# FILES
+
+_/etc/pkgmk.conf_
+	Default location for this configuration file.
+
+# EXAMPLES
+
+Minimal configuration sample:
+```
+#
+# /etc/pkgmk.conf: pkgmk(8) configuration
+#
+# See pkgmk.conf(5) for more information.
+#
+
+export CFLAGS="-O2 -march=x86-64 -pipe -fdiagnostics-color=always"
+export CXXFLAGS="$CFLAGS"
+export JOBS=$(nproc)
+export MAKEFLAGS="-j $JOBS"
+
+case $PKGMK_ARCH in
+"64"|"")
+	# See pkgmk.32bit(5) for more information.
+	;;
+"32")
+	export CFLAGS="$CFLAGS -m32"
+	export CXXFLAGS="$CXXFLAGS -m32"
+	export LDFLAGS="$LDFLAGS -m32"
+	export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig"
+	;;
+*)
+	error "Unknown architecture selected! Exiting."
+	exit $E_GENERAL
+	;;
+esac
+
+# End of file.
+```
+
+# SEE ALSO
+
+*Pkgfile*(5),
+*pkgmk*(8)
+
+; vim: ft=scdoc cc=72 tw=70

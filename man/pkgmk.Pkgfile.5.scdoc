@@ -1,0 +1,322 @@
+PKGFILE(5)
+
+# NAME
+
+Pkgfile - build file for pkgmk
+
+# SYNOPSIS
+
+*Pkgfile*
+
+# DESCRIPTION
+
+This manual page describes the format of the _Pkgfile_ file.  The file
+is a POSIX *sh*(1p) script (with some practical exceptions as noted
+below) that defines several key variables (*name*, *version*,
+*release* and *source*) and a function (*build*) which contains the
+instructions for compiling the package.
+
+## POSIX Exceptions: The local Keyword
+
+In POSIX *sh*(1p), "local" is undefined.  You can adopt some
+convention to avoid accidentally overwriting variable names, e.g.,
+prefixing with the function name:
+
+```
+build() {
+	_build_foo="bar"
+	...
+}
+```
+
+However, "local" is supported in many shells, including *bash*(1),
+*ksh*(1), *dash*(1) (which is used in Zeppe-Lin as default _/bin/sh_
+provider), and BusyBox' *ash*(1).  So, strictly  speaking, it's not
+POSIX, but since quite a lot of real world shells support this
+feature, prefixing variables is little ugly, and finding bugs with
+overwriting variables is a big headache for developers, it was decided
+to allow "local".  In the end, the choice is yours to use or not.
+
+## General Guidelines
+
+The name of a package should always be lowercase (e.g., "name=eterm"
+and not "name=Eterm").  Dashes are also allowed.
+
+Exceptions to the naming rules are when it is necessary to fix the
+version of a package (e.g., autoconf-2.13).
+
+In case the package is added to the packages sources tree the exact
+same name should be used for the name of the directory in the
+packages sources structure (e.g., /usr/src/pkgsrc-???/eterm).
+
+Do not combine several separately distributed programs/libraries into
+one package.  Make several packages instead.
+
+## Directories
+
+Packages should generally install files into the following directories.
+While exceptions may be necessary in some cases, strive to adhere to
+this structure as closely as possible.
+
+_/usr/bin_
+	User command/application binaries.
+
+_/usr/sbin_
+	System binaries (e.g. daemons).
+
+_/usr/lib_
+	Libraries.
+
+_/usr/include_
+	Header files.
+
+_/usr/lib/<name>_
+	Plug-ins, add-ons, etc.
+
+_/usr/share/man_
+	Man pages.
+
+_/usr/share/<prog>_
+	Data files.
+
+_/usr/etc/<prog>_
+	Default configs for specific programs.  Users often copy these
+	to $HOME/.config/<prog> or $HOME/.<prog> to customize, or even
+	don't touch them at all.  Example: irssi, lynx, etc.
+
+_/etc_
+	System-wide config for daemons and services, managed by the
+	administrator.  Examples: lighttpd, crond, dhcpcd, etc.
+
+The _/opt_ directory is reserved for manually compiled or installed
+applications and binary-only distributions.  Packages built from
+sources should generally not install anything under _/opt_.
+
+The _/usr/libexec_ directory is not typically used; install package-
+specific executables under _/usr/lib/<prog>_ instead, where <prog> is
+the package name.
+
+## Junk Files
+
+Packages should not include unnecessary "junk files" beyond essential
+documentation.  This includes info pages, HTML documentation, README
+files, etc.  Man pages under /usr/share/man are an exception to this
+rule.
+
+Specifically, the following should be removed during the build
+process:
+
+- Files related to NLS (National Language Support).  Use build options
+like --disable-nls when available and remove /usr/share/locale if the
+package does not require it.
+
+- Obsolete or rarely used binaries (e.g., /usr/games/banner,
+/sbin/mkfs.minix).
+
+## Variable Names
+
+Avoid introducing new variables in the _Pkgfile_.  The variables
+*name*, *version*, *release*, and *source* are guaranteed to be
+supported by future versions of *pkgmk*(8).  Using other variable
+names may lead to conflicts with internal *pkgmk*(8) variables.
+Utilize the "$name" and "$version" variables to enhance the
+maintainability and updatability of the package definition.  For
+example:
+
+```
+source=http://xyz.org/$name-$version.tar.gz
+```
+
+is preferable to:
+
+```
+source=http://xyz.org/longprogramname-1.0.3.tar.gz
+```
+
+as the URL will automatically update when the *version* variable is
+modified.
+
+The *source* variable is a string containing whitespace-separated URIs
+or local file paths.  To specify multiple sources, enclose them in
+quotes:
+
+```
+source="http://xyz.org/$name-$version.tar.gz
+        http://xyz.org/$name-$version.patch"
+```
+
+*pkgmk*(8) allows renaming downloaded source files to avoid potential
+name collisions.  This is achieved by prefixing the original filename
+with the desired new filename, separated by double colon (*::*):
+
+```
+source="$name-$version.tar.gz::http://xyz.org/v$version.tar.gz
+        $name-$version.patch::http://xyz.org/$name.patch"
+```
+
+## Header
+
+Provide a header including the following fields:
+
+*Description*
+	Short description of the package (keep it factual).
+*Maintainer*
+	Your full name and e-mail address (can be obfuscated).
+*URL*
+	Website with more information on this software package.
+*Depends on*
+	List of dependencies, separated either by spaces.
+	Can be omitted if there are no dependencies.
+
+While this header is not directly parsed by *pkgmk*(8), it is
+essential for *pkgman*(1) and package management tools.
+
+## Dependencies
+
+*pkgman*(1) handles package dependencies. The following guidelines
+should be followed:
+
+- List all linked runtime dependencies, with the exception of gcc
+  (specifically libstdc++), glibc, binutils, and the package itself
+  (to avoid circular dependencies).
+
+- The *pkgsrc-core* collection contains essential system packages.
+  Build dependencies provided by *pkgsr-core* should not be explicitly
+  listed.
+
+- Runtime dependencies from *pkgsrc-core* that are not dynamically
+  linked should generally not be listed, with one exception: if the
+  package provides a library for an interpreted language (like Perl or
+  Python) and/or its _.footprint_ file specifies a particular
+  interpreter version.
+
+Examples:
+
+- *pkgsrc-core*/automake:
+  Does not list "perl", because "automake" is a Perl script and not a
+  binary linked against "libperl".
+
+- *pkgsrc-core*/bc
+  Lists "readline" because the "bc" binary is linked against the
+  "readline" library.
+
+- *pkgsrc-core*/py3-setuptools
+  Lists "python3" because the package's contains the specific
+  interpreter version in its _.footprint_ file.
+
+This dependency policy allows the use of tools like *revdep*(1) to
+identify packages that need rebuilding if a dependent library
+undergoes ABI-incompatible changes.  To determine the libraries a
+binary is linked against, use *ldd*(1) or *finddepslinked*(1).
+
+Also, in the case of updating the major version of Perl/Python/etc, it
+will be useful that the libraries or programs that create Perl/Python
+bindings have a dependency on them.  We will have to rebuild
+everything that depends on Perl/Python with one command, e.g.:
+
+```
+pkgman update -fr --deps --depsort $(pkgman rdep perl)
+```
+
+See *pkgman-rdep*(1) for more information on reverse dependencies.
+
+## Service Scripts
+
+If the package includes a system service, the control script for that
+service should be named "rc.<prog>" (where "<prog>" is the name of the
+service) and installed to "/etc/rc.d/<prog>".  Refer to the *rc.d*(7)
+manual page for detailed information and examples on writing service
+control scripts.
+
+## Runscripts
+
+Packages can include pre- and post-install/remove scripts to perform
+actions during package management.  While these scripts are not
+directly executed by *pkgmk*(8), they are automatically processed by
+*pkgman*(1) during install/remove/update/system update procedures.
+See the *pkgman-runscripts*(7) manual page for details on these
+scripts and guidelines for their use.
+
+The restrictions mentioned above regarding modifying system
+configuration and interacting with other packages primarily apply to
+packages within official repositories.  Custom package collections may
+have different requirements.
+
+## Environment
+
+The *build()* function should utilize the *$SRC* variable to access
+the extracted source files (listed in the *source* variable) and the
+*$PKG* variable as the root directory where the package's files should
+be installed.
+
+Being a shell script executed by *pkgmk*(8), the _Pkgfile_ has read
+access to variables defined in _pkgmk.conf_ and the default values set
+by *pkgmk*(8).  While it is technically possible to alter *pkgmk*(8)'s
+behavior by redefining its functions and variables during the build
+process of the current package, this practice is strongly discouraged
+as it can lead to unpredictable results and should only be employed
+with extreme caution and a thorough understanding of *pkgmk*(8)'s
+internals.
+
+## Error Handling
+
+By default, most command failures within the *build()* function will
+cause *pkgmk*(8) to halt the build process.  Explicitly checking the
+return code of every command is generally not necessary.  If you need
+to handle potential command failures, use standard shell constructs
+such as:
+
+```
+if ! command ... ; then
+	# Handle the error
+fi
+
+command || {
+	# Handle the error
+}
+```
+
+# EXAMPLES
+
+Sample Pkgfile:
+
+```
+# Description: Concise description without articles and trailing dot
+# URL:         http://www.gnu.org/software/somelib/index.html
+# Maintainer:  Joe Maintainer, joe at myfantasticisp dot net
+# Depends on:  someotherlib coolness
+
+name=somelib
+version=1.2.3
+release=1
+source="ftp://ftp.gnu.org/gnu/$name/$name-$version.tar.gz
+	Makefile.in.patch"
+
+build() {
+	cd $name-$version
+
+	patch -p1 -i ../Makefile.in.patch
+
+	./configure --prefix=/usr
+
+	make V=1
+	make DESTDIR=$PKG install
+
+	rm -rf $PKG/usr/info
+}
+```
+
+# SEE ALSO
+
+*pkgmk.conf*(5),
+*pkgmk*(8)
+
+# AUTHORS
+
+The initial version of this manual page was written 
+by Just-The-Real-Fun <just.the.real.fun@gmail.com>.
+
+This implementation was extensively re-worked for Zeppe-Lin by
+Alexandr Savca <alexandr.savca89@gmail.com>.
+
+; vim: ft=scdoc cc=72 tw=70

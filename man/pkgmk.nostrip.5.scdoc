@@ -1,0 +1,80 @@
+PKGMK.NOSTRIP(5)
+
+# NAME
+
+pkgmk.nostrip - exceptions for stripping executable binaries and libraries
+
+# SYNOPSIS
+
+*.nostrip*
+
+# DESCRIPTION
+
+The _.nostrip_ file is a per-package configuration file used by
+*pkgmk*(8) to define files that should not have debug symbols stripped
+during package creation.  Normally, stripping removes debug symbols
+from executables and libraries to reduce package size.  However, if
+you need to preserve debug symbols for certain files (for debugging or
+other reasons), list them in the _.nostrip_ file.  When *pkgmk*(8)
+runs, it excludes files matching any pattern in _.nostrip_ from the
+stripping process.
+
+# FORMAT
+
+The _.nostrip_ file is a plain text file.  Each non-empty line
+specifies a pattern that matches one or more file paths relative to
+the package directory.  Lines beginning with a hash (*#*) are treated
+as comments.
+
+If you wish to match exact literal strings, be sure to escape any
+regex metacharacters.
+
+# USAGE
+
+Place the _.nostrip_ file in the package root (alongside the
+_Pkgfile_) and list one regex pattern per line that represents the
+relative paths to exclude from stripping.  Files matching any of these
+patterns will be skipped by the stripping process.
+
+# EXAMPLES
+
+A simple _.nostrip_ file might contain:
+
+```
+# Exclude the 'debug-binary' executable
+usr/bin/debug-binary
+
+# Exclude the libunistripped.so shared library
+usr/lib/libunistripped.so
+
+# Exclude an entire directory and its contents
+usr/lib/debug-tools/
+
+# Exclude any file starting with a dot
+# (note: the literal dot is escaped)
+^\..*
+
+# Exclude any file
+.*
+```
+
+# FILES
+
+*$PKGMK_ROOT*/_.nostrip_
+	The _.nostrip_ file should reside in the package root
+	directory (e.g., /mnt/mycollection/mypackage/.nostrip).
+
+# SEE ALSO
+
+*grep*(1),
+*strip*(1),
+*Pkgfile*(5),
+*pkgmk*(8)
+
+# CAVEATS
+
+The filtering mechanism uses basic regular expressions as provided by
+*grep*(1).  Ensure that regex metacharacters in patterns intended for
+literal matching are properly escaped.
+
+; vim: ft=scdoc cc=72 tw=70

@@ -1,0 +1,79 @@
+PKGMK.MD5SUM(5)
+
+# NAME
+
+pkgmk.md5sum - MD5 checksum file for pkgmk source verification
+
+# SYNOPSIS
+
+*.md5sum*
+
+# DESCRIPTION
+
+The _.md5sum_ file is used by *pkgmk*(8) to verify the integrity of
+source files downloaded for package building.  It contains the MD5
+checksums for each source file listed by the *source* variable in the
+_Pkgfile_.  When *pkgmk*(8) runs, it recalculates the MD5 checksum for
+each downloaded file and compares it with the value in this file.
+
+*pkgmk*(8) behavior is adjusted by command-line options and
+configuration variables:
+
+*-cm*, *--check-md5sum*:
+	Only check checksums against _.md5sum_ and exit with success
+	if all match; exit with an error if any mismatch occurs or if
+	_.md5sum_ is missing when *PKGMK_CHECK_MD5SUM* is enabled.
+
+*-im*, *--ignore-md5sum*:
+	Skip MD5 checksum verification entirely.
+
+*-um*, *--update-md5sum*:
+	Update the _.md5sum_ file by recalculating and replacing the
+	checksums of the downloaded source files.
+
+If a _.md5sum_ file does not exist (and checksum checking is enabled),
+*pkgmk*(8) will issue a warning and create a new _.md5sum_ file using
+the current checksums.
+
+# FORMAT
+
+The _.md5sum_ file is a plain text file that mirrors the output
+produced by *md5sum*(1).  Each valid line contains an MD5 checksum and
+a filename, formatted as follows:
+
+```
+checksum  filename
+```
+
+Where:
+- _checksum_ is a 32-character hexadecimal string
+- _filename_ is typically the basename of the file
+  (without path components)
+
+Entries are sorted by filename to ensure a consistent and easily
+comparable format.  Empty lines and those starting with a hash (*#*)
+are ignored.
+
+# EXAMPLES
+
+A typical _.md5sum_ file might look like:
+
+```
+d41d8cd98f00b204e9800998ecf8427e  example-1.0.tar.gz
+e2fc714c4727ee9395f324cd2e7f331f  example-patch.diff
+0dd916ca03e9b9ffaf9f6994c155542d  another-source-file.zip
+```
+
+# FILES
+
+$PKGMK_ROOT/.md5sum
+	The _.md5sum_ file is expected to reside in the package root
+	directory, alongside the _Pkgfile_.
+
+# SEE ALSO
+
+*md5sum*(1),
+*Pkgfile*(5),
+*pkgmk*(8)
+
+; vim: ft=scdoc cc=72 tw=70
