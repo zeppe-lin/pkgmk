@@ -31,8 +31,6 @@ Coding style
 Documentation
 -------------
 
-* Generate online references to the manual pages in README.md from Vim:
+* Check manual pages for misspells:
 
-```
-:r!ls *.[0-9] | sed 's/^man\/\(.*\)/- \[\1\]\(https:\/\/zeppe-lin.github.io\/\1.html\)/g'
-```
+    hunspell -l man/*.scdoc
