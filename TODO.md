@@ -5,6 +5,9 @@ TODO pkgmk
 Next Release
 ------------
 
+- [ ] Reflect pkgman-readme(7) & pkgman-runscripts(7) in pkgmk's
+  manual pages.
+
 - [ ] Reflect new manual pages in the handbook.
 
 - [ ] Refine new manual pages.  Look how well they link to each other.
