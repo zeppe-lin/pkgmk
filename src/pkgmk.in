@@ -1034,9 +1034,9 @@ main() {
 	# Validate archive format against supported formats
 	case $PKGMK_ARCHIVE_FORMAT in
 	gnutar | pax | ustar | v7 )
-		# Valid formats conform bsdtar(1) and
-		# libarchive-formats(5)/"Tar Formats":
-		# - pass through
+		# These are valid formats conform bsdtar(1) and
+		# libarchive-formats(5)/"Tar Formats" section.
+		# Pass through.
 		;;
 	*)
 		error "Archive format '$PKGMK_ARCHIVE_FORMAT' is not supported."
