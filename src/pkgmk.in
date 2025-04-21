@@ -493,7 +493,7 @@ check_md5sum() {
 				exit $E_MD5
 			fi
 
-			error "Building '$TARGET' failed due to MD5 checksum mismatch (non-fatal, MD5 check ignored)."
+			error "Building '$TARGET' failed due to MD5 checksum mismatch."
 			exit $E_MD5
 		fi
 	else
