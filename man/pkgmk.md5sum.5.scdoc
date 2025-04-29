@@ -46,9 +46,12 @@ checksum  filename
 ```
 
 Where:
-- _checksum_ is a 32-character hexadecimal string
-- _filename_ is typically the basename of the file
-  (without path components)
+
+_checksum_
+	is a 32-character hexadecimal string
+_filename_
+	is typically the basename of the file (without path
+	components)
 
 Entries are sorted by filename to ensure a consistent and easily
 comparable format.  Empty lines and those starting with a hash (*#*)
