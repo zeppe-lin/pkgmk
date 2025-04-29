@@ -12,10 +12,10 @@ pkgmk.32bit - flag file to trigger 32-bit build mode in pkgmk
 
 The _.32bit_ file is an optional flag used by *pkgmk*(8) to indicate
 that the package should be built in 32-bit mode.  When this file is
-present in the package source directory (alongside _Pkgfile_,
-_.md5sum_, and _.footprint_), *pkgmk*(8) automatically exports the
-environment variable *PKGMK_ARCH=32* before sourcing the global
-configuration file (_/etc/pkgmk.conf_).
+present in the package source directory (alongside _Pkgfile_),
+*pkgmk*(8) automatically exports the environment variable
+*PKGMK_ARCH=32* before sourcing the global configuration file
+(_/etc/pkgmk.conf_).
 
 In addition, *pkgmk*(8) adjusts the default build options as follows:
 . Appends "-m32" to CFLAGS, CXXFLAGS, and LDFLAGS.
