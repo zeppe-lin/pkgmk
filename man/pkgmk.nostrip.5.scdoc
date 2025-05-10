@@ -68,7 +68,7 @@ usr/lib/debug-tools/
 
 *grep*(1),
 *strip*(1),
-*Pkgfile*(5),
+*pkgmk.Pkgfile*(5),
 *pkgmk*(8)
 
 # CAVEATS
