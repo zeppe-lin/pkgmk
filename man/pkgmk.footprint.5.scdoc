@@ -92,7 +92,7 @@ lrwxrwxrwx    root/root    usr/share/man/man1/red.1.gz -> ed.1.gz
 # SEE ALSO
 
 *pkginfo*(1),
-*Pkgfile*(5),
+*pkgmk.Pkgfile*(5),
 *pkgmk*(8)
 
 # NOTES
