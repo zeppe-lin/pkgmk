@@ -142,7 +142,7 @@ _/etc/pkgmk.conf_
 
 # SEE ALSO
 
-*Pkgfile*(5),
+*pkgmk.Pkgfile*(5),
 *pkgmk.conf*(5)
 
 # AUTHORS
