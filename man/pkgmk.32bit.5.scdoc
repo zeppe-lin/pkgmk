@@ -50,6 +50,9 @@ _.32bit_
 
 # SEE ALSO
 
+*pkgmk.footprint*(5),
+*pkgmk.md5sum*(5),
+*pkgmk.nostrip*(5),
 *pkgmk.Pkgfile*(5),
 *pkgmk.conf*(5),
 *pkgmk*(8)
