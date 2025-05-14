@@ -2,7 +2,7 @@ PKGFILE(5)
 
 # NAME
 
-Pkgfile - build file for pkgmk
+pkgmk.Pkgfile - build file for pkgmk
 
 # SYNOPSIS
 
