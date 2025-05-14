@@ -76,7 +76,11 @@ $PKGMK_ROOT/.md5sum
 # SEE ALSO
 
 *md5sum*(1),
+*pkgmk.32bit*(5),
+*pkgmk.footprint*(5),
+*pkgmk.nostrip*(5),
 *pkgmk.Pkgfile*(5),
+*pkgmk.conf*(5),
 *pkgmk*(8)
 
 ; vim: ft=scdoc cc=72 tw=70
