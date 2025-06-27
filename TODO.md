@@ -5,15 +5,15 @@ TODO pkgmk
 Next Release
 ------------
 
-- [ ] Reflect pkgman-readme(7) & pkgman-runscripts(7) in pkgmk's
-  manual pages.
+- [ ] Reflect `pkgman-readme(7)` & `pkgman-runscripts(7)` in pkgmk's
+  manual pages?
 
 - [ ] Reflect new manual pages in the handbook.
 
 - [ ] Refine new manual pages.  Look how well they link to each other.
 
 - [ ] Document any exported to `pkgmk.conf` variables and functions,
-  like error(), `$E_GENERAL`, etc? Where?
+  like `error()`, `$E_GENERAL`, etc? Where?
 
 - [ ] Make packages' `.footprint` files kernel-version and
   architecture awarness?
@@ -52,5 +52,5 @@ Done
 - [x] Document `.md5sum` files.
   Done via pkgmk.md5sum(5).
 
-- [ ] Document `PKGMK_ARCH`.
+- [x] Document `PKGMK_ARCH`.
   Done via pkgmk.32bit(5).
