@@ -16,8 +16,8 @@ Packages are archives with a defined directory structure.
 To use *pkgmk*, you need a _Pkgfile_ describing the build process.
 See *pkgmk.Pkgfile*(5).  After creating a _Pkgfile_, run *pkgmk* to
 build a package.  To update the package after changes, simply run
-*pkgmk*.  It will rebuild if the source files or the Pkgfile have been
-modified since the last successful build.
+*pkgmk*.  It will rebuild if the source files or the _Pkgfile_ have
+been modified since the last successful build.
 
 Global configuration is read from _/etc/pkgmk.conf_ at startup.
 
@@ -95,29 +95,36 @@ The options are as follows:
 
 _Pkgfile_
 	Package build description and instructions.
+
 	See *pkgmk.Pkgfile*(5).
 
 _.nostrip_
 	Exceptions for *strip*(1) on binaries/libraries.
+
 	See *pkgmk.nostrip*(5).
 
 _.footprint_
 	Package footprint (used for regression testing).
+
 	See *pkgmk.footprint*(5).
 
 _.md5sum_
 	MD5 checksum of source files.
+
 	See *pkgmk.md5sum*(5).
 
 _.32bit_
 	Flag file to trigger 32-bit build mode in *pkgmk*.
+
 	See *pkgmk.32bit*(5).
 
 _/etc/pkgmk.conf_
 	Global configuration file for *pkgmk*.
+
 	See *pkgmk.conf*(5).
 
 # EXIT STATUS
+
 *0*
 	Success.
 *1*
