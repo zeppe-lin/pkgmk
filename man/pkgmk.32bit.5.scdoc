@@ -21,7 +21,7 @@ In addition, *pkgmk*(8) adjusts the default build options as follows:
 . Appends "-m32" to CFLAGS, CXXFLAGS, and LDFLAGS.
 . Sets PKG_CONFIG_LIBDIR to "/usr/lib32/pkgconfig".
 
-If the _.32bit_ file is absent, *pkgmk* defaults to 64-bit mode by
+If the _.32bit_ file is absent, *pkgmk*(8) defaults to 64-bit mode by
 exporting *PKGMK_ARCH=64*.
 
 The following snippet from *pkgmk*(8) illustrates this behavior:
