@@ -19,7 +19,7 @@ present in the package source directory (alongside _Pkgfile_),
 
 In addition, *pkgmk*(8) adjusts the default build options as follows:
 . Appends "-m32" to CFLAGS, CXXFLAGS, and LDFLAGS.
-. Sets PKG_CONFIG_LIBDIR to "/usr/lib32/pkgconfig".
+. Sets PKG_CONFIG_LIBDIR to _/usr/lib32/pkgconfig_.
 
 If the _.32bit_ file is absent, *pkgmk*(8) defaults to 64-bit mode by
 exporting *PKGMK_ARCH=64*.
@@ -46,7 +46,7 @@ necessary.
 _.32bit_
 	A flag file located in the package source directory.  Its
 	presence triggers 32-bit build settings by exporting
-	PKGMK_ARCH=32.
+	*PKGMK_ARCH=32*.
 
 # SEE ALSO
 
