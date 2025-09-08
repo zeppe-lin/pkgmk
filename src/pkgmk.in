@@ -694,7 +694,7 @@ build_package() {
 	# shellcheck disable=SC2181
 	if [ $? = 0 ]; then
 
-		if [ "$PKGMK_NO_STRIP" = "yes" ]; then
+		if [ "$PKGMK_NO_STRIP" = "no" ]; then
 			strip_files
 		fi
 
