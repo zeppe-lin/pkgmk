@@ -2,7 +2,7 @@ PKGMK.NOSTRIP(5)
 
 # NAME
 
-pkgmk.nostrip - exceptions for stripping executable binaries and libraries
+pkgmk.nostrip - exceptions for stripping binaries and libraries
 
 # SYNOPSIS
 
@@ -10,59 +10,42 @@ pkgmk.nostrip - exceptions for stripping executable binaries and libraries
 
 # DESCRIPTION
 
-The _.nostrip_ file is a per-package configuration file used by
-*pkgmk*(8) to define files that should not have debug symbols stripped
-during package creation.  Normally, stripping removes debug symbols
-from executables and libraries to reduce package size.  However, if
-you need to preserve debug symbols for certain files (for debugging or
-other reasons), list them in the _.nostrip_ file.  When *pkgmk*(8)
-runs, it excludes files matching any pattern in _.nostrip_ from the
-stripping process.
+_.nostrip_ file lists files that should not have debug symbols
+stripped during package creation.  Normally, *pkgmk*(8) runs
+*strip*(1) to reduce package size; files matching patterns in this
+file are excluded from that process.
 
-# FORMAT
-
-The _.nostrip_ file is a plain text file.  Each non-empty line
-specifies a pattern that matches one or more file paths relative to
-the package directory.  Lines beginning with a hash (*#*) are treated
-as comments.
-
-If you wish to match exact literal strings, be sure to escape any
-regex metacharacters.
-
-# USAGE
-
-Place the _.nostrip_ file in the package root (alongside the
-_Pkgfile_) and list one regex pattern per line that represents the
-relative paths to exclude from stripping.  Files matching any of these
-patterns will be skipped by the stripping process.
-
-# EXAMPLES
-
-A simple _.nostrip_ file might contain:
-
-```
-# Exclude the 'debug-binary' executable
-usr/bin/debug-binary
-
-# Exclude the libunistripped.so shared library
-usr/lib/libunistripped.so
-
-# Exclude an entire directory and its contents
-usr/lib/debug-tools/
-
-# Exclude any file starting with a dot
-# (note: the literal dot is escaped)
-^\..*
-
-# Exclude any file
-.*
-```
+The file is plain text, one pattern per line.  Paths are relative to
+the package directory.  Empty lines are ignored, and lines beginning
+with '*#*' are comments.  Patterns are interpreted as basic regular
+expressions (*grep*(1)).
 
 # FILES
 
-*$PKGMK_ROOT*/_.nostrip_
-	The _.nostrip_ file should reside in the package root
-	directory (e.g., /mnt/mycollection/mypackage/.nostrip).
+_.nostrip_
+	Exclusions for the strip stage.  Placed in the package source
+	directory alongside the _Pkgfile_.
+
+# EXAMPLES
+
+Example _.nostrip_ file:
+
+```
+# Exclude a specific binary
+usr/bin/debug-binary
+
+# Exclude a shared library
+usr/lib/libunistripped.so
+
+# Exclude a directory
+usr/lib/debug-tools/
+
+# Exclude dotfiles (note the escaped dot)
+^\..*
+
+# Exclude everything
+.*
+```
 
 # SEE ALSO
 
@@ -77,8 +60,7 @@ usr/lib/debug-tools/
 
 # CAVEATS
 
-The filtering mechanism uses basic regular expressions as provided by
-*grep*(1).  Ensure that regex metacharacters in patterns intended for
-literal matching are properly escaped.
+Patterns use basic regular expressions; escape metacharacters when
+matching literal text.
 
 ; vim: ft=scdoc cc=72 tw=70

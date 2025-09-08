@@ -10,32 +10,15 @@ pkgmk.Pkgfile - build file for pkgmk
 
 # DESCRIPTION
 
-This manual page describes the format of the _Pkgfile_ file.  The file
-is a POSIX *sh*(1p) script (with some practical exceptions as noted
-below) that defines several key variables (*name*, *version*,
-*release* and *source*) and a function (*build*) which contains the
-instructions for compiling the package.
+_Pkgfile_ is a POSIX *sh*(1p) script that defines the variables
+(*name*, *version*, *release*, and *source*) required by *pkgmk*(8),
+and a function (*build()*) containing the instructions for compiling
+the package.
 
-## POSIX Exceptions: The local Keyword
-
-In POSIX *sh*(1p), "local" is undefined.  You can adopt some
-convention to avoid accidentally overwriting variable names, e.g.,
-prefixing with the function name:
-
-```
-build() {
-	_build_foo="bar"
-	...
-}
-```
-
-However, "local" is supported in many shells, including *bash*(1),
-*ksh*(1), *dash*(1) (which is used in Zeppe-Lin as default _/bin/sh_
-provider), and BusyBox' *ash*(1).  So, strictly  speaking, it's not
-POSIX, but since quite a lot of real world shells support this
-feature, prefixing variables is little ugly, and finding bugs with
-overwriting variables is a big headache for developers, it was decided
-to allow "local".  In the end, the choice is yours to use or not.
+While strictly speaking the *local* keyword is not defined by POSIX,
+it is supported by the shell used to run _Pkgfile_ (typically
+*dash*(1)), as well as many other common shells.  For convenience,
+using *local* to declare function-local variables is allowed.
 
 ## General Guidelines
 
@@ -54,15 +37,15 @@ one package.  Make several packages instead.
 
 ## Directories
 
-Packages should generally install files into the following directories.
-While exceptions may be necessary in some cases, strive to adhere to
-this structure as closely as possible.
+Packages should generally install files into the following
+directories.  While exceptions may be necessary in some cases, strive
+to adhere to this structure as closely as possible.
 
 _/usr/bin_
 	User command/application binaries.
 
 _/usr/sbin_
-	System binaries (e.g. daemons).
+	System binaries (e.g., daemons).
 
 _/usr/lib_
 	Libraries.
@@ -173,7 +156,7 @@ essential for *pkgman*(1) and package management tools.
 
 ## Dependencies
 
-*pkgman*(1) handles package dependencies. The following guidelines
+*pkgman*(1) handles package dependencies.  The following guidelines
 should be followed:
 
 - List all linked runtime dependencies, with the exception of gcc
@@ -181,8 +164,8 @@ should be followed:
   (to avoid circular dependencies).
 
 - The *pkgsrc-core* collection contains essential system packages.
-  Build dependencies provided by *pkgsr-core* should not be explicitly
-  listed.
+  Build dependencies provided by *pkgsrc-core* should not be
+  explicitly listed.
 
 - Runtime dependencies from *pkgsrc-core* that are not dynamically
   linked should generally not be listed, with one exception: if the
@@ -196,12 +179,12 @@ Examples:
   Does not list "perl", because "automake" is a Perl script and not a
   binary linked against "libperl".
 
-- *pkgsrc-core*/bc
+- *pkgsrc-core*/bc:
   Lists "readline" because the "bc" binary is linked against the
   "readline" library.
 
-- *pkgsrc-core*/py3-setuptools
-  Lists "python3" because the package's contains the specific
+- *pkgsrc-core*/py3-setuptools:
+  Lists "python3" because the package contains the specific
   interpreter version in its _.footprint_ file.
 
 This dependency policy allows the use of tools like *revdep*(1) to
@@ -230,7 +213,7 @@ control scripts.
 
 ## Runscripts
 
-Packages can include pre- and post-install/remove scripts to perform
+Packages may include pre/post install/remove scripts to perform
 actions during package management.  While these scripts are not
 directly executed by *pkgmk*(8), they are automatically processed by
 *pkgman*(1) during install/remove/update/system update procedures.
@@ -276,12 +259,18 @@ command || {
 }
 ```
 
+# FILES
+
+_Pkgfile_
+	Package build description.  Placed in the package source
+	directory, e.g. _/usr/src/pkgsrc-core/acl_.
+
 # EXAMPLES
 
-Sample Pkgfile:
+Sample _Pkgfile_:
 
 ```
-# Description: Concise description without articles and trailing dot
+# Description: Concise description w/o articles and trailing dot
 # URL:         http://www.gnu.org/software/somelib/index.html
 # Maintainer:  Joe Maintainer, joe at myfantasticisp dot net
 # Depends on:  someotherlib coolness
@@ -308,6 +297,7 @@ build() {
 
 # SEE ALSO
 
+*sh*(1p),
 *pkgmk.32bit*(5),
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
@@ -317,8 +307,8 @@ build() {
 
 # AUTHORS
 
-The initial version of this manual page was written 
-by Just-The-Real-Fun <just.the.real.fun@gmail.com>.
+The initial version of this manual page was written by
+Just-The-Real-Fun <just.the.real.fun@gmail.com>.
 
 This implementation was extensively re-worked for Zeppe-Lin by
 Alexandr Savca <alexandr.savca89@gmail.com>.

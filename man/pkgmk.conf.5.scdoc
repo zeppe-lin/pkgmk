@@ -10,14 +10,11 @@ pkgmk.conf - configuration file for pkgmk
 
 # DESCRIPTION
 
-This manual page describes the format of the *pkgmk.conf* file.  This
-file is a simple shell file that configures *pkgmk*(8).  The file
-consists of a number of variable assignments of the form
-*option=value*.  Comments can be specified by putting a hash ('*#*')
-symbol as the first character on the line.
-
-If an option is not set (commented out or absent), *pkgmk*(8) uses a
-default value.
+_pkgmk.conf_ file is a POSIX *sh*(1p) script that configures
+*pkgmk*(8).  It sets environment variables using '*option=value*' or
+'*export option=value*' assignments.  Comments begin with a hash
+('*#*').  If an option is not set, *pkgmk*(8) falls back to its
+built-in default.
 
 The configuration options are as follows:
 
@@ -105,8 +102,8 @@ The configuration options are as follows:
 	Default: no.
 
 *PKGMK_NO_STRIP*=<yes | no>
-	If set to "no", *pkgmk*(8) will strip built
-	binaries/libraries.
+	If set to "yes", *pkgmk*(8) does not strip binaries/libraries.
+	If set to "no", stripping will be performed.
 
 	Default: no.
 
@@ -116,12 +113,13 @@ The configuration options are as follows:
 	The following compression modes are supported:
 
 	```
-	Mode   Compression format   Package extension
-	gz     gzip                 .pkg.tar.gz
-	bz2    bzip2                .pkg.tar.bz2
-	xz     xz                   .pkg.tar.xz
-	lz     lzip                 .pkg.tar.lz
-	zst    zstd                 .pkg.tar.zst
+	Mode   Format   Extension
+	----   ------   ---------
+	gz     gzip     .pkg.tar.gz
+	bz2    bzip2    .pkg.tar.bz2
+	xz     xz       .pkg.tar.xz
+	lz     lzip     .pkg.tar.lz
+	zst    zstd     .pkg.tar.zst
 	```
 
 	Default: gz.
@@ -132,11 +130,12 @@ The configuration options are as follows:
 	The following archive formats are supported:
 
 	```
-	Format    Description
-	gnutar    GNU tar format
-	pax       POSIX 1003.1-2001 (pax) format
-	ustar     POSIX 1003.1-1988 (ustar) format
-	v7        Old V7 tar format
+	Format   Description
+	------   -----------
+	gnutar   GNU tar format
+	pax      POSIX 1003.1-2001 (pax) format
+	ustar    POSIX 1003.1-1988 (ustar) format
+	v7       Old V7 tar format
 	```
 
 	Default: gnutar.
@@ -152,6 +151,7 @@ _/etc/pkgmk.conf_
 # EXAMPLES
 
 Minimal configuration sample:
+
 ```
 #
 # /etc/pkgmk.conf: pkgmk(8) configuration
@@ -166,16 +166,16 @@ export MAKEFLAGS="-j $JOBS"
 
 case $PKGMK_ARCH in
 "64"|"")
-	# See pkgmk.32bit(5) for more information.
 	;;
 "32")
+	# See pkgmk.32bit(5) for more information.
 	export CFLAGS="$CFLAGS -m32"
 	export CXXFLAGS="$CXXFLAGS -m32"
 	export LDFLAGS="$LDFLAGS -m32"
 	export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig"
 	;;
 *)
-	error "Unknown architecture selected! Exiting."
+	error "Unknown architecture: $PKGMK_ARCH"
 	exit $E_GENERAL
 	;;
 esac

@@ -2,7 +2,7 @@ PKGMK.32BIT(5)
 
 # NAME
 
-pkgmk.32bit - flag file to trigger 32-bit build mode in pkgmk
+pkgmk.32bit - flag file enabling 32-bit mode
 
 # SYNOPSIS
 
@@ -10,43 +10,44 @@ pkgmk.32bit - flag file to trigger 32-bit build mode in pkgmk
 
 # DESCRIPTION
 
-The _.32bit_ file is an optional flag used by *pkgmk*(8) to indicate
-that the package should be built in 32-bit mode.  When this file is
-present in the package source directory (alongside _Pkgfile_),
-*pkgmk*(8) automatically exports the environment variable
-*PKGMK_ARCH=32* before sourcing the global configuration file
-(_/etc/pkgmk.conf_).
+_.32bit_ is an optional flag file recognized by *pkgmk*(8).  When
+present in a package source directory (next to the _Pkgfile_), it
+instructs *pkgmk*(8) to build in 32-bit mode.
 
-In addition, *pkgmk*(8) adjusts the default build options as follows:
-. Appends "-m32" to CFLAGS, CXXFLAGS, and LDFLAGS.
-. Sets PKG_CONFIG_LIBDIR to _/usr/lib32/pkgconfig_.
+In this mode, *pkgmk*(8) sets *PKGMK_ARCH=32* and adjusts build flags:
+*CFLAGS*, *CXXFLAGS*, and *LDFLAGS* are appended with "-m32", and
+*PKG_CONFIG_LIBDIR* is set to _/usr/lib32/pkgconfig_.
 
-If the _.32bit_ file is absent, *pkgmk*(8) defaults to 64-bit mode by
-exporting *PKGMK_ARCH=64*.
-
-The following snippet from *pkgmk*(8) illustrates this behavior:
-
-```
-if [ -f .32bit ]; then
-	export PKGMK_ARCH=32
-	export CFLAGS="$CFLAGS -m32"
-	export CXXFLAGS="$CXXFLAGS -m32"
-	export LDFLAGS="$LDFLAGS -m32"
-	export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig"
-else
-	export PKGMK_ARCH=64
-fi
-```
-
-You may override these defaults in your _/etc/pkgmk.conf_ if
-necessary.
+If the _.32bit_ file is absent, *pkgmk*(8) defaults to 64-bit mode
+(*PKGMK_ARCH=64*).
 
 # FILES
 
 _.32bit_
-	A flag file located in the package source directory.  Its
-	presence triggers 32-bit build settings by exporting
-	*PKGMK_ARCH=32*.
+	Flag file enabling 32-bit build mode.  Placed in the package
+	source directory alongside the _Pkgfile_.
+
+# EXAMPLES
+
+Customizing flags in _/etc/pkgmk.conf_:
+
+```
+case $PKGMK_ARCH in
+"64"|"")
+	# Default 64-bit build
+	;;
+"32")
+	export CFLAGS="$CFLAGS -m32"
+	export CXXFLAGS="$CXXFLAGS -m32"
+	export LDFLAGS="$LDFLAGS -m32"
+	export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig"
+	;;
+*)
+	error "Unknown architecture: $PKGMK_ARCH"
+	exit $E_GENERAL
+	;;
+esac
+```
 
 # SEE ALSO
 

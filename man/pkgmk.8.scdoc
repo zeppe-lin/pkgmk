@@ -10,14 +10,15 @@ pkgmk - make an installable software package
 
 # DESCRIPTION
 
-*pkgmk* creates installable software package for use with *pkgadd*(8).
-Packages are archives with a defined directory structure.
+*pkgmk* creates installable software packages for use with
+*pkgadd*(8).  Packages are archives with a standardized directory
+structure.
 
 To use *pkgmk*, you need a _Pkgfile_ describing the build process.
 See *pkgmk.Pkgfile*(5).  After creating a _Pkgfile_, run *pkgmk* to
-build a package.  To update the package after changes, simply run
-*pkgmk*.  It will rebuild if the source files or the _Pkgfile_ have
-been modified since the last successful build.
+build a package.  To rebuild after changes, rerun *pkgmk*(8).  It
+rebuilds the package if the source files or the _Pkgfile_ have been
+modified since the last successful build.
 
 Global configuration is read from _/etc/pkgmk.conf_ at startup.
 
@@ -57,7 +58,7 @@ The options are as follows:
 	Force build even if up-to-date.
 
 *-c*, *--clean*
-	Remove build package and downloaded source files.
+	Remove built package and downloaded source files.
 
 *-kw*, *--keep-work*
 	Keep temporary working directory.
@@ -67,22 +68,20 @@ The options are as follows:
 	_/etc/pkgmk.conf_.
 
 *-af* _format_, *--archive-format*=_format_
-	Use _format_ as archive format for the package instead of the
-	default "gnutar" or the value defined by
-	*PKGMK_ARCHIVE_FORMAT* in the _/etc/pkgmk.conf_.
+	Use _format_ as archive format for the package.
 
 	The following archive formats are supported:
 
-	gnutar
-		GNU tar format.
-	pax
-		POSIX 1003.1-2001 (pax) format.
-	ustar
-		POSIX 1003.1-1988 (ustar) format.
-	v7
-		Old V7 tar format.
+	```
+	Format   Description
+	------   -----------
+	gnutar   GNU tar format
+	pax      POSIX 1003.1-2001 (pax) format
+	ustar    POSIX 1003.1-1988 (ustar) format
+	v7       Old V7 tar format
+	```
 
-	See *libarchive-formats*(5) for more information about
+	See *libarchive-formats*(5) for details about
 	currently-supported formats.
 
 *-v*, *--version*
@@ -109,17 +108,17 @@ _.footprint_
 	See *pkgmk.footprint*(5).
 
 _.md5sum_
-	MD5 checksum of source files.
+	MD5 checksums of source files.
 
 	See *pkgmk.md5sum*(5).
 
 _.32bit_
-	Flag file to trigger 32-bit build mode in *pkgmk*.
+	Flag file enabling 32-bit build mode.
 
 	See *pkgmk.32bit*(5).
 
 _/etc/pkgmk.conf_
-	Global configuration file for *pkgmk*.
+	Global configuration file.
 
 	See *pkgmk.conf*(5).
 
@@ -145,7 +144,7 @@ _/etc/pkgmk.conf_
 *8*
 	Error during package "build()" function execution.
 *130*
-	Script interrupted or terminated by *C-c*.
+	Interrupted or terminated by *C-c*.
 
 # SEE ALSO
 
