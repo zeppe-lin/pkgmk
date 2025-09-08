@@ -26,10 +26,9 @@ differences:
   * Ignore extended attributes when extracting tarballs
   * Configure archive formats for created packages
 
-See git log for the full list of changes.
+See git log for the full history.
 
-The original sources can be downloaded from:
-  * https://git.crux.nu/tools/pkgutils.git
+Original sources: https://git.crux.nu/tools/pkgutils.git
 
 
 REQUIREMENTS
@@ -58,13 +57,13 @@ To install this package, run:
 
     make install
 
-See `config.mk` file for configuration parameters.
+Configuration parameters are in `config.mk`.
 
 
 DOCUMENTATION
 =============
 
-See `/man` directory for manual pages.
+Manual pages are in `/man`.
 
 
 LICENSE
@@ -72,5 +71,4 @@ LICENSE
 
 `pkgmk` is licensed through the GNU General Public License v2 or later
 <https://gnu.org/licenses/gpl.html>.
-Read the COPYING file for copying conditions.
-Read the COPYRIGHT file for copyright notices.
+See `COPYING` for license terms and `COPYRIGHT` for notices.
