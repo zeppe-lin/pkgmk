@@ -850,7 +850,7 @@ build_needed() {
 print_help() {
 	cat <<EOF
 Usage: pkgmk [option ...]
-Make software package.
+Make an installable software package.
 
 Mandatory arguments to long options are mandatory for short options too.
   -d,   --download          download missing source file(s)
