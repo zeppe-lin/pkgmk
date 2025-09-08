@@ -98,7 +98,7 @@ _Pkgfile_
 	See *pkgmk.Pkgfile*(5).
 
 _.nostrip_
-	Exceptions for *strip*(1) on binaries/libraries.
+	Exceptions for stripping executable binaries and libraries.
 
 	See *pkgmk.nostrip*(5).
 
