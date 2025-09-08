@@ -1,36 +1,25 @@
 HACKING
 =======
 
-This file attempts to describe the rules and notes to use when hacking
-the `pkgmk` sources cloned from the Zeppe-Lin's source code repository.
+This document outlines guidelines for working on `pkgmk`.
 
 
 Coding style
 ------------
 
-* Indent with tabs, align with spaces.
+* **Identation**: Use tabs; use spaces only for alignment.
 
-* Maintain a 71-column limit for code where possible, and enforce a
-  strict 79-column limit for the formatted output messages, such as
-  usage, help, etc.
+* **Line length**: Aim for ~71 columns in code.  Help/usage text must
+  fit within 79 columns.
 
-* Variables declaration:
-
-```
-+----------------+-------------------------------------------+
-| ${var}, ${VAR} | Global variable. External, declared in    |
-|                | sourced files like Pkgfile or pkgmk.conf. |
-+----------------+-------------------------------------------+
-| $VAR           | Internal, global variable.                |
-+----------------+-------------------------------------------+
-| $__VAR         | Local variable.                           |
-+----------------+-------------------------------------------+
-```
+* **Variable naming**:
+  * `${var}`, `${VAR}` -> external globals (declared in sourced files
+    like `Pkgfile` or `pkgmk.conf`)
+  * `$VAR` -> internal globals
+  * `$__var` -> locals
 
 
 Documentation
 -------------
 
-* Check manual pages for misspells:
-
-    hunspell -l man/*.scdoc
+* Check manual pages for misspells: `hunspell -l man/*.scdoc`
