@@ -68,7 +68,7 @@ The options are as follows:
 	_/etc/pkgmk.conf_.
 
 *-af* _format_, *--archive-format*=_format_
-	Use _format_ as archive format for the package.
+	Use archive _format_ for created packages.
 
 	The following archive formats are supported:
 
