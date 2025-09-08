@@ -8,10 +8,6 @@ Next Release
 - [ ] Reflect `pkgman-readme(7)` & `pkgman-runscripts(7)` in pkgmk's
   manual pages?
 
-- [ ] Reflect new manual pages in the handbook.
-
-- [ ] Refine new manual pages.  Look how well they link to each other.
-
 - [ ] Document any exported to `pkgmk.conf` variables and functions,
   like `error()`, `$E_GENERAL`, etc? Where?
 
@@ -24,6 +20,7 @@ Next Release
   implementing this feature.  He just replace X.Y.Z in the footprint,
   which may correspond to kernel version, but may not.  "Handle
   kernel-version better", lol.
+
 
 No milestone
 ------------
@@ -42,6 +39,7 @@ No milestone
 
 - [ ] Colorize "footprint mismatch" messages like `diff(1)` does?
 
+
 Done
 ----
 
@@ -54,3 +52,8 @@ Done
 
 - [x] Document `PKGMK_ARCH`.
   Done via pkgmk.32bit(5).
+
+- [x] Reflect new manual pages in the handbook.
+
+- [x] Refine new manual pages.  Look how well they link to each other.
+
