@@ -10,13 +10,13 @@ pkgmk.32bit - flag file enabling 32-bit mode
 
 # DESCRIPTION
 
-_.32bit_ is an optional flag file recognized by *pkgmk*(8).  When
-present in a package source directory (next to the _Pkgfile_), it
-instructs *pkgmk*(8) to build in 32-bit mode.
+The _.32bit_ file is an optional flag in a package source directory.
+When present alongside the _Pkgfile_, it instructs *pkgmk*(8) to build
+the package in 32-bit mode.
 
-In this mode, *pkgmk*(8) sets *PKGMK_ARCH=32* and adjusts build flags:
-*CFLAGS*, *CXXFLAGS*, and *LDFLAGS* are appended with "-m32", and
-*PKG_CONFIG_LIBDIR* is set to _/usr/lib32/pkgconfig_.
+By default, this mode sets *PKGMK_ARCH=32*, appends "-m32" to
+*CFLAGS*, *CXXFLAGS*, and *LDFLAGS*, and sets *PKG_CONFIG_LIBDIR* to
+_/usr/lib32/pkgconfig_.
 
 If the _.32bit_ file is absent, *pkgmk*(8) defaults to 64-bit mode
 (*PKGMK_ARCH=64*).
@@ -24,38 +24,33 @@ If the _.32bit_ file is absent, *pkgmk*(8) defaults to 64-bit mode
 # FILES
 
 _.32bit_
-	Flag file enabling 32-bit build mode.  Placed in the package
-	source directory alongside the _Pkgfile_.
+	Flag file enabling 32-bit build mode.
+	Located in the package source directory alongside the
+	_Pkgfile_.
 
 # EXAMPLES
 
-Customizing flags in _/etc/pkgmk.conf_:
+The following example in _/etc/pkgmk.conf_ overrides the default
+32-bit settings to add custom include and library paths:
 
 ```
 case $PKGMK_ARCH in
-"64"|"")
-	# Default 64-bit build
-	;;
 "32")
-	export CFLAGS="$CFLAGS -m32"
-	export CXXFLAGS="$CXXFLAGS -m32"
-	export LDFLAGS="$LDFLAGS -m32"
-	export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig"
-	;;
-*)
-	error "Unknown architecture: $PKGMK_ARCH"
-	exit $E_GENERAL
+	# Extend default 32-bit flags with custom paths
+	export CFLAGS="$CFLAGS -I/opt/compat/include"
+	export CXXFLAGS="$CFLAGS -I/opt/compat/include"
+	export LDFLAGS="$LDFLAGS -L/opt/compat/lib"
 	;;
 esac
 ```
 
 # SEE ALSO
 
+*pkgmk.Pkgfile*(5),
+*pkgmk.conf*(5),
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
 *pkgmk.nostrip*(5),
-*pkgmk.Pkgfile*(5),
-*pkgmk.conf*(5),
 *pkgmk*(8)
 
 ; vim: ft=scdoc cc=72 tw=70
