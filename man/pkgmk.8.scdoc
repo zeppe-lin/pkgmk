@@ -29,37 +29,34 @@ The options are as follows:
 	Download missing source files.
 
 *-do*, *--download-only*
-	Download missing sources only and exit.
+	Download missing sources only, then exit.
 
 *-eo*, *--extract-only*
-	Download and extract sources to the work directory without
-	building.
-	Exit after completion.
+	Download and extract sources to the work directory, then exit.
 
 *-utd*, *--up-to-date*
 	Check if the package is up to date and exit.
 
 *-uf*, *--update-footprint*
-	Update the footprint from the current build and mark the build
-	as successful.
-	Exit after completion.
+	Update the footprint from the current build, treat it as
+	successful, and exit.
 
 *-if*, *--ignore-footprint*
-	Build without checking footprint.
+	Build without checking the footprint.
 
 *-in*, *--ignore-new*
-	Build, ignoring new files in footprint mismatch.
+	Ignore new files in footprint mismatches.
 
 *-um*, *--update-md5sum*
 	Update the md5sum file using the current source files.
-	Combine with *-d* to download sources if needed.
+	Combine with *-d* to download as needed.
 
 *-im*, *--ignore-md5sum*
 	Build without checking md5sum.
 
 *-cm*, *--check-md5sum*
 	Check md5sum and exit.
-	Combine with *-d* to download source files if needed.
+	Combine with *-d* to download as needed.
 
 *-ns*, *--no-strip*
 	Do not strip binaries and libraries.

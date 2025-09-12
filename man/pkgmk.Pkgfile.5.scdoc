@@ -187,6 +187,7 @@ build() {
 
 # SEE ALSO
 
+*dash*(1),
 *sh*(1p),
 *pkgmk.32bit*(5),
 *pkgmk.conf*(5),
@@ -194,5 +195,8 @@ build() {
 *pkgmk.md5sum*(5),
 *pkgmk.nostrip*(5),
 *pkgmk*(8)
+
+For Zeppe-Lin packaging conventions and best practices, see
+*packaging*(7).
 
 ; vim: ft=scdoc cc=72 tw=70
