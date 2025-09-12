@@ -1,5 +1,5 @@
 #!/bin/sh
-# pkgmk - make software package
+# pkgmk - build an installable software package
 # See COPYING and COPYRIGHT files for corresponding information.
 
 # Intentional: allow "local"s declaration.
@@ -849,28 +849,31 @@ build_needed() {
 # print_help - Print the help message to stdout.
 print_help() {
 	cat <<EOF
-Usage: pkgmk [option ...]
-Make an installable software package.
+Usage: pkgmk [options]
+Build an installable software package.
 
 Mandatory arguments to long options are mandatory for short options too.
-  -d,   --download          download missing source file(s)
-  -do,  --download-only     do not build, only download missing source file(s)
-  -eo,  --extract-only      do not build, only extract source file(s)
-  -utd, --up-to-date        do not build, only check if package is up to date
-  -uf,  --update-footprint  update footprint using result from last build
-  -if,  --ignore-footprint  build package without checking footprint
-  -um,  --update-md5sum     update md5sum
-  -im,  --ignore-md5sum     build package without checking md5sum
-  -cm,  --check-md5sum      do not build, only check md5sum
-  -ns,  --no-strip          do not strip executable binaries and/or libraries
-  -f,   --force             build package even if it appears to be up to date
-  -c,   --clean             remove package and downloaded files
-  -kw,  --keep-work         keep temporary working directory
-  -af,  --archive-format=FORMAT
-                            use the specified format for the created archive
-  -cf,  --config-file=FILE  use alternative configuration file
-  -v,   --version           print version and exit
-  -h,   --help              print help and exit
+  -d,  --download             Download missing source files
+  -do, --download-only        Download missing sources only and exit
+  -eo, --extract-only         Download and extract sources to the work
+                              directory without building, and exit
+  -utd,--up-to-date           Check if the package is up to date and exit
+  -uf, --update-footprint     Update the footprint from the current build,
+                              mark build as successful, and exit
+  -if, --ignore-footprint     Build without checking footprint
+  -in, --ignore-new           Build, ignoring new files in footprint mismatch
+  -um, --update-md5sum        Update the md5sum file using current sources
+  -im, --ignore-md5sum        Build without checking md5sum
+  -cm, --check-md5sum         Check md5sum and exit
+  -ns, --no-strip             Do not strip binaries and libraries
+  -f,  --force                Force a build even if up to date
+  -c,  --clean                Remove built package and downloaded sources
+  -kw, --keep-work            Keep the temporary working directory
+  -cf, --config-file=FILE     Use an alternate configuration file
+  -af, --archive-format=FMT   Use an alternate archive format for created
+                              packages
+  -v,  --version              Print version and exit
+  -h,  --help                 Print this message and exit
 EOF
 }
 
