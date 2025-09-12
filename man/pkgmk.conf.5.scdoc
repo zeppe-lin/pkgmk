@@ -10,13 +10,31 @@ pkgmk.conf - configuration file for pkgmk
 
 # DESCRIPTION
 
-_pkgmk.conf_ file is a POSIX *sh*(1p) script that configures
-*pkgmk*(8).  It sets environment variables using '*option=value*' or
-'*export option=value*' assignments.  Comments begin with a hash
-('*#*').  If an option is not set, *pkgmk*(8) falls back to its
-built-in default.
+The _pkgmk.conf_ file is a POSIX *sh*(1p) script read by *pkgmk*(8) at
+startup.
+It sets environment variables that control package building.
 
-The configuration options are as follows:
+# FILE FORMAT
+
+The file consists of lines of the form:
+
+```
+name=value
+export name=value
+```
+
+Comments begin with a hash ('*#*') and extend to the end of the line.
+
+Since _pkgmk.conf_ is interpreted by the shell, normal shell syntax
+may be used.
+This includes variable expansion, command substitution, and
+conditional statements such as 'case' or 'if'.
+Functions, loops, and other POSIX *sh*(1p) constructs are also
+permitted.
+
+If an option is unset, *pkgmk*(8) uses its built-in default.
+
+The following variables are recognised:
 
 *export CFLAGS*=<STRING>
 	Set C compiler options.
@@ -29,29 +47,28 @@ The configuration options are as follows:
 	Default: unset.
 
 *export JOBS*=<NUMBER>
-	Set the number of commands to run simultaneously when building
-	a package.
+	Number of commands to run simultaneously when building.
 
 	Default: unset.
 
 *export MAKEFLAGS*=<STRING>
-	Set *make*(1) options.
+	Options passed to *make*(1).
 
 	Default: unset.
 
 *PKGMK_SOURCE_MIRRORS*=<URI ...>
-	Set mirror URIs for downloaded source files.  Replace spaces
-	in URIs with '%20'.
+	Mirror URIs for downloaded source files.
+	Replace spaces in URIs with '%20'.
 
 	Default: unset.
 
 *PKGMK_SOURCE_DIR*=<DIR>
-	Set directory for downloaded source files.
+	Directory for downloaded source files.
 
 	Default: current directory of _Pkgfile_.
 
 *PKGMK_PACKAGE_DIR*=<DIR>
-	Set directory for built packages.
+	Directory for built packages.
 
 	Default: current directory of _Pkgfile_.
 
@@ -62,12 +79,12 @@ The configuration options are as follows:
 	_Pkgfile_.
 
 *PKGMK_DOWNLOAD*=<yes | no>
-	Download the source files if necessary.
+	Download source files if necessary.
 
 	Default: no.
 
 *PKGMK_DOWNLOAD_PROG*=<aria2c | curl | wget>
-	Use specified program to download source files.
+	Program used to download source files.
 
 	Default: curl.
 
@@ -87,7 +104,7 @@ The configuration options are as follows:
 	Default: unset.
 
 *PKGMK_IGNORE_FOOTPRINT*=<yes | no>
-	Skip footprint check of the build package.
+	Skip footprint check of the built package.
 
 	Default: no.
 
@@ -102,15 +119,14 @@ The configuration options are as follows:
 	Default: no.
 
 *PKGMK_NO_STRIP*=<yes | no>
-	If set to "yes", *pkgmk*(8) does not strip binaries/libraries.
-	If set to "no", stripping will be performed.
+	If "yes", do not strip binaries and libraries.
 
 	Default: no.
 
 *PKGMK_COMPRESSION_MODE*=<gz | bz2 | xz | lz | zst>
-	Set the compression mode for packages.
+	Compression mode for packages.
 
-	The following compression modes are supported:
+	Supported modes:
 
 	```
 	Mode   Format   Extension
@@ -125,9 +141,9 @@ The configuration options are as follows:
 	Default: gz.
 
 *PKGMK_ARCHIVE_FORMAT*=<gnutar | pax | ustar | v7>
-	Set the archive format for packages.
+	Archive format for packages.
 
-	The following archive formats are supported:
+	Supported formats:
 
 	```
 	Format   Description
@@ -140,17 +156,16 @@ The configuration options are as follows:
 
 	Default: gnutar.
 
-	See *libarchive-formats*(5) for more information about
-	currently-supported formats.
+	See *libarchive-formats*(5) for details.
 
 # FILES
 
 _/etc/pkgmk.conf_
-	Default location for this configuration file.
+	Configuration file.
 
 # EXAMPLES
 
-Minimal configuration sample:
+Sample configuration:
 
 ```
 #
@@ -185,10 +200,10 @@ esac
 # SEE ALSO
 
 *pkgmk.32bit*(5),
+*pkgmk.Pkgfile*(5),
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
 *pkgmk.nostrip*(5),
-*pkgmk.Pkgfile*(5),
 *pkgmk*(8)
 
 ; vim: ft=scdoc cc=72 tw=70
