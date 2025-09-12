@@ -2,7 +2,7 @@ PKGMK(8)
 
 # NAME
 
-pkgmk - make an installable software package
+pkgmk - build an installable software package
 
 # SYNOPSIS
 
@@ -10,17 +10,17 @@ pkgmk - make an installable software package
 
 # DESCRIPTION
 
-*pkgmk* creates installable software packages for use with
-*pkgadd*(8).  Packages are archives with a standardized directory
-structure.
+The *pkgmk* utility builds installable software packages for use with
+*pkgadd*(8).
+Packages are archive files with a standard directory layout.
 
-To use *pkgmk*, you need a _Pkgfile_ describing the build process.
-See *pkgmk.Pkgfile*(5).  After creating a _Pkgfile_, run *pkgmk* to
-build a package.  To rebuild after changes, rerun *pkgmk*(8).  It
-rebuilds the package if the source files or the _Pkgfile_ have been
-modified since the last successful build.
+A _Pkgfile_ describing the build process must be present in the
+current directory.
+*pkgmk* rebuilds the package if the _Pkgfile_ or any source file has
+changed since the last successful build.
 
-Global configuration is read from _/etc/pkgmk.conf_ at startup.
+After building, *pkgmk* compresses manual pages with *gzip*(1) and
+adjusts symbolic links.
 
 The options are as follows:
 
@@ -28,47 +28,57 @@ The options are as follows:
 	Download missing source files.
 
 *-do*, *--download-only*
-	Download missing sources only, do not build.
+	Download missing sources only and exit.
+
+*-eo*, *--extract-only*
+	Download and extract sources to the work directory without
+	building.
+	Exit after completion.
 
 *-utd*, *--up-to-date*
-	Check if package is up-to-date, do not build.
+	Check if the package is up to date and exit.
 
 *-uf*, *--update-footprint*
-	Update footprint and mark last build as successful.
+	Update the footprint from the current build and mark the build
+	as successful.
+	Exit after completion.
 
 *-if*, *--ignore-footprint*
 	Build without checking footprint.
 
 *-in*, *--ignore-new*
-	Build, ignore new files in footprint mismatch.
+	Build, ignoring new files in footprint mismatch.
 
 *-um*, *--update-md5sum*
-	Update md5sum using the current source files.
+	Update the md5sum file using the current source files.
+	Combine with *-d* to download sources if needed.
 
 *-im*, *--ignore-md5sum*
-	Build without checking md5sum first.
+	Build without checking md5sum.
 
 *-cm*, *--check-md5sum*
-	Check md5sum, do not build.
+	Check md5sum and exit.
+	Combine with *-d* to download source files if needed.
 
 *-ns*, *--no-strip*
-	Do not strip binaries/libraries.
+	Do not strip binaries and libraries.
 
 *-f*, *--force*
-	Force build even if up-to-date.
+	Force a build even if the package is up to date.
 
 *-c*, *--clean*
-	Remove built package and downloaded source files.
+	Remove the built package and downloaded source files.
 
 *-kw*, *--keep-work*
-	Keep temporary working directory.
+	Keep the temporary working directory.
 
-*-cf* _conffile_, *--config-file*=_conffile_
-	Use alternate configuration file _conffile_ instead of
-	_/etc/pkgmk.conf_.
+*-cf* _config-file_, *--config-file*=_config-file_
+	Use an alternate configuration file.
 
-*-af* _format_, *--archive-format*=_format_
-	Use archive _format_ for created packages.
+	Default: _/etc/pkgmk.conf_.
+
+*-af* _archive-format_, *--archive-format*=_archive-format_
+	Use an alternate archive format for created packages.
 
 	The following archive formats are supported:
 
@@ -81,29 +91,30 @@ The options are as follows:
 	v7       Old V7 tar format
 	```
 
-	See *libarchive-formats*(5) for details about
-	currently-supported formats.
+	See *libarchive-formats*(5) for details.
+
+	Default: gnutar.
 
 *-v*, *--version*
 	Print version and exit.
 
 *-h*, *--help*
-	Print help and exit.
+	Print usage information and exit.
 
 # FILES
 
 _Pkgfile_
-	Package build description and instructions.
+	Package build description.
 
 	See *pkgmk.Pkgfile*(5).
 
 _.nostrip_
-	Exceptions for stripping executable binaries and libraries.
+	Exceptions for stripping binaries and libraries.
 
 	See *pkgmk.nostrip*(5).
 
 _.footprint_
-	Package footprint (used for regression testing).
+	Package footprint for regression testing.
 
 	See *pkgmk.footprint*(5).
 
@@ -118,7 +129,7 @@ _.32bit_
 	See *pkgmk.32bit*(5).
 
 _/etc/pkgmk.conf_
-	Global configuration file.
+	Configuration file.
 
 	See *pkgmk.conf*(5).
 
@@ -129,20 +140,21 @@ _/etc/pkgmk.conf_
 *1*
 	General error.
 *2*
-	Invalid _Pkgfile_ (missing required variables or functions).
+	Invalid _Pkgfile_
+	(missing required variables or functions).
 *3*
 	Directory missing or permission error
 	(source/build directories).
 *4*
-	Error during source file download.
+	Error downloading source files.
 *5*
-	Error during source file unpacking.
+	Error unpacking source files.
 *6*
 	MD5 checksum verification failed.
 *7*
-	Package footprint check failure.
+	Package footprint check failed.
 *8*
-	Error during package "build()" function execution.
+	Error during execution of the "build()" function.
 *130*
 	Interrupted or terminated by *C-c*.
 
@@ -150,13 +162,5 @@ _/etc/pkgmk.conf_
 
 *pkgmk.Pkgfile*(5),
 *pkgmk.conf*(5)
-
-# AUTHORS
-
-Originally written by Per Lidén <per@fukt.bth.se> as part of
-*pkgutils* for CRUX: http://crux.nu.
-
-This implementation was extensively re-worked for Zeppe-Lin by
-Alexandr Savca <alexandr.savca89@gmail.com>.
 
 ; vim: ft=scdoc cc=72 tw=70
