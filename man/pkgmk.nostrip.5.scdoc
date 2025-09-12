@@ -18,12 +18,12 @@ matching patterns in this file are excluded.
 # FILE FORMAT
 
 The file is plain text, one pattern per line.
-Paths are relative to the package directory.
+Paths are relative to the package root ('$PKG').
 
 Empty lines are ignored.
 Lines beginning with a hash ('*#*') are comments.
-Patterns are interpreted as basic regular expressions, provided by
-*grep*(1).
+Patterns are interpreted as basic regular expressions, as understood
+by *grep*(1).
 
 # FILES
 

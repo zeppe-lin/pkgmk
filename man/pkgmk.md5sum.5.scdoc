@@ -31,10 +31,11 @@ checksum  filename
 ```
 
 *checksum*
-	A 32-character hexadecimal string representing the MD5 digest
-	of the file.
+	A 32-character lowercase hexadecimal string representing the
+	MD5 digest of the file.
 *filename*
-	Usually the basename of the source file.
+	Usually the basename of the source file as listed in the
+	*source* variable of the _Pkgfile_.
 
 Lines beginning with a hash ('*#*') and empty lines are ignored.
 Entries are usually sorted by filename.

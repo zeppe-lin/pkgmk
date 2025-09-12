@@ -27,7 +27,8 @@ permissions  owner/group  path
 Fields are separated by whitespace:
 
 *permissions*
-	File mode in symbolic form (as shown by *ls*(1)).
+	File mode in symbolic form (as shown by *ls*(1)), e.g.,
+	'drwxr-xr-x'.
 *owner/group*
 	Owner and group of the file, separated by a slash.
 *path*

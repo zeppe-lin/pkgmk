@@ -48,7 +48,7 @@ Every _Pkgfile_ must define the following variables:
 
 *release*
 	Package release number (incremented when the packaging changes
-	without a new upstream release).
+	but the upstream version does not).
 
 *source*
 	One or more source URIs or local paths, whitespace-separated.
@@ -188,7 +188,7 @@ build() {
 # SEE ALSO
 
 *sh*(1p),
-*pkgmk.32bit*(5)
+*pkgmk.32bit*(5),
 *pkgmk.conf*(5),
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),

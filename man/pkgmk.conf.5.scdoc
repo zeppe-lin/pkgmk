@@ -28,7 +28,7 @@ Comments begin with a hash ('*#*') and extend to the end of the line.
 Since _pkgmk.conf_ is interpreted by the shell, normal shell syntax
 may be used.
 This includes variable expansion, command substitution, and
-conditional statements such as 'case' or 'if'.
+conditional statements such as *case* or *if*.
 Functions, loops, and other POSIX *sh*(1p) constructs are also
 permitted.
 
@@ -199,6 +199,7 @@ esac
 
 # SEE ALSO
 
+*libarchive-formats*(5),
 *pkgmk.32bit*(5),
 *pkgmk.Pkgfile*(5),
 *pkgmk.footprint*(5),
