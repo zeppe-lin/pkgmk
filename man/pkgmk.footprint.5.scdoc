@@ -10,35 +10,52 @@ pkgmk.footprint - package footprint for regression checking
 
 # DESCRIPTION
 
-_.footprint_ file records the list of files installed by a package.
-It is created by *pkgmk*(8) after a successful build and used on later
-builds to detect changes or regressions.
+The _.footprint_ file records the list of files installed by a
+package.
+It is created by *pkgmk*(8) after a successful build and is used on
+later builds to detect changes or regressions.
 
-The file is plain text, one entry per line, usually sorted by path:
+# FILE FORMAT
+
+The file is plain text, one entry per line, usually sorted by path.
+Each line has the form:
 
 ```
 permissions  owner/group  path
 ```
 
-On subsequent builds, *pkgmk*(8) compares the new footprint with the
-saved one.  Differences are reported as:
+Fields are separated by whitespace:
 
-	*NEW*
-		Present in the new build but not in the saved file.
-	*MISSING*
-		Present in the saved file but absent in the new build.
+*permissions*
+	File mode in symbolic form (as shown by *ls*(1)).
+*owner/group*
+	Owner and group of the file, separated by a slash.
+*path*
+	Path to the file, relative to the installation prefix.
+
+On subsequent builds, *pkgmk*(8) compares the new footprint with the
+saved one.
+Differences are reported as:
+
+*NEW*
+	File present in the new build but not in the saved footprint.
+*MISSING*
+	File present in the saved footprint but absent in the new
+	build.
 
 In either case, *pkgmk*(8) exits with an error code.
 
 If no _.footprint_ exists and checking is enabled, *pkgmk*(8) creates
-one.  Footprint checking and creation may be controlled by *pkgmk*(8)
+one.
+Footprint checking and creation may be controlled by *pkgmk*(8)
 options; see *pkgmk*(8) for details.
 
 # FILES
 
 _.footprint_
-	Installed file list for regression checking.  Placed in the
-	package source directory alongside the _Pkgfile_.
+	Installed file list for regression checking.
+	Located in the package source directory alongside the
+	_Pkgfile_.
 
 # EXAMPLES
 
@@ -73,10 +90,10 @@ lrwxrwxrwx    root/root    usr/share/man/man1/red.1.gz -> ed.1.gz
 
 *pkginfo*(1),
 *pkgmk.32bit*(5),
-*pkgmk.md5sum*(5),
-*pkgmk.nostrip*(5),
 *pkgmk.Pkgfile*(5),
 *pkgmk.conf*(5),
+*pkgmk.md5sum*(5),
+*pkgmk.nostrip*(5),
 *pkgmk*(8)
 
 # NOTES
