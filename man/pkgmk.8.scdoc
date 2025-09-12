@@ -12,7 +12,8 @@ pkgmk - build an installable software package
 
 The *pkgmk* utility builds installable software packages for use with
 *pkgadd*(8).
-Packages are archive files with a standard directory layout.
+The resulting package archive follows the format described in
+*packages*(7) and contains a standard directory layout.
 
 A _Pkgfile_ describing the build process must be present in the
 current directory.
@@ -167,5 +168,6 @@ _/etc/pkgmk.conf_
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
 *pkgmk.nostrip*(5)
+*packages*(7)
 
 ; vim: ft=scdoc cc=72 tw=70
