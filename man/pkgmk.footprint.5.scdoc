@@ -13,7 +13,8 @@ pkgmk.footprint - package footprint for regression checking
 The _.footprint_ file records the list of files installed by a
 package.
 It is created by *pkgmk*(8) after a successful build and is used on
-later builds to detect changes or regressions.
+subsequent builds to detect changes or regressions in the installed
+file set.
 
 # FILE FORMAT
 
@@ -48,8 +49,8 @@ In either case, *pkgmk*(8) exits with an error code.
 
 If no _.footprint_ exists and checking is enabled, *pkgmk*(8) creates
 one.
-Footprint checking and creation may be controlled by *pkgmk*(8)
-options; see *pkgmk*(8) for details.
+Footprint checking and creation may be controlled by options; see
+*pkgmk*(8) for details.
 
 # FILES
 

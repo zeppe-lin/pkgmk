@@ -21,7 +21,7 @@ current directory.
 changed since the last successful build.
 
 After building, *pkgmk* compresses manual pages with *gzip*(1) and
-adjusts symbolic links.
+adjusts symbolic links automatically.
 
 The options are as follows:
 
@@ -134,25 +134,25 @@ _/etc/pkgmk.conf_
 # EXIT STATUS
 
 *0*
-	Success.
+	Package built successfully.
 *1*
 	General error.
 *2*
 	Invalid _Pkgfile_
 	(missing required variables or functions).
 *3*
-	Directory missing or permission error
+	Missing directory or permission error
 	(source/build directories).
 *4*
-	Error downloading source files.
+	Failed to download source files.
 *5*
-	Error unpacking source files.
+	Failed to unpack source files.
 *6*
 	MD5 checksum verification failed.
 *7*
 	Package footprint check failed.
 *8*
-	Error during execution of the "build()" function.
+	Error during execution of the *build()* function.
 *130*
 	Interrupted or terminated by *C-c*.
 

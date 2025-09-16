@@ -17,8 +17,8 @@ variable of the _Pkgfile_.
 
 During a build, *pkgmk*(8) recalculates checksums and compares them
 against this file.
-If mismatches are found, *pkgmk*(8) reports the differences and exits
-with an error.
+If mismatches are found, it reports the differences and exits with an
+error.
 If the file is missing and checking is enabled, *pkgmk*(8) warns and
 generates a new one.
 
@@ -51,6 +51,14 @@ _.md5sum_
 	MD5 checksums of package source files.
 	Located in the package source directory alongside the
 	_Pkgfile_.
+
+# NOTES
+
+The _.md5sum_ mechanism is intended as a regression safeguard, not a
+cryptographically strong integrity check.
+MD5 is known to be weak against deliberate collision attacks, but
+remains sufficient for detecting accidental corruption or mismatched
+sources in packaging workflows.
 
 # EXAMPLES
 

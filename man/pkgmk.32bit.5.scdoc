@@ -12,7 +12,7 @@ pkgmk.32bit - flag file enabling 32-bit mode
 
 The _.32bit_ file is an optional flag in a package source directory.
 When present alongside the _Pkgfile_, it instructs *pkgmk*(8) to build
-the package in 32-bit mode.
+the package in 32-bit mode instead of the default 64-bit mode.
 
 By default, this mode sets *PKGMK_ARCH=32*, appends "-m32" to
 *CFLAGS*, *CXXFLAGS*, and *LDFLAGS*, and sets *PKG_CONFIG_LIBDIR* to
@@ -27,6 +27,18 @@ _.32bit_
 	Flag file enabling 32-bit build mode.
 	Located in the package source directory alongside the
 	_Pkgfile_.
+
+# NOTES
+
+32-bit packages typically declare a dependency on their 64-bit
+counterpart.
+At runtime the 32-bit libraries are self-contained, but headers,
+manual pages, and binaries are provided only by the main 64-bit
+package.
+The 32-bit package therefore ships just the 32-bit libraries under
+_/usr/lib32_, while relying on the primary package for everything
+else.
+This avoids file conflicts and keeps packaging minimal.
 
 # EXAMPLES
 
@@ -44,6 +56,45 @@ case $PKGMK_ARCH in
 esac
 ```
 
+Example _Pkgfile_ for building a 32-bit compatibility package of
+*alsa-lib*:
+
+```
+# Description: ALSA libraries
+# URL:         https://www.alsa-project.org/
+# Depends on:  alsa-lib
+
+name=alsa-lib-32
+version=1.2.14
+release=1
+source=https://www.alsa-project.org/files/pub/lib/alsa-lib-$version.tar.bz2
+
+build() {
+	cd alsa-lib-$version
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--disable-python
+
+	make V=1
+	make DESTDIR=$PKG install
+
+	# remove files not needed in compat package
+	rm -r $PKG/usr/bin $PKG/usr/include $PKG/usr/share
+}
+```
+
+32-bit packages typically declare a dependency on their 64-bit
+counterpart.
+At runtime the 32-bit libraries are self-contained, but headers,
+manual pages, and binaries are provided only by the main 64-bit
+package.
+The 32-bit package therefore ships just the 32-bit libraries under
+_/usr/lib32_, while relying on the primary package for everything
+else.
+This avoids file conflicts and keeps packaging minimal.
+
 # SEE ALSO
 
 *pkgmk.Pkgfile*(5),
@@ -52,5 +103,12 @@ esac
 *pkgmk.md5sum*(5),
 *pkgmk.nostrip*(5),
 *pkgmk*(8)
+
+# CAVEATS
+
+The _.32bit_ flag only switches compiler and linker settings.
+It does not guarantee that all software can be built in 32-bit mode.
+Additional adjustments may be required in _pkgmk.conf_ or the
+_Pkgfile_.
 
 ; vim: ft=scdoc cc=72 tw=70

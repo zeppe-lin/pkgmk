@@ -12,8 +12,9 @@ pkgmk.nostrip - exceptions for stripping binaries and libraries
 
 The _.nostrip_ file lists files that should not have debug symbols
 stripped during package creation.
-Normally, *pkgmk*(8) runs *strip*(1) to reduce package size; files
-matching patterns in this file are excluded.
+By default, *pkgmk*(8) runs *strip*(1) on binaries and libraries to
+reduce package size; files matching patterns in this file are
+excluded from that step.
 
 # FILE FORMAT
 
@@ -31,6 +32,15 @@ _.nostrip_
 	Exclusions for the strip stage.
 	Located in the package source directory alongside the
 	_Pkgfile_.
+
+# NOTES
+
+Patterns use basic regular expressions as understood by *grep*(1).
+Escape metacharacters when matching literal text.
+
+The _.nostrip_ file is intended for exceptional cases such as
+debugging tools or libraries that must retain symbols.
+Overuse may lead to unnecessarily large packages.
 
 # EXAMPLES
 
@@ -63,10 +73,5 @@ usr/lib/debug-tools/
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
 *pkgmk*(8)
-
-# CAVEATS
-
-Patterns use basic regular expressions; escape metacharacters when
-matching literal text.
 
 ; vim: ft=scdoc cc=72 tw=70

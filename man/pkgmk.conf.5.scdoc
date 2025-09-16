@@ -207,4 +207,12 @@ esac
 *pkgmk.nostrip*(5),
 *pkgmk*(8)
 
+# CAVEATS
+
+Because _pkgmk.conf_ is a shell script, it can include logic such as
+conditionals and functions.
+This flexibility allows per-architecture, per-environment, or
+per-package customization, but also means that syntax errors will
+prevent *pkgmk*(8) from starting.
+
 ; vim: ft=scdoc cc=72 tw=70
