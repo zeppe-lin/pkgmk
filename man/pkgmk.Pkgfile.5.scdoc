@@ -189,17 +189,16 @@ build() {
 
 # SEE ALSO
 
-*dash*(1),
-*sh*(1p),
-*pkgmk.32bit*(5),
+*pkgmk*(8),
 *pkgmk.conf*(5),
+*pkgmk.32bit*(5),
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
 *pkgmk.nostrip*(5),
-*pkgmk*(8)
-
-For Zeppe-Lin packaging conventions and best practices, see
-*packaging*(7).
+*sh*(1p),
+*dash*(1),
+*packages*(7),
+*packaging*(7)
 
 # CAVEATS
 

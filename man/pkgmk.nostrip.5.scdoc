@@ -65,13 +65,13 @@ usr/lib/debug-tools/
 
 # SEE ALSO
 
-*grep*(1),
-*strip*(1),
+*pkgmk*(8),
 *pkgmk.32bit*(5),
 *pkgmk.Pkgfile*(5),
 *pkgmk.conf*(5),
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
-*pkgmk*(8)
+*grep*(1),
+*strip*(1)
 
 ; vim: ft=scdoc cc=72 tw=70

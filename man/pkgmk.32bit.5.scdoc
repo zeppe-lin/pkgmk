@@ -97,12 +97,14 @@ This avoids file conflicts and keeps packaging minimal.
 
 # SEE ALSO
 
-*pkgmk.Pkgfile*(5),
+*pkgmk*(8),
 *pkgmk.conf*(5),
+*pkgmk.Pkgfile*(5),
 *pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
 *pkgmk.nostrip*(5),
-*pkgmk*(8)
+*packages*(7),
+*packaging*(7)
 
 # CAVEATS
 
