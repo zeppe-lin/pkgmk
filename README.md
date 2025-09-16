@@ -12,8 +12,8 @@ differences:
   * Optional downloader support: `aria2c(1)` in addition to
     `curl(1)`/`wget(1)`
   * Manual pages in `scdoc(5)` format, including new ones:
-    * `pkgmk.Pkgfile(5)`
     * `pkgmk.32bit(5)`
+    * `pkgmk.Pkgfile(5)`
     * `pkgmk.footprint(5)`
     * `pkgmk.md5sum(5)`
     * `pkgmk.nostrip(5)`
