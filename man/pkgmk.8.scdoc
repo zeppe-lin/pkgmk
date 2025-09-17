@@ -35,28 +35,28 @@ The options are as follows:
 	Download and extract sources to the work directory, then exit.
 
 *-utd*, *--up-to-date*
-	Check if the package is up to date and exit.
+	Check if the package is up to date, then exit.
 
 *-uf*, *--update-footprint*
-	Update the footprint from the current build, treat it as
-	successful, and exit.
+	Update the footprint from the current build, mark it as
+	successful, then exit.
 
 *-if*, *--ignore-footprint*
 	Build without checking the footprint.
 
 *-in*, *--ignore-new*
-	Ignore new files in footprint mismatches.
+	Build ignoring new files in footprint mismatches.
 
 *-um*, *--update-md5sum*
-	Update the md5sum file using the current source files.
-	Combine with *-d* to download as needed.
+	Update the md5sum file using the current sources.
+	May be combined with *-d*.
 
 *-im*, *--ignore-md5sum*
 	Build without checking md5sum.
 
 *-cm*, *--check-md5sum*
-	Check md5sum and exit.
-	Combine with *-d* to download as needed.
+	Check md5sum, then exit.
+	May be combined with *-d*.
 
 *-ns*, *--no-strip*
 	Do not strip binaries and libraries.
@@ -65,7 +65,7 @@ The options are as follows:
 	Force a build even if the package is up to date.
 
 *-c*, *--clean*
-	Remove the built package and downloaded source files.
+	Remove the built package and downloaded sources.
 
 *-kw*, *--keep-work*
 	Keep the temporary working directory.
@@ -78,7 +78,7 @@ The options are as follows:
 *-af* _archive-format_, *--archive-format*=_archive-format_
 	Use an alternate archive format for created packages.
 
-	The following archive formats are supported:
+	Supported formats:
 
 	```
 	Format   Description
@@ -89,7 +89,7 @@ The options are as follows:
 	v7       Old V7 tar format
 	```
 
-	See *libarchive-formats*(5) for details.
+	See *libarchive-formats*(5).
 
 	Default: gnutar.
 
@@ -97,7 +97,7 @@ The options are as follows:
 	Print version and exit.
 
 *-h*, *--help*
-	Print usage information and exit.
+	Print help and exit.
 
 # FILES
 
