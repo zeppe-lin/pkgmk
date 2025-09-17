@@ -134,7 +134,7 @@ _/etc/pkgmk.conf_
 # EXIT STATUS
 
 *0*
-	Package built successfully.
+	Success.
 *1*
 	General error.
 *2*
