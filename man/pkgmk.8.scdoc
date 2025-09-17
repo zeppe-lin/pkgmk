@@ -10,18 +10,23 @@ pkgmk - build an installable software package
 
 # DESCRIPTION
 
-The *pkgmk* utility builds installable software packages for use with
-*pkgadd*(8).
-The resulting package archive follows the format described in
-*packages*(7) and contains a standard directory layout.
+The *pkgmk* utility builds software into installable package archives
+for use with *pkgadd*(8).
 
-A _Pkgfile_ describing the build process must be present in the
-current directory.
-*pkgmk* rebuilds the package if the _Pkgfile_ or any source file has
-changed since the last successful build.
+Each build is driven by a _Pkgfile_ in the current directory.
+The _Pkgfile_ defines the source files to fetch and the commands to
+run.
 
-After building, *pkgmk* compresses manual pages with *gzip*(1) and
-adjusts symbolic links automatically.
+*pkgmk* downloads missing sources, verifies them, extracts them into a
+working directory, and executes the build instructions.
+
+If the _Pkgfile_ or any source file has changed since the last build,
+*pkgmk* rebuilds the package.
+Otherwise, the existing package is left unchanged unless *-f* is
+given.
+
+On success, *pkgmk* creates a package archive as described in
+*packages*(7).
 
 The options are as follows:
 
