@@ -849,36 +849,40 @@ build_needed() {
 # print_help - Print the help message to stdout.
 print_help() {
 	cat <<EOF
-Usage: pkgmk [-cf FILE] -do | -eo [-d] | -cm [-d] | -um [-d] | -uf | -utd | -c
-       pkgmk [-cf FILE] [-f] [-ns] [-kw] [-af FMT] [-d] [-im] [-if] [-in]
+Usage: pkgmk [-cf config-file]
+             -do | -eo [-d] | -cm [-d] | -um [-d] | -uf | -utd | -c
+       pkgmk [-cf config-file] [-af archive-format]
+             [-f] [-ns] [-kw] [-d] [-im] [-if] [-in]
        pkgmk -h | -v
 Build an installable software package.
 
 Mandatory arguments to long options are mandatory for short options too.
 
 General options:
-  -cf, --config-file=FILE    Use alternate configuration file
-  -h,  --help                Print this help and exit
-  -v,  --version             Print version and exit
+  -cf, --config-file=config-file
+                           Use an alternate configuration file
+  -h,  --help              Print this help and exit
+  -v,  --version           Print version and exit
 
 One-shot actions:
-  -c,  --clean               Remove built package and downloaded sources
-  -cm, --check-md5sum        Verify source checksums and exit
-  -do, --download-only       Download missing sources and exit
-  -eo, --extract-only        Download and extract sources and exit
-  -uf, --update-footprint    Update footprint with last build and exit
-  -um, --update-md5sum       Regenerate md5sum from current sources and exit
-  -utd, --up-to-date         Check if package is up to date and exit
+  -c,  --clean             Remove built package and downloaded sources
+  -cm, --check-md5sum      Verify source checksums and exit
+  -do, --download-only     Download missing sources and exit
+  -eo, --extract-only      Download and extract sources and exit
+  -uf, --update-footprint  Update footprint with last build and exit
+  -um, --update-md5sum     Update md5sum from current sources and exit
+  -utd, --up-to-date       Check if package is up to date and exit
 
 Build modifiers:
-  -af, --archive-format=FMT  Use alternate archive format
-  -d,  --download            Download missing sources before building
-  -f,  --force               Force rebuild even if package is up to date
-  -if, --ignore-footprint    Build without checking footprint
-  -im, --ignore-md5sum       Build without verifying source checksums
-  -in, --ignore-new          Ignore new files in footprint mismatch
-  -kw, --keep-work           Keep temporary working directory
-  -ns, --no-strip            Do not strip binaries and libraries
+  -af, --archive-format=archive-format
+                           Use an alternate archive format
+  -d,  --download          Download missing sources before building
+  -f,  --force             Force rebuild even if package is up to date
+  -if, --ignore-footprint  Build without checking footprint
+  -im, --ignore-md5sum     Build without verifying source checksums
+  -in, --ignore-new        Ignore new files in footprint mismatch
+  -kw, --keep-work         Keep temporary working directory
+  -ns, --no-strip          Do not strip binaries and libraries
 EOF
 }
 
