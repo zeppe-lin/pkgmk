@@ -2,7 +2,7 @@ PKGFILE(5)
 
 # NAME
 
-pkgmk.Pkgfile - build file for pkgmk
+pkgmk.Pkgfile - package build script for pkgmk
 
 # SYNOPSIS
 
@@ -45,7 +45,7 @@ Every _Pkgfile_ must define the following variables:
 
 *version*
 	Package version.
-	Actually corresponds to upstream software version.
+	Corresponds to the upstream software version.
 
 *release*
 	Package release number (incremented when the packaging changes
@@ -94,7 +94,7 @@ Within *build()*, the following environment is available:
 	Staging directory representing the package root.
 	All files must be installed under this directory.
 
-Typical workflow in *build()*:
+Example workflow:
 
 ```
 build() {
@@ -107,7 +107,7 @@ build() {
 }
 ```
 
-Always install under '$PKG', never directly into _/usr_.
+Always install under '$PKG', never directly into system directories.
 
 Avoid redefining *pkgmk*(8) internal functions or variables.
 
@@ -134,7 +134,7 @@ It is parsed by *pkgman*(1) and related tools.
 	Short factual description of the software (no trailing dot).
 
 *Maintainer*
-	Name and e-mail (may be obfuscated).
+	Name and e-mail (obfuscated if preferred).
 
 *URL*
 	Project website.
@@ -154,8 +154,8 @@ Example:
 # FILES
 
 _Pkgfile_
-	Package build description.
-	Located in the package source directory.
+	The package build script, located in the package's source
+	directory.
 
 # EXAMPLES
 
@@ -189,14 +189,16 @@ build() {
 
 # SEE ALSO
 
+*sh*(1p),
+*dash*(1)
+
 *pkgmk*(8),
 *pkgmk.conf*(5),
 *pkgmk.32bit*(5),
-*pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
-*pkgmk.nostrip*(5),
-*sh*(1p),
-*dash*(1),
+*pkgmk.footprint*(5),
+*pkgmk.nostrip*(5)
+
 *packages*(7),
 *packaging*(7)
 
@@ -205,6 +207,6 @@ build() {
 The _Pkgfile_ is executed as a shell script.
 This allows powerful constructs (functions, loops, conditionals), but
 also means that syntax errors or unsafe commands can break the build.
-Keep _Pkgfile_ minimal and reproducible.
+Keep _Pkgfile_ minimal, reproducible, and auditable.
 
 ; vim: ft=scdoc cc=72 tw=70

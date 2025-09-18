@@ -10,39 +10,31 @@ pkgmk.conf - configuration file for pkgmk
 
 # DESCRIPTION
 
-The _pkgmk.conf_ file is a POSIX *sh*(1p) script read by *pkgmk*(8) at
-startup.
-It sets environment variables that control package building.
+The _pkgmk.conf_ file controls the behavior of *pkgmk*(8).
+It defines variables that affect how packages are built,
+archived, and compressed.
+This file is read and evaluated at runtime, after the _Pkgfile_ but
+before the build process begins.
 
 # FILE FORMAT
 
-The file consists of lines of the form:
-
-```
-name=value
-export name=value
-```
-
-Comments begin with a hash ('*#*') and extend to the end of the line.
-
-Since _pkgmk.conf_ is interpreted by the shell, normal shell syntax
-may be used.
-This includes variable expansion, command substitution, and
-conditional statements such as *case* or *if*.
-Functions, loops, and other POSIX *sh*(1p) constructs are also
+The file is a POSIX *sh*(1p) script consisting of variable
+assignments.
+Lines beginning with a hash ('*#*') are comments and are ignored.
+Standard shell syntax, including quoting and variable expansion, is
 permitted.
 
-If an option is unset, *pkgmk*(8) uses its built-in default.
+## Variables
 
-The following variables are recognised:
+The following variables are recognized:
 
 *export CFLAGS*=<STRING>
-	Set C compiler options.
+	C compiler options.
 
 	Default: unset.
 
 *export CXXFLAGS*=<STRING>
-	Set C++ compiler options.
+	C++ compiler options.
 
 	Default: unset.
 
@@ -73,7 +65,7 @@ The following variables are recognised:
 	Default: current directory of _Pkgfile_.
 
 *PKGMK_WORK_DIR*=<DIR>
-	Set directory for building packages.
+	Working directory for building packages.
 
 	Default: "_foo_/work", where _foo_ is the current directory of
 	_Pkgfile_.
@@ -123,6 +115,24 @@ The following variables are recognised:
 
 	Default: no.
 
+*PKGMK_ARCHIVE_FORMAT*=<gnutar | pax | ustar | v7>
+	Archive format for packages.
+
+	Supported formats:
+
+	```
+	Format   Description
+	------   -----------
+	gnutar   GNU tar format
+	pax      POSIX 1003.1-2001 (pax) format
+	ustar    POSIX 1003.1-1988 (ustar) format
+	v7       Old V7 tar format
+	```
+
+	Default: gnutar.
+
+	See *packages*(7) and *libarchive-formats*(5) for details.
+
 *PKGMK_COMPRESSION_MODE*=<gz | bz2 | xz | lz | zst>
 	Compression mode for packages.
 
@@ -140,28 +150,16 @@ The following variables are recognised:
 
 	Default: gz.
 
-*PKGMK_ARCHIVE_FORMAT*=<gnutar | pax | ustar | v7>
-	Archive format for packages.
+	See *packages*(7) and *libarchive-formats*(5) for details.
 
-	Supported formats:
-
-	```
-	Format   Description
-	------   -----------
-	gnutar   GNU tar format
-	pax      POSIX 1003.1-2001 (pax) format
-	ustar    POSIX 1003.1-1988 (ustar) format
-	v7       Old V7 tar format
-	```
-
-	Default: gnutar.
-
-	See *libarchive-formats*(5) for details.
+If an option is unset, *pkgmk*(8) uses its built-in default.
+Distributions may ship a default _pkgmk.conf_ with values tuned for
+their policies.
 
 # FILES
 
 _/etc/pkgmk.conf_
-	Configuration file.
+	The default configuration file.
 
 # EXAMPLES
 
@@ -199,13 +197,15 @@ esac
 
 # SEE ALSO
 
+*libarchive-formats*(5)
+
 *pkgmk*(8),
-*pkgmk.32bit*(5),
 *pkgmk.Pkgfile*(5),
-*pkgmk.footprint*(5),
 *pkgmk.md5sum*(5),
+*pkgmk.footprint*(5),
 *pkgmk.nostrip*(5),
-*libarchive-formats*(5),
+*pkgmk.32bit*(5)
+
 *packages*(7),
 *packaging*(7)
 

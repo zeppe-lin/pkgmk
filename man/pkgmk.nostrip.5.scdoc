@@ -2,7 +2,7 @@ PKGMK.NOSTRIP(5)
 
 # NAME
 
-pkgmk.nostrip - exceptions for stripping binaries and libraries
+pkgmk.nostrip - exceptions to binary stripping during packaging
 
 # SYNOPSIS
 
@@ -10,41 +10,33 @@ pkgmk.nostrip - exceptions for stripping binaries and libraries
 
 # DESCRIPTION
 
-The _.nostrip_ file lists files that should not have debug symbols
-stripped during package creation.
-By default, *pkgmk*(8) runs *strip*(1) on binaries and libraries to
-reduce package size; files matching patterns in this file are
-excluded from that step.
+The _.nostrip_ file lists file paths or patterns that *pkgmk*(8) must
+*not* strip of debug symbols.
+By default, *pkgmk*(8) strips binaries and shared libraries to reduce
+package size.
+This file provides a mechanism to override that behavior for specific
+files where symbols must be preserved for debugging or other purposes.
 
 # FILE FORMAT
 
-The file is plain text, one pattern per line.
-Paths are relative to the package root ('$PKG').
+The file is plain text, with one entry per line.
+Each entry is a path or pattern relative to the package root.
 
-Empty lines are ignored.
-Lines beginning with a hash ('*#*') are comments.
+Blank lines and lines beginning with a hash ('*#*') are ignored.
+
 Patterns are interpreted as basic regular expressions, as understood
 by *grep*(1).
 
 # FILES
 
 _.nostrip_
-	Exclusions for the strip stage.
-	Located in the package source directory alongside the
-	_Pkgfile_.
-
-# NOTES
-
-Patterns use basic regular expressions as understood by *grep*(1).
-Escape metacharacters when matching literal text.
-
-The _.nostrip_ file is intended for exceptional cases such as
-debugging tools or libraries that must retain symbols.
-Overuse may lead to unnecessarily large packages.
+	A file containing patterns for binaries or libraries to be
+	excluded from stripping.
+	It is located in the same directory as the _Pkgfile_.
 
 # EXAMPLES
 
-Example _.nostrip_ file:
+A _.nostrip_ file with several examples:
 
 ```
 # Exclude a specific binary
@@ -65,13 +57,24 @@ usr/lib/debug-tools/
 
 # SEE ALSO
 
-*pkgmk*(8),
-*pkgmk.32bit*(5),
-*pkgmk.Pkgfile*(5),
-*pkgmk.conf*(5),
-*pkgmk.footprint*(5),
-*pkgmk.md5sum*(5),
 *grep*(1),
 *strip*(1)
+
+*pkgmk*(8),
+*pkgmk.conf*(5),
+*pkgmk.Pkgfile*(5),
+*pkgmk.md5sum*(5),
+*pkgmk.footprint*(5),
+*pkgmk.32bit*(5)
+
+*packages*(7),
+*packaging*(7)
+
+# CAVEATS
+
+Use _.nostrip_ sparingly.
+Preserving debug symbols increases package size.
+Restrict exceptions to debugging tools or cases where stripping breaks
+functionality.
 
 ; vim: ft=scdoc cc=72 tw=70
