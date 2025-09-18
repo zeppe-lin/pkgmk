@@ -37,7 +37,7 @@ described in packages(7).
 The options are as follows.
 Command-line options always override defaults in *pkgmk.conf*(5).
 
-## General
+## General options
 
 *-cf* _config-file_, *--config-file*=_config-file_
 	Use an alternate configuration file.
@@ -55,21 +55,19 @@ Command-line options always override defaults in *pkgmk.conf*(5).
 These options perform a single task and then exit.
 They cannot be combined with build modifiers, unless noted.
 
-*-do*, *--download-only*
-	Download missing sources only, then exit.
-
-*-eo*, *--extract-only*
-	Download and extract sources to the work directory, then exit.
+*-c*, *--clean*
+	Remove the built package and downloaded sources, then exit.
 
 *-cm*, *--check-md5sum*
 	Verify source checksums against _.md5sum_, then exit.
 
 	May be combined with *-d*.
 
-*-um*, *--update-md5sum*
-	Regenerate _.md5sum_ from current sources, then exit.
+*-do*, *--download-only*
+	Download missing sources only, then exit.
 
-	May be combined with *-d*.
+*-eo*, *--extract-only*
+	Download and extract sources to the work directory, then exit.
 
 *-uf*, *--update-footprint*
 	Update _.footprint_ with the file list from the last built
@@ -78,11 +76,13 @@ They cannot be combined with build modifiers, unless noted.
 	Use this to accept the last build as correct when the
 	footprint check failed.
 
+*-um*, *--update-md5sum*
+	Regenerate _.md5sum_ from current sources, then exit.
+
+	May be combined with *-d*.
+
 *-utd*, *--up-to-date*
 	Check if the package is up to date, then exit.
-
-*-c*, *--clean*
-	Remove the built package and downloaded sources, then exit.
 
 ## Build modifiers
 
@@ -113,20 +113,20 @@ They may be combined freely.
 *-f*, *--force*
 	Rebuild even if the package is up to date.
 
-*-ns*, *--no-strip*
-	Do not strip binaries and libraries.
-
-*-kw*, *--keep-work*
-	Keep the temporary working directory after build.
+*-if*, *--ignore-footprint*
+	Build without checking footprint.
 
 *-im*, *--ignore-md5sum*
 	Build without verifying source checksums.
 
-*-if*, *--ignore-footprint*
-	Build without checking footprint.
-
 *-in*, *--ignore-new*
 	Build, ignoring new files reported in footprint mismatch.
+
+*-kw*, *--keep-work*
+	Keep the temporary working directory after build.
+
+*-ns*, *--no-strip*
+	Do not strip binaries and libraries.
 
 # FILES
 
