@@ -25,6 +25,8 @@ Next Release
 No milestone
 ------------
 
+- [ ] -in (--ignore-new) documented in man page but not implemented.
+
 - [ ] rework command-line options? add `--compress-format <format>`
   option?  Note that these changes need update pkgman's manual pages.
 
