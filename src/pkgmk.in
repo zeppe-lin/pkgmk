@@ -849,31 +849,36 @@ build_needed() {
 # print_help - Print the help message to stdout.
 print_help() {
 	cat <<EOF
-Usage: pkgmk [options]
+Usage: pkgmk [-cf FILE] -do | -eo [-d] | -cm [-d] | -um [-d] | -uf | -utd | -c
+       pkgmk [-cf FILE] [-f] [-ns] [-kw] [-af FMT] [-d] [-im] [-if] [-in]
+       pkgmk -h | -v
 Build an installable software package.
 
 Mandatory arguments to long options are mandatory for short options too.
-  -d,  --download             Download missing source files
-  -do, --download-only        Download missing sources only and exit
-  -eo, --extract-only         Download and extract sources to the work
-                              directory without building, and exit
-  -utd,--up-to-date           Check if the package is up to date and exit
-  -uf, --update-footprint     Update the footprint from the current build,
-                              mark build as successful, and exit
-  -if, --ignore-footprint     Build without checking footprint
-  -in, --ignore-new           Build, ignoring new files in footprint mismatch
-  -um, --update-md5sum        Update the md5sum file using current sources
-  -im, --ignore-md5sum        Build without checking md5sum
-  -cm, --check-md5sum         Check md5sum and exit
-  -ns, --no-strip             Do not strip binaries and libraries
-  -f,  --force                Force a build even if up to date
-  -c,  --clean                Remove built package and downloaded sources
-  -kw, --keep-work            Keep the temporary working directory
-  -cf, --config-file=FILE     Use an alternate configuration file
-  -af, --archive-format=FMT   Use an alternate archive format for created
-                              packages
-  -v,  --version              Print version and exit
-  -h,  --help                 Print this message and exit
+
+General options:
+  -cf, --config-file=FILE    Use alternate configuration file
+  -h,  --help                Print this help and exit
+  -v,  --version             Print version and exit
+
+One-shot actions:
+  -c,  --clean               Remove built package and downloaded sources
+  -cm, --check-md5sum        Verify source checksums and exit
+  -do, --download-only       Download missing sources and exit
+  -eo, --extract-only        Download and extract sources and exit
+  -uf, --update-footprint    Update footprint with last build and exit
+  -um, --update-md5sum       Regenerate md5sum from current sources and exit
+  -utd, --up-to-date         Check if package is up to date and exit
+
+Build modifiers:
+  -af, --archive-format=FMT  Use alternate archive format
+  -d,  --download            Download missing sources before building
+  -f,  --force               Force rebuild even if package is up to date
+  -if, --ignore-footprint    Build without checking footprint
+  -im, --ignore-md5sum       Build without verifying source checksums
+  -in, --ignore-new          Ignore new files in footprint mismatch
+  -kw, --keep-work           Keep temporary working directory
+  -ns, --no-strip            Do not strip binaries and libraries
 EOF
 }
 
