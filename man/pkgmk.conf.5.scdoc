@@ -18,11 +18,12 @@ before the build process begins.
 
 # FILE FORMAT
 
-The file is a POSIX *sh*(1p) script consisting of variable
+The file is a POSIX *sh*(1p) script consisting primarily of variable
 assignments.
-Lines beginning with a hash ('*#*') are comments and are ignored.
-Standard shell syntax, including quoting and variable expansion, is
-permitted.
+Lines beginning with '*#*' are comments.
+Because the file is interpreted by the shell, standard syntax such as
+quoting, variable expansion, command substitution, conditionals,
+functions, and loops may also be used.
 
 ## Variables
 
@@ -211,8 +212,8 @@ esac
 
 # CAVEATS
 
-Because _pkgmk.conf_ is a shell script, it can include logic such as
-conditionals and functions.
+Since _pkgmk.conf_ is interpreted by the shell, it may include
+conditionals, functions, or other logic.
 This flexibility allows per-architecture, per-environment, or
 per-package customization, but also means that syntax errors will
 prevent *pkgmk*(8) from starting.
