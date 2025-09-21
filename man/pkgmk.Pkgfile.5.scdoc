@@ -10,32 +10,23 @@ pkgmk.Pkgfile - package build script for pkgmk
 
 # DESCRIPTION
 
-The _Pkgfile_ is a POSIX *sh*(1p) script read by *pkgmk*(8) to build a
-package.
-
-It defines the variables *name*, *version*, *release*, and *source*,
-and a *build()* function containing the commands to compile and stage
-the software in the package root directory.
+A _Pkgfile_ specifies how a software package is built by *pkgmk*(8).
+It defines package metadata and provides the build instructions that
+compile and stage files into a package root directory.
 
 # FILE FORMAT
 
-The file consists of shell variable assignments and function
-definitions.
-Comments begin with a hash ('*#*') and extend to the end of the line.
+A _Pkgfile_ is a POSIX *sh*(1p) script.
+It may contain variable assignments, function definitions, and
+standard shell constructs.
+Lines beginning with '*#*' are comments.
 
-Since _Pkgfile_ is interpreted by the shell, normal shell syntax may
-be used, including variable expansion, command substitution, and
-conditional statements such as *case* or *if*.
-Functions, loops, and other POSIX *sh*(1p) constructs are also
-permitted.
-
-The *local* keyword, while not defined by POSIX, is supported by the
-shell used to run _Pkgfile_ (typically *dash*(1)) and many other
-common shells, and may be used for function-local variables.
+The following sections describe the variables and functions recognized
+by *pkgmk*(8).
 
 ## Variables
 
-Every _Pkgfile_ must define the following variables:
+The following variables are required:
 
 *name*
 	Package name.
@@ -80,49 +71,45 @@ Every _Pkgfile_ must define the following variables:
 
 ## Functions
 
-Every _Pkgfile_ must define a *build()* function.
-This function builds the software and installs files into the staging
-directory ('$PKG').
+The following function is required:
 
-Within *build()*, the following environment is available:
+*build()*
+	Builds the software and installs files into the staging
+	directory ('*$PKG*').
 
-*$SRC*
-	Directory containing the extracted sources.
-	Typically *$SRC/$name-$version*.
+	Within *build()*, the following variables are provided:
 
-*$PKG*
-	Staging directory representing the package root.
-	All files must be installed under this directory.
+	*$SRC*
+		Directory containing extracted sources.
+	*$PKG*
+		Staging directory representing the package root.
 
-Example workflow:
+	All files must be installed under _$PKG_, never directly into
+	system directories.
 
-```
-build() {
-	cd $name-$version
+	Example:
 
-	./configure --prefix=/usr
+	```
+	build() {
+		cd $name-$version
+		./configure --prefix=/usr
+		make
+		make DESTDIR=$PKG install
+	}
+	```
 
-	make
-	make DESTDIR=$PKG install
-}
-```
+	Command failures stop the build automatically.
+	For explicit error handling, use standard shell idioms:
 
-Always install under '$PKG', never directly into system directories.
+	```
+	if ! command ... ; then
+		# Handle error
+	fi
 
-Avoid redefining *pkgmk*(8) internal functions or variables.
-
-Most command failures stop the build automatically.
-If explicit error handling is needed, use standard shell idioms:
-
-```
-if ! command ... ; then
-	# Handle the error
-fi
-
-command || {
-	# Handle the error
-}
-```
+	command || {
+		# Handle error
+	}
+	```
 
 ## Metadata header
 
