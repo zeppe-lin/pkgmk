@@ -6,13 +6,13 @@ pkgmk - build an installable software package
 
 # SYNOPSIS
 
-*pkgmk* {*-h* | *-v*}
+*pkgmk* [*-h* | *-v*]
 
-*pkgmk* [*-cf* _config-file_]
-{*-do* | *-eo* [*-d*] | *-cm* [*-d*] | *-um* [*-d*] | *-uf* | *-utd* | *-c*}
+*pkgmk* [*-cf* _config-file_]++
+      *-do* | *-eo* [*-d*] | *-cm* [*-d*] | *-um* [*-d*] | *-uf* | *-utd* | *-c*
 
-*pkgmk* [*-cf* _config-file_] [*-f*] [*-ns*] [*-kw*] \
-[*-af* _archive-format_] [*-d*] [*-im*] [*-if*] [*-in*]
+*pkgmk* [*-cf* _config-file_] [*-af* _archive-format_]++
+      [*-f*] [*-ns*] [*-kw*] [*-d*] [*-im*] [*-if*] [*-in*]
 
 # DESCRIPTION
 
