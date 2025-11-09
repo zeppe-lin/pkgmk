@@ -1,8 +1,8 @@
-PKGFILE(5)
+PKGMK.PKGFILE(5)
 
 # NAME
 
-pkgmk.Pkgfile - package build script for pkgmk
+pkgmk.Pkgfile - package build script for pkgmk(8)
 
 # SYNOPSIS
 
@@ -10,9 +10,12 @@ pkgmk.Pkgfile - package build script for pkgmk
 
 # DESCRIPTION
 
-A _Pkgfile_ specifies how a software package is built by *pkgmk*(8).
-It defines package metadata and provides the build instructions that
-compile and stage files into a package root directory.
+The _Pkgfile_ describes how a software package is built by *pkgmk*(8).
+It contains metadata, source file references, and the build procedure
+to compile and stage files into the package root directory.
+
+A _Pkgfile_ must be named exactly "Pkgfile" (capitalized, no
+extension) and reside in the package source directory.
 
 # FILE FORMAT
 
@@ -20,6 +23,7 @@ A _Pkgfile_ is a POSIX *sh*(1p) script.
 It may contain variable assignments, function definitions, and
 standard shell constructs.
 Lines beginning with '*#*' are comments.
+Shell extensions beyond POSIX *sh*(1p) are not guaranteed to work.
 
 The following sections describe the variables and functions recognized
 by *pkgmk*(8).
@@ -30,26 +34,36 @@ The following variables are required:
 
 *name*
 	Package name.
+	The directory containing the _Pkgfile_ must have the same
+	name.
 
-	The package source directory name must match this value.
-	Example: "/usr/src/pkgsrc-desktop/xterm" -> "name=xterm"
+	Example:
+
+	```
+	/usr/src/pkgsrc-desktop/xterm -> name=xterm
+	```
 
 *version*
 	Package version.
-	Corresponds to the upstream software version.
+	Matches the upstream software version.
 
 *release*
-	Package release number (incremented when the packaging changes
-	but the upstream version does not).
+	Package release number.
+	Begin at 1 and increment when packaging changes without an
+	upstream version change.
 
 *source*
-	One or more source URIs or local paths, whitespace-separated.
+	Whitespace-separated list of source files, patches, or URIs.
+	Shell variable substitution is supported.
 
-	Supports variable substitution:
+	Example:
 
 	```
 	source=http://foo.org/$name-$version.tar.gz
 	```
+
+	Using *$name* and *$version* avoids redundancy and eases
+	maintenance.
 
 	Multiple sources may be listed using quotes and newlines:
 
@@ -58,34 +72,48 @@ The following variables are required:
 	        fix-build.patch"
 	```
 
-	Files may be renamed on download with '*::*' to avoid
-	collisions:
+	Files may be renamed at download time using "*::*".
+	The left-hand side specifies the local filename; the
+	right-hand side specifies the upstream URI:
 
 	```
 	source="$name-$version.tar.gz::http://foo.org/v$version.tar.gz
 	        $name-$version.patch::http://foo.org/fix-build.patch"
 	```
 
-	Using '$name' and '$version' ensures automatic updates when
-	these variables change.
+	If no "*::*" mapping is provided, the upstream basename is
+	used as the local filename.
+	Checksums in *pkgmk.md5sum*(5) apply to the local filename.
+
+Additional variables may appear but are ignored by *pkgmk*(8).
 
 ## Functions
 
 The following function is required:
 
 *build()*
-	Builds the software and installs files into the staging
-	directory ('*$PKG*').
+	Defines the build procedure for the package.
+	Typical tasks include patching, configuring, compiling, and
+	installing into the staging directory.
 
-	Within *build()*, the following variables are provided:
+	Inside *build()*, the following variables are provided by
+	*pkgmk*(8):
 
 	*$SRC*
 		Directory containing extracted sources.
+
 	*$PKG*
 		Staging directory representing the package root.
 
-	All files must be installed under _$PKG_, never directly into
-	system directories.
+	Variables from the environment and from *pkgmk.conf*(5)
+	(such as CFLAGS, CXXFLAGS, LDFLAGS, MAKEFLAGS, and PKGMK_\*
+	settings) are also available inside *build()*.
+
+	The *build()* function runs in a subshell.
+	Commands must install files beneath *$PKG*.
+	Writing directly into system directories is an error.
+	Returning without installing into *$PKG* produces an
+	incomplete package.
 
 	Example:
 
@@ -98,8 +126,11 @@ The following function is required:
 	}
 	```
 
-	Command failures stop the build automatically.
-	For explicit error handling, use standard shell idioms:
+	Command failures stop the build automatically;
+	explicit "*set -e*" is unnecessary.
+
+	When explicit error handling is desired, conventional shell
+	idioms may be used:
 
 	```
 	if ! command ... ; then
@@ -113,64 +144,62 @@ The following function is required:
 
 ## Metadata header
 
-Although ignored by *pkgmk*(8), a metadata header is strongly
-recommended.
-It is parsed by *pkgman*(1) and related tools.
+*pkgmk*(8) does not interpret comment headers, but other tools such as
+*pkgman*(1) may use them.
+A header is recommended.
 
-*Description*
-	Short factual description of the software (no trailing dot).
-
-*Maintainer*
-	Name and e-mail (obfuscated if preferred).
-
-*URL*
-	Project website.
-
-*Depends on*
-	Space-separated list of dependencies (omit if none).
-
-Example:
+Conventional fields include:
 
 ```
-# Description: Lightweight terminal emulator
-# Maintainer:  Joe Maintainer <joe@example.org>
-# URL:         https://www.eterm.org/
-# Depends on:  imlib2
+# Description: Short factual summary without trailing dot
+# URL:         Project website
+# Maintainer:  Name <email>
+# Depends on:  Space-separated dependency list (if any)
 ```
 
 # FILES
 
 _Pkgfile_
-	The package build script, located in the package's source
-	directory.
+	Build script for the package.
+
+_.md5sum_
+	Checksums of source files.
+
+	See *pkgmk.md5sum*(5).
+
+_.footprint_
+	Manifest of installed files.
+
+	See *pkgmk.footprint*(5).
+
+_.nostrip_
+	Patterns for files excluded from stripping.
+
+	See *pkgmk.nostrip*(5).
+
+_.32bit_
+	Flag enabling 32-bit build mode.
+
+	See *pkgmk.32bit*(5).
 
 # EXAMPLES
 
-Minimal example:
+Minimal _Pkgfile_ for a simple autotools project:
 
 ```
-# Description: Concise description w/o articles and trailing dot
-# URL:         http://www.gnu.org/software/somelib/index.html
-# Maintainer:  Joe Maintainer, joe at myfantasticisp dot net
-# Depends on:  someotherlib coolness
+# Description: Example package
+# URL:         https://example.org/
 
-name=somelib
-version=1.2.3
+name=example
+version=1.0
 release=1
-source="ftp://ftp.gnu.org/gnu/$name/$name-$version.tar.gz
-	Makefile.in.patch"
+source=https://example.org/releases/$name-$version.tar.gz
 
 build() {
 	cd $name-$version
-
-	patch -p1 -i ../Makefile.in.patch
-
 	./configure --prefix=/usr
-
-	make V=1
+	make
 	make DESTDIR=$PKG install
-
-	rm -rf $PKG/usr/info
 }
 ```
 
@@ -191,9 +220,10 @@ build() {
 
 # CAVEATS
 
-The _Pkgfile_ is executed as a shell script.
-This allows powerful constructs (functions, loops, conditionals), but
-also means that syntax errors or unsafe commands can break the build.
-Keep _Pkgfile_ minimal, reproducible, and auditable.
+Because a _Pkgfile_ is sourced as a shell script, arbitrary code is
+executed.
+This permits expressive build procedures but makes correctness and
+predictability important.
+Keep _Pkgfiles_ concise and avoid unnecessary complexity.
 
 ; vim: ft=scdoc cc=72 tw=70

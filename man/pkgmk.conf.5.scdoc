@@ -2,7 +2,7 @@ PKGMK.CONF(5)
 
 # NAME
 
-pkgmk.conf - configuration file for pkgmk
+pkgmk.conf - configuration file for pkgmk(8)
 
 # SYNOPSIS
 
@@ -13,13 +13,12 @@ pkgmk.conf - configuration file for pkgmk
 The _pkgmk.conf_ file controls the behavior of *pkgmk*(8).
 It defines variables that affect how packages are built,
 archived, and compressed.
-This file is read and evaluated at runtime, after the _Pkgfile_ but
-before the build process begins.
+The file is read after the _Pkgfile_ and before the build process
+begins.
 
 # FILE FORMAT
 
-The file is a POSIX *sh*(1p) script consisting primarily of variable
-assignments.
+A POSIX *sh*(1p) script consisting primarily of variable assignments.
 Lines beginning with '*#*' are comments.
 Because the file is interpreted by the shell, standard syntax such as
 quoting, variable expansion, command substitution, conditionals,
@@ -102,7 +101,7 @@ The following variables are recognized:
 	Default: no.
 
 *PKGMK_IGNORE_MD5SUM*=<yes | no>
-	Skip md5sum check of source files.
+	Skip MD5 checksum verification of source files.
 
 	Default: no.
 
@@ -130,9 +129,9 @@ The following variables are recognized:
 	v7       Old V7 tar format
 	```
 
-	Default: gnutar.
+	See *packages*(7) and *libarchive-formats*(5).
 
-	See *packages*(7) and *libarchive-formats*(5) for details.
+	Default: gnutar.
 
 *PKGMK_COMPRESSION_MODE*=<gz | bz2 | xz | lz | zst>
 	Compression mode for packages.
@@ -149,18 +148,17 @@ The following variables are recognized:
 	zst    zstd     .pkg.tar.zst
 	```
 
+	See *packages*(7) and *libarchive-formats*(5).
+
 	Default: gz.
 
-	See *packages*(7) and *libarchive-formats*(5) for details.
-
-If an option is unset, *pkgmk*(8) uses its built-in default.
-Distributions may ship a default _pkgmk.conf_ with values tuned for
-their policies.
+If a variable is unset, *pkgmk*(8) uses its built-in default.
+Distributions may ship a tuned default _pkgmk.conf_.
 
 # FILES
 
 _/etc/pkgmk.conf_
-	The default configuration file.
+	Default configuration file.
 
 # EXAMPLES
 

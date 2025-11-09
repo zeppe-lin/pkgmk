@@ -2,7 +2,7 @@ PKGMK.NOSTRIP(5)
 
 # NAME
 
-pkgmk.nostrip - exceptions to binary stripping during packaging
+pkgmk.nostrip - files excluded from stripping during packaging
 
 # SYNOPSIS
 
@@ -10,19 +10,20 @@ pkgmk.nostrip - exceptions to binary stripping during packaging
 
 # DESCRIPTION
 
-The _.nostrip_ file lists file paths or patterns that *pkgmk*(8) must
-*not* strip of debug symbols.
+The _.nostrip_ file lists path or patterns of files that *pkgmk*(8)
+must _not_ strip of debug symbols.
+
 By default, *pkgmk*(8) strips binaries and shared libraries to reduce
 package size.
-This file provides a mechanism to override that behavior for specific
-files where symbols must be preserved for debugging or other purposes.
+The _.nostrip_ file overrides this behavior for files where symbols
+must be preserved, e.g., for debugging or tool compatibility.
 
 # FILE FORMAT
 
-The file is plain text, with one entry per line.
-Each entry is a path or pattern relative to the package root.
+Each line contains a single path or pattern relative to the package
+root.
 
-Blank lines and lines beginning with a hash ('*#*') are ignored.
+Blank lines and lines starting with '*#*' are ignored.
 
 Patterns are interpreted as basic regular expressions, as understood
 by *grep*(1).
@@ -30,13 +31,12 @@ by *grep*(1).
 # FILES
 
 _.nostrip_
-	A file containing patterns for binaries or libraries to be
-	excluded from stripping.
-	It is located in the same directory as the _Pkgfile_.
+	Manifest of files excluded from stripping.
+	Located in the package source directory.
 
 # EXAMPLES
 
-A _.nostrip_ file with several examples:
+Sample _.nostrip_ entries:
 
 ```
 # Exclude a specific binary

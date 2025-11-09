@@ -2,7 +2,7 @@ PKGMK.32BIT(5)
 
 # NAME
 
-pkgmk.32bit - a flag file for 32-bit builds
+pkgmk.32bit - enable 32-bit builds for a package
 
 # SYNOPSIS
 
@@ -10,32 +10,29 @@ pkgmk.32bit - a flag file for 32-bit builds
 
 # DESCRIPTION
 
-The _.32bit_ file is an optional flag in a package source directory.
-When present alongside the _Pkgfile_, it instructs *pkgmk*(8) to build
-the package in 32-bit mode instead of the default 64-bit mode.
+The _.32bit_ file, when present in a package source directory,
+instructs *pkgmk*(8) to build the package in 32-bit mode.
+When absent, *pkgmk*(8) defaults to 64-bit mode.
 
-By default, this mode sets the *PKGMK_ARCH* environment variable to
-"32", appends "-m32" to *CFLAGS*, *CXXFLAGS*, and *LDFLAGS*, and sets
-*PKG_CONFIG_LIBDIR* to _/usr/lib32/pkgconfig_.
+When 32-bit mode is active, *pkgmk*(8) sets the environment variable
+*PKGMK_ARCH* to "32", appends "-m32" to *CFLAGS*, *CXXFLAGS*, and
+*LDFLAGS*, and sets *PKG_CONFIG_LIBDIR* to _/usr/lib32/pkgconfig_.
+In normal 64-bit mode, *PKGMK_ARCH* is set to "64".
 
-If the _.32bit_ file is absent, *pkgmk*(8) defaults to 64-bit mode and
-sets *PKGMK_ARCH* to "64".
+Most 32-bit packages depend on their 64-bit counterpart.
+At runtime, only the 32-bit libraries under _/usr/lib32_ are
+installed.
+Headers, manual pages, and binaries remain supplied by the 64-bit
+package to avoid duplication and file conflicts.
+
+This layout provides multilib compatibility while keeping the 32-bit
+package minimal.
 
 # FILES
 
 _.32bit_
-	The flag file enabling 32-bit build mode.
-	It is located in the same directory as the _Pkgfile_.
-
-# NOTES
-
-32-bit packages typically declare a dependency on their 64-bit
-counterpart.
-At runtime, 32-bit libraries are self-contained, but headers, manual
-pages, and binaries are provided only by the primary 64-bit package.
-The 32-bit package therefore ships just the libraries under
-_/usr/lib32_, while relying on the 64-bit package for everything else.
-This avoids file conflicts and reduces duplication.
+	Flag file enabling 32-bit build mode.
+	Located in the package source directory.
 
 # EXAMPLES
 
@@ -95,9 +92,12 @@ build() {
 
 # CAVEATS
 
-The _.32bit_ flag only adjusts compiler and linker settings.
-It does not guarantee that all software can be built in 32-bit mode.
-Additional changes may be required in *pkgmk.conf*(5) or the
-_Pkgfile_.
+The _.32bit_ flag file adjusts compiler and linker settings only.
+It does not guarantee that all software can be built successfully in
+32-bit mode.
+Some packages require additional configuration in *pkgmk.conf*(5), the
+_Pkgfile_, or manual patching to support 32-bit builds.
+Complex packages that use bundled toolchains, JITs, or unusual build
+systems may need extra attention.
 
 ; vim: ft=scdoc cc=72 tw=70

@@ -2,7 +2,7 @@ PKGMK(8)
 
 # NAME
 
-pkgmk - build an installable software package
+pkgmk - build software package for installation
 
 # SYNOPSIS
 
@@ -16,26 +16,17 @@ pkgmk - build an installable software package
 
 # DESCRIPTION
 
-The *pkgmk* utility builds software into an installable package
-archives for use with *pkgadd*(8).
+The *pkgmk* utility builds software into a package archive suitable
+for installation with *pkgadd*(8).
+Each build is controlled by a _Pkgfile_ in the current directory,
+which defines sources and the build procedure.
 
-Each build is driven by a _Pkgfile_ in the current directory, which
-defines the source files to fetch and the commands to run.
+*pkgmk* downloads missing sources, verifies integrity, extracts them
+into a working directory, and executes the build instructions.
+A package is rebuilt only when its sources or the _Pkgfile_ have
+changed, unless *-f* is specified.
 
-*pkgmk* downloads any missing sources, verifies their integrity, and
-extracts them into a work directory.
-It then executes the build instructions defined in the _Pkgfile_.
-To determine if a build is necessary, *pkgmk* compares the
-last-modification times of the source files and the _Pkgfile_ with the
-timestamp of the last built package.
-If any of these files are newer, the package is rebuilt.
-Otherwise, the existing package is considered up to date unless the
-*-f* flag is specified.
-Upon a successful build, *pkgmk* creates a package archive as
-described in packages(7).
-
-The options are as follows.
-Command-line options always override defaults in *pkgmk.conf*(5).
+Options override defaults in *pkgmk.conf*(5).
 
 ## General options
 
@@ -52,11 +43,11 @@ Command-line options always override defaults in *pkgmk.conf*(5).
 
 ## One-shot actions
 
-These options perform a single task and then exit.
-They cannot be combined with build modifiers, unless noted.
+The following options perform a single task and then exit.
+They cannot be combined with build modifiers unless noted.
 
 *-c*, *--clean*
-	Remove the built package and downloaded sources, then exit.
+	Remove built package and downloaded sources, then exit.
 
 *-cm*, *--check-md5sum*
 	Verify source checksums against _.md5sum_, then exit.
@@ -67,17 +58,18 @@ They cannot be combined with build modifiers, unless noted.
 	Download missing sources only, then exit.
 
 *-eo*, *--extract-only*
-	Download and extract sources to the work directory, then exit.
+	Download and extract sources into the working directory, then
+	exit.
 
 *-uf*, *--update-footprint*
 	Update _.footprint_ with the file list from the last built
 	package, then exit.
 
-	Use this to accept the last build as correct when the
-	footprint check failed.
+	Use this to accept the previous build when a footprint check
+	has failed.
 
 *-um*, *--update-md5sum*
-	Regenerate _.md5sum_ from current sources, then exit.
+	Regenerate _.md5sum_ from the current sources, then exit.
 
 	May be combined with *-d*.
 
@@ -86,11 +78,11 @@ They cannot be combined with build modifiers, unless noted.
 
 ## Build modifiers
 
-These options adjust how a normal build is performed.
-They may be combined freely.
+These options alter how a normal build proceeds.
+They may be freely combined.
 
 *-af* _archive-format_, *--archive-format*=_archive-format_
-	Use an alternate archive format for created packages.
+	Use an alternate package archive format.
 
 	Supported formats:
 
@@ -111,56 +103,56 @@ They may be combined freely.
 	Download missing source files before building.
 
 *-f*, *--force*
-	Rebuild even if the package is up to date.
+	Rebuild even if the package is already up to date.
 
 *-if*, *--ignore-footprint*
-	Build without checking footprint.
+	Build without performing a footprint check.
 
 *-im*, *--ignore-md5sum*
 	Build without verifying source checksums.
 
 *-in*, *--ignore-new*
-	Build, ignoring new files reported in footprint mismatch.
+	Proceed with build, ignoring new files reported during a
+	footprint mismatch.
 
 *-kw*, *--keep-work*
-	Keep the temporary working directory after build.
+	Keep the temporary working directory after the build
+	completes.
 
 *-ns*, *--no-strip*
-	Do not strip binaries and libraries.
+	Do not strip binaries or libraries.
 
 # FILES
 
 _/etc/pkgmk.conf_
-	The default configuration file.
+	Default configuration file.
 
 	See *pkgmk.conf*(5).
 
 _Pkgfile_
-	The build script for a package.
+	Build script describing a package.
 
 	See *pkgmk.Pkgfile*(5).
 
 _.md5sum_
-	A file containing checksums for source files.
+	Checksums of source files.
 
 	See *pkgmk.md5sum*(5).
 
 _.footprint_
-	A record of files included in a built package.
+	Manifest of files included in a built package.
 
 	See *pkgmk.footprint*(5).
 
 _.nostrip_
-	A file listing exceptions for stripping binaries and
-	libraries.
+	Patterns for files excluded from stripping.
 
 	See *pkgmk.nostrip*(5).
 
 _.32bit_
-	A flag file enabling 32-bit build mode.
+	Flag for enabling 32-bit build mode.
 
 	See *pkgmk.32bit*(5).
-
 
 # EXIT STATUS
 
@@ -171,8 +163,7 @@ The *pkgmk* utility exits with one of the following values:
 *1*
 	General error.
 *2*
-	Invalid _Pkgfile_
-	(missing required variables or functions).
+	Invalid _Pkgfile_ (missing required variables or functions).
 *3*
 	Missing directory or permission error
 	(source/build directories).
@@ -183,7 +174,7 @@ The *pkgmk* utility exits with one of the following values:
 *6*
 	MD5 checksum verification failed.
 *7*
-	Package footprint check failed.
+	Footprint check failed.
 *8*
 	Error during execution of the *build()* function.
 *130*
@@ -215,12 +206,12 @@ The *pkgmk* utility exits with one of the following values:
 
 # SECURITY CONSIDERATIONS
 
-The *pkgmk* utility must *not* be run as the real superuser.
+*pkgmk* must *not* be run as the real superuser.
 Builds should be performed under *fakeroot*(8) or an equivalent
-environment, which records ownership and modes without requiring
-actual root privileges.
-Running *pkgmk* as root risks allowing untrusted build scripts to
-alter system files.
+environment.
+Running as root risks allowing untrusted build scripts to alter system
+files.
+
 Always confine builds to a dedicated user and controlled working
 directory.
 
