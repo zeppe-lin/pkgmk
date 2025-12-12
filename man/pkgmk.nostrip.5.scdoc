@@ -2,7 +2,7 @@ PKGMK.NOSTRIP(5)
 
 # NAME
 
-pkgmk.nostrip - files excluded from stripping during packaging
+pkgmk.nostrip - list of files excluded from stripping by pkgmk
 
 # SYNOPSIS
 
@@ -13,8 +13,8 @@ pkgmk.nostrip - files excluded from stripping during packaging
 The _.nostrip_ file lists path or patterns of files that *pkgmk*(8)
 must _not_ strip of debug symbols.
 
-By default, *pkgmk*(8) strips binaries and shared libraries to reduce
-package size.
+By default, *pkgmk*(8) strips binaries and shared libraries using
+*strip*(1) to reduce package size.
 The _.nostrip_ file overrides this behavior for files where symbols
 must be preserved, e.g., for debugging or tool compatibility.
 
@@ -22,17 +22,18 @@ must be preserved, e.g., for debugging or tool compatibility.
 
 Each line contains a single path or pattern relative to the package
 root.
-
 Blank lines and lines starting with '*#*' are ignored.
 
 Patterns are interpreted as basic regular expressions, as understood
 by *grep*(1).
+Contributors should note that these are BREs (Basic Regular
+Expressions), not extended forms.
 
 # FILES
 
 _.nostrip_
-	Manifest of files excluded from stripping.
-	Located in the package source directory.
+	Manifest file in package source directory; lists files
+	excluded from stripping.
 
 # EXAMPLES
 
@@ -49,16 +50,13 @@ usr/lib/libunistripped.so
 usr/lib/debug-tools/
 
 # Exclude dotfiles (note the escaped dot)
-^\..*
+^\\..*
 
 # Exclude everything
 .*
 ```
 
 # SEE ALSO
-
-*grep*(1),
-*strip*(1)
 
 *pkgmk*(8),
 *pkgmk.conf*(5),
@@ -67,13 +65,16 @@ usr/lib/debug-tools/
 *pkgmk.footprint*(5),
 *pkgmk.32bit*(5)
 
+*grep*(1),
+*strip*(1),
 *packages*(7),
 *packaging*(7)
 
 # CAVEATS
 
 Use _.nostrip_ sparingly.
-Preserving debug symbols increases package size.
+Preserving debug symbols increases package size and may reduce
+reproducibility, as debug sections vary across toolchains and builds.
 Restrict exceptions to debugging tools or cases where stripping breaks
 functionality.
 

@@ -2,31 +2,33 @@ PKGMK(8)
 
 # NAME
 
-pkgmk - build software package for installation
+pkgmk - build a software package suitable for installation
 
 # SYNOPSIS
 
 *pkgmk* [*-h* | *-v*]
 
-*pkgmk* [*-cf* _config-file_]++
-      *-do* | *-eo* [*-d*] | *-cm* [*-d*] | *-um* [*-d*] | *-uf* | *-utd* | *-c*
+*pkgmk* [*-cf* _config-file_] *-do* | *-eo* [*-d*] | *-cm* [*-d*] | \
+      *-um* [*-d*] | *-uf* | *-utd* | *-c*
 
-*pkgmk* [*-cf* _config-file_] [*-af* _archive-format_]++
+*pkgmk* [*-cf* _config-file_] [*-af* _archive-format_] \
       [*-f*] [*-ns*] [*-kw*] [*-d*] [*-im*] [*-if*] [*-in*]
 
 # DESCRIPTION
 
 The *pkgmk* utility builds software into a package archive suitable
 for installation with *pkgadd*(8).
-Each build is controlled by a _Pkgfile_ in the current directory,
-which defines sources and the build procedure.
+Each build is driven by a _Pkgfile_ in the current directory that
+defines sources, build steps, and metadata.
 
-*pkgmk* downloads missing sources, verifies integrity, extracts them
-into a working directory, and executes the build instructions.
-A package is rebuilt only when its sources or the _Pkgfile_ have
-changed, unless *-f* is specified.
+*pkgmk* handles downloading missing sources, verifying checksums,
+extracting sources into a working directory, executing the build
+procedure defined in the _Pkgfile_, and finally packaging the staged
+files.
 
-Options override defaults in *pkgmk.conf*(5).
+A package is rebuilt only when its sources or _Pkgfile_ have changed,
+unless *-f* is specified.
+Options override defaults from _pkgmk.conf_(5).
 
 ## General options
 
@@ -44,7 +46,7 @@ Options override defaults in *pkgmk.conf*(5).
 ## One-shot actions
 
 The following options perform a single task and then exit.
-They cannot be combined with build modifiers unless noted.
+Can combine with *-d* where noted.
 
 *-c*, *--clean*
 	Remove built package and downloaded sources, then exit.
@@ -58,8 +60,9 @@ They cannot be combined with build modifiers unless noted.
 	Download missing sources only, then exit.
 
 *-eo*, *--extract-only*
-	Download and extract sources into the working directory, then
-	exit.
+	Extract sources into the working directory, then exit.
+
+	May be combined with *-d*.
 
 *-uf*, *--update-footprint*
 	Update _.footprint_ with the file list from the last built
@@ -117,7 +120,7 @@ They may be freely combined.
 
 *-kw*, *--keep-work*
 	Keep the temporary working directory after the build
-	completes.
+	completes or failures.
 
 *-ns*, *--no-strip*
 	Do not strip binaries or libraries.
@@ -125,32 +128,44 @@ They may be freely combined.
 # FILES
 
 _/etc/pkgmk.conf_
-	Default configuration file.
+	System-wide configuration file; defines default build,
+	packaging, and environment variables.
 
 	See *pkgmk.conf*(5).
 
+The following files reside in the package source directory
+(where *pkgmk* is invoked):
+
 _Pkgfile_
-	Build script describing a package.
+	Mandatory build script declaring package metadata, source
+	references, and the required *build()* procedure.
 
 	See *pkgmk.Pkgfile*(5).
 
 _.md5sum_
-	Checksums of source files.
+	Optional checksum manifest listing MD5 digests of sources in
+	the _Pkgfile_; used to detect accidental corruption or
+	mismatched downloads.
 
 	See *pkgmk.md5sum*(5).
 
 _.footprint_
-	Manifest of files included in a built package.
+	Optional build manifest recording files, directories, and
+	symbolic links produced by the build; used to verify
+	reproducibility and detect unexpected changes.
 
 	See *pkgmk.footprint*(5).
 
 _.nostrip_
-	Patterns for files excluded from stripping.
+	Optional user-maintained exclusion list for *strip*(1);
+	contains paths or BRE patterns of files that must not be
+	stripped.
 
 	See *pkgmk.nostrip*(5).
 
 _.32bit_
-	Flag for enabling 32-bit build mode.
+	Optional flag file; presence enables 32-bit build mode and
+	adjusts compiler, linker, and package environment.
 
 	See *pkgmk.32bit*(5).
 
@@ -165,8 +180,7 @@ The *pkgmk* utility exits with one of the following values:
 *2*
 	Invalid _Pkgfile_ (missing required variables or functions).
 *3*
-	Missing directory or permission error
-	(source/build directories).
+	Missing source/build directory or insufficient permissions.
 *4*
 	Failed to download sources.
 *5*
@@ -182,8 +196,6 @@ The *pkgmk* utility exits with one of the following values:
 
 # SEE ALSO
 
-*libarchive-formats*(5)
-
 *pkgmk.conf*(5),
 *pkgmk.Pkgfile*(5),
 *pkgmk.md5sum*(5),
@@ -191,6 +203,7 @@ The *pkgmk* utility exits with one of the following values:
 *pkgmk.nostrip*(5),
 *pkgmk.32bit*(5)
 
+*libarchive-formats*(5),
 *packages*(7),
 *packaging*(7)
 

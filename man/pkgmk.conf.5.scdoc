@@ -2,7 +2,7 @@ PKGMK.CONF(5)
 
 # NAME
 
-pkgmk.conf - configuration file for pkgmk(8)
+pkgmk.conf - system-wide configuration file for pkgmk
 
 # SYNOPSIS
 
@@ -57,18 +57,18 @@ The following variables are recognized:
 *PKGMK_SOURCE_DIR*=<DIR>
 	Directory for downloaded source files.
 
-	Default: current directory of _Pkgfile_.
+	Default: package source directory containing the _Pkgfile_.
 
 *PKGMK_PACKAGE_DIR*=<DIR>
 	Directory for built packages.
 
-	Default: current directory of _Pkgfile_.
+	Default: package source directory containing the _Pkgfile_.
 
 *PKGMK_WORK_DIR*=<DIR>
 	Working directory for building packages.
 
-	Default: "_foo_/work", where _foo_ is the current directory of
-	_Pkgfile_.
+	Default: "_foo_/work", where _foo_ is the package source
+	directory.
 
 *PKGMK_DOWNLOAD*=<yes | no>
 	Download source files if necessary.
@@ -120,14 +120,14 @@ The following variables are recognized:
 
 	Supported formats:
 
-	```
-	Format   Description
-	------   -----------
-	gnutar   GNU tar format
-	pax      POSIX 1003.1-2001 (pax) format
-	ustar    POSIX 1003.1-1988 (ustar) format
-	v7       Old V7 tar format
-	```
+	gnutar
+		GNU tar format.
+	pax
+		POSIX 1003.1-2001 (pax) format.
+	ustar
+		POSIX 1003.1-1988 (ustar) format.
+	v7
+		Old V7 tar format.
 
 	See *packages*(7) and *libarchive-formats*(5).
 
@@ -138,15 +138,16 @@ The following variables are recognized:
 
 	Supported modes:
 
-	```
-	Mode   Format   Extension
-	----   ------   ---------
-	gz     gzip     .pkg.tar.gz
-	bz2    bzip2    .pkg.tar.bz2
-	xz     xz       .pkg.tar.xz
-	lz     lzip     .pkg.tar.lz
-	zst    zstd     .pkg.tar.zst
-	```
+	gz
+		Gzip compression, yielding _.pkg.tar.gz_.
+	bz2
+		Bzip2 compression, yielding _.pkg.tar.bz2_.
+	xz
+		XZ compression, yielding _.pkg.tar.xz_.
+	lz
+		Lzip compression, yielding _.pkg.tar.lz_.
+	zst
+		Zstd compression, yielding _.pkg.tar.zst_.
 
 	See *packages*(7) and *libarchive-formats*(5).
 

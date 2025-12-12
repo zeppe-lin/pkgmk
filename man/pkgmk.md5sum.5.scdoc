@@ -2,7 +2,7 @@ PKGMK.MD5SUM(5)
 
 # NAME
 
-pkgmk.md5sum - checksums to verify source integrity
+pkgmk.md5sum - checksum manifest for source files used by pkgmk
 
 # SYNOPSIS
 
@@ -12,8 +12,8 @@ pkgmk.md5sum - checksums to verify source integrity
 
 The _.md5sum_ file lists MD5 checksums for all source files used by
 *pkgmk*(8).
-It ensures source integrity by detecting accidental corruption or
-mismatched sources.
+It ensures source integrity by detecting accidental corruption,
+mismatched downloads, or unintended source changes.
 
 During a build, *pkgmk*(8) calculates the checksum of each source file
 and compares it against the value in _.md5sum_.
@@ -38,12 +38,13 @@ checksum  filename
 
 Fields are whitespace-separated.
 Blank lines and lines starting with '*#*' are ignored.
-The format matches the output of *md5sum*(1).
+The format matches the output of *md5sum*(1), with the checksum
+preceding the filename separated by two spaces.
 
 # FILES
 
 _.md5sum_
-	Checksum manifest, located in the package source directory.
+	Checksum manifest for source files.
 
 # EXAMPLES
 

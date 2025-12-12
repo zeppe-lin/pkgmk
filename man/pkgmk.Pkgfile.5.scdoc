@@ -2,7 +2,7 @@ PKGMK.PKGFILE(5)
 
 # NAME
 
-pkgmk.Pkgfile - package build script for pkgmk(8)
+pkgmk.Pkgfile - package build script for pkgmk
 
 # SYNOPSIS
 
@@ -49,8 +49,17 @@ The following variables are required:
 
 *release*
 	Package release number.
-	Begin at 1 and increment when packaging changes without an
-	upstream version change.
+	Begin at *1*, and increment only when the packaging changes
+	while the upstream software version stays the same.
+
+	A release bump is appropriate when fixing issues in the build
+	script, adjusting installation paths, updating or adding
+	patches, or changing auxiliary packaging files (such as
+	service scripts, cron snippets, or configuration templates).
+
+	The purpose of the release number is to signal that the
+	_packaged form_ of the software has changed, even though the
+	upstream version has not.
 
 *source*
 	Whitespace-separated list of source files, patches, or URIs.
@@ -85,7 +94,7 @@ The following variables are required:
 	used as the local filename.
 	Checksums in *pkgmk.md5sum*(5) apply to the local filename.
 
-Additional variables may appear but are ignored by *pkgmk*(8).
+Additional variables may appear, but are ignored by *pkgmk*(8).
 
 ## Functions
 
@@ -106,8 +115,8 @@ The following function is required:
 		Staging directory representing the package root.
 
 	Variables from the environment and from *pkgmk.conf*(5)
-	(such as CFLAGS, CXXFLAGS, LDFLAGS, MAKEFLAGS, and PKGMK_\*
-	settings) are also available inside *build()*.
+	(such as *CFLAGS*, *CXXFLAGS*, *LDFLAGS*, *MAKEFLAGS*, and
+	*PKGMK_\** settings) are also available inside *build()*.
 
 	The *build()* function runs in a subshell.
 	Commands must install files beneath *$PKG*.
@@ -126,8 +135,8 @@ The following function is required:
 	}
 	```
 
-	Command failures stop the build automatically;
-	explicit "*set -e*" is unnecessary.
+	Command failures stop the build automatically; explicit
+	"*set -e*" is unnecessary.
 
 	When explicit error handling is desired, conventional shell
 	idioms may be used:
@@ -160,25 +169,26 @@ Conventional fields include:
 # FILES
 
 _Pkgfile_
-	Build script for the package.
+	Package build script defining sources, metadata, and build
+	procedure.
 
 _.md5sum_
-	Checksums of source files.
+	Checksums for sources declared in _Pkgfile_.
 
 	See *pkgmk.md5sum*(5).
 
 _.footprint_
-	Manifest of installed files.
+	Manifest of files produced by the build.
 
 	See *pkgmk.footprint*(5).
 
 _.nostrip_
-	Patterns for files excluded from stripping.
+	Patterns of files excluded from stripping.
 
 	See *pkgmk.nostrip*(5).
 
 _.32bit_
-	Flag enabling 32-bit build mode.
+	Flag file enabling 32-bit builds for this package.
 
 	See *pkgmk.32bit*(5).
 
@@ -218,12 +228,23 @@ build() {
 *packages*(7),
 *packaging*(7)
 
+# SECURITY CONSIDERATIONS
+
+A _Pkgfile_ is sourced as shell code, meaning all commands it contains
+will be executed.
+For safety, keep all work within *$SRC* and install only into *$PKG*;
+a _Pkgfile_ must never modify real system paths.
+
+Builds do not run as root, so Pkgfiles must not rely on elevated
+privileges (they run under *fakeroot*(8) or equivalent).
+
 # CAVEATS
 
-Because a _Pkgfile_ is sourced as a shell script, arbitrary code is
-executed.
-This permits expressive build procedures but makes correctness and
-predictability important.
-Keep _Pkgfiles_ concise and avoid unnecessary complexity.
+Keep Pkgfiles simple and predictable.
+Prefer portable POSIX shell, avoid extensions, and limit side effects
+to *$SRC* and *$PKG*.
+
+Complex, non-portable, or stateful logic makes builds harder to
+understand, review, and reproduce.
 
 ; vim: ft=scdoc cc=72 tw=70

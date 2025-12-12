@@ -2,7 +2,8 @@ PKGMK.FOOTPRINT(5)
 
 # NAME
 
-pkgmk.footprint - file manifest used by pkgmk
+pkgmk.footprint - manifest of files, directories, and symlinks \
+produced by pkgmk
 
 # SYNOPSIS
 
@@ -62,7 +63,8 @@ target.
 # FILES
 
 _.footprint_
-	Manifest file, located in the package source directory.
+	Manifest file in package source directory; records package
+	contents.
 
 # EXAMPLES
 
@@ -111,5 +113,8 @@ Differences between systems or *pkginfo* versions can cause
 mismatches.
 ; *pkgmk*(8) performs only a line-by-line comparison and may not
 ; handle complex format variations.
+
+Contributors should regenerate the footprint after intentional changes
+to avoid false mismatches.
 
 ; vim: ft=scdoc cc=72 tw=70
