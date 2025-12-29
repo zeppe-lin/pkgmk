@@ -1,6 +1,6 @@
 #!/bin/sh
 # pkgmk - build an installable software package
-# See COPYING and COPYRIGHT files for corresponding information.
+# See COPYING for license terms and COPYRIGHT for notices.
 
 # Intentional: allow "local"s declaration.
 # https://www.shellcheck.net/wiki/SC3043
@@ -13,15 +13,15 @@
 
 # https://tldp.org/LDP/abs/html/exitcodes.html
 readonly E_GENERAL=1     # General error
-readonly E_PKGFILE=2     # Invalid Pkgfile (missing variables/functions)
-readonly E_DIR_PERM=3    # Directory missing or permission error (source/build directories)
-readonly E_DOWNLOAD=4    # Error during source file download
-readonly E_UNPACK=5      # Error during source file unpacking
+readonly E_PKGFILE=2     # Invalid Pkgfile (missing variables or functions)
+readonly E_DIR_PERM=3    # Missing source/build directory or insufficient permissions
+readonly E_DOWNLOAD=4    # Failed to download sources
+readonly E_UNPACK=5      # Failed to unpack sources
 readonly E_MD5=6         # MD5 checksum verification failed
-readonly E_FOOTPRINT=7   # Footprint check failure
-readonly E_BUILD=8       # Error during package 'build()' function execution
+readonly E_FOOTPRINT=7   # Footprint check failed
+readonly E_BUILD=8       # Error during execution of 'build()' function
 #readonly E_CMDEXEC=126  # Command invoked cannot execute
-readonly E_INTERRUPT=130 # Script interrupted or terminated by C-c
+readonly E_INTERRUPT=130 # Interrupted or terminated by C-c
 
 ######################################################################
 # Section: Notification helpers                                      #
