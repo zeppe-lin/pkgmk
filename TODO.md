@@ -5,9 +5,6 @@ TODO pkgmk
 Next Release
 ------------
 
-- [ ] Reflect `pkgman-readme(7)` & `pkgman-runscripts(7)` in pkgmk's
-  manual pages?
-
 - [ ] Document any exported to `pkgmk.conf` variables and functions,
   like `error()`, `$E_GENERAL`, etc? Where?
 
@@ -58,4 +55,10 @@ Done
 - [x] Reflect new manual pages in the handbook.
 
 - [x] Refine new manual pages.  Look how well they link to each other.
+
+- [x] Reflect `pkgman-readme(7)` & `pkgman-runscripts(7)` in pkgmk's
+  manual pages?
+  Done: Reflected in pkgman's packaging(7) manual page.  More
+  appropriate location.
+
 
