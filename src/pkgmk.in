@@ -552,15 +552,16 @@ compress_manpages() {
 	local __FILE=
 	local __TARGET=
 	local __DIR=
+	local __COMPRESSOR="gzip"
+	if command -v pigz >/dev/null 2>&1; then
+		__COMPRESSOR="pigz"
+	fi
 
 	cd "$PKG"
 
 	# Compress regular manpage files.
-	find . -type f -path "*/man/man*/*" | while read -r __FILE; do
-		if [ "$__FILE" = "${__FILE%%.gz}" ]; then
-			gzip -9 "$__FILE"
-		fi
-	done
+	find . -type f -path "*/man/man*/*" ! -name '*.gz' \
+		-exec $__COMPRESSOR -9 {} +
 
 	# Re-link manpage symlinks to point to compressed versions.
 	find . -type l -path "*/man/man*/*" | while read -r __FILE; do
@@ -712,7 +713,13 @@ build_package() {
 		# Determine compression extension based on specified
 		# PKGMK_COMPRESSION_MODE:
 		case $PKGMK_COMPRESSION_MODE in
-		 gz) __COMPRESSION="-z"     ;;
+		 gz)
+			if command -v pigz >/dev/null 2>&1; then
+				__COMPRESSION="--use-compress-program=pigz"
+			else
+				__COMPRESSION="-z"
+			fi
+			;;
 		bz2) __COMPRESSION="-j"     ;;
 		 xz) __COMPRESSION="-J"     ;;
 		 lz) __COMPRESSION="--lzip" ;;

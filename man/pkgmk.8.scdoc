@@ -194,6 +194,12 @@ The *pkgmk* utility exits with one of the following values:
 *130*
 	Interrupted or terminated by *C-c*.
 
+# IMPLEMENTATION NOTES
+
+When gzip-compatible compression is used, *pkgmk* invokes *gzip*(1).
+If *pigz*(1) is available in *PATH*, it may be used as a drop-in
+replacement.
+
 # SEE ALSO
 
 *pkgmk.conf*(5),
