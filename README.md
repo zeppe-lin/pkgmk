@@ -25,6 +25,8 @@ differences:
   * Ability to rename downloaded tarballs
   * Ignore extended attributes when extracting tarballs
   * Configure archive formats for created packages
+  * Use pigz(1) for both manpage and archive compression if available
+    in PATH
 
 See git log for the full history.
 
