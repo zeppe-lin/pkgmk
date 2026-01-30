@@ -12,7 +12,9 @@ pkgmk - build a software package suitable for installation
       *-um* [*-d*] | *-uf* | *-utd* | *-c*
 
 *pkgmk* [*-cf* _config-file_] [*-af* _archive-format_] \
-      [*-f*] [*-ns*] [*-kw*] [*-d*] [*-im*] [*-if*] [*-in*]
+      [*-f*] [*-ns*] [*-kw*] [*-d*] [*-im*] [*-if*]
+
+; [*-in*]
 
 # DESCRIPTION
 
@@ -114,9 +116,9 @@ They may be freely combined.
 *-im*, *--ignore-md5sum*
 	Build without verifying source checksums.
 
-*-in*, *--ignore-new*
-	Proceed with build, ignoring new files reported during a
-	footprint mismatch.
+; *-in*, *--ignore-new*
+; Proceed with build, ignoring new files reported during a
+; footprint mismatch.
 
 *-kw*, *--keep-work*
 	Keep the temporary working directory after the build
