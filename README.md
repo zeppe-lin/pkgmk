@@ -18,7 +18,7 @@ differences:
     * `pkgmk.md5sum(5)`
     * `pkgmk.nostrip(5)`
   * Bash completion
-  * Removed options: `-i`, `-u`, `-r`
+  * Removed options: `-i`, `-u`, `-r`, `-in`
   * Removed `signify(1)` support
   * GNU-style options, help, and usage
   * Support for `zstd`-compressed packages
