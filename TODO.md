@@ -22,19 +22,20 @@ Next Release
 No milestone
 ------------
 
-- [ ] -in (--ignore-new) documented in man page but not implemented.
+- [ ] -in (--ignore-new) documented (although commented) in man page
+  but not implemented:
+  - Reintroduce? Do we need this separation between:
+    ignore footprint and ignore new files in footprint?
+  - Do we insist on reproducible builds?
 
-- [ ] rework command-line options? add `--compress-format <format>`
+- [ ] Rework command-line options? add `--compress-format <format>`
   option?  Note that these changes need update pkgman's manual pages.
 
-- [ ] add support of sha256 checksums `.sha256sum`?  Make priorities?
+- [ ] Add support of sha256 checksums `.sha256sum`?  Make priorities?
   Check all sum-files if exist more than one?
 
 - [ ] Pkgmk checks of directory permissions are too strict:
   https://github.com/zeppe-lin/pkgmk/issues/4
-
-- [ ] Add pigz support for parallel compression to gzip?
-  https://github.com/zeppe-lin/pkgmk/issues/1
 
 - [ ] Colorize "footprint mismatch" messages like `diff(1)` does?
 
@@ -60,5 +61,8 @@ Done
   manual pages?
   Done: Reflected in pkgman's packaging(7) manual page.  More
   appropriate location.
+
+- [x] Add pigz support for parallel compression to gzip?
+  https://github.com/zeppe-lin/pkgmk/issues/1
 
 
