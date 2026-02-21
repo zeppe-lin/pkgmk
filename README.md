@@ -28,10 +28,11 @@ differences:
   * Use pigz(1) for both manpage and archive compression if available
     in PATH
 
-See git log for the full history.
+See git log for full history.
 
 Original sources: https://git.crux.nu/tools/pkgutils.git
 
+---
 
 REQUIREMENTS
 ============
@@ -51,27 +52,34 @@ Runtime
   * `bsdtar(1)` for unpacking sources
   * `pkginfo(1)` (from `pkgutils`) for footprint checking/making
 
+---
 
 INSTALLATION
 ============
 
-To install this package, run:
+To install:
 
-    make install
+```sh
+# as root
+make install
+```
 
-Configuration parameters are in `config.mk`.
+Configuration parameters are defined in `config.mk`.
 
+---
 
 DOCUMENTATION
 =============
 
-Manual pages are in `/man`.
+Manual pages are provided in `/man` and installed under the system
+manual hierarchy.
 
+---
 
 LICENSE
 =======
 
-`pkgmk` is licensed through the
+`pkgmk` is licensed under the
 [GNU General Public License v2 or later](https://gnu.org/licenses/gpl.html).
 
 See `COPYING` for license terms and `COPYRIGHT` for notices.
