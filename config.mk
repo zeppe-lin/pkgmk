@@ -1,6 +1,6 @@
 # project metadata
 NAME        = pkgmk
-VERSION     = 5.45
+VERSION     = 5.46
 
 # paths
 PREFIX      = /usr
