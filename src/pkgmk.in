@@ -547,7 +547,7 @@ $2 == "current ar archive"              { print "--strip-debug    \"" $1 "\"" }
 }
 
 # compress_manpages - Compress manual pages within the package
-# directory using gzip.
+# directory using gzip or pigz.
 compress_manpages() {
 	local __FILE=
 	local __TARGET=
@@ -560,7 +560,14 @@ compress_manpages() {
 	cd "$PKG"
 
 	# Compress regular manpage files.
-	find . -type f -path "*/man/man*/*" ! -name '*.gz' \
+	#
+	# Only compress single-linked files (-links 1) to match gzip's
+	# behavior and avoid pigz duplicating hard-linked man pages.
+	#
+	# See commit 710af39d4de852101e67bdfbb650a7a45e7f2ce9 for
+	# detailed explanation.
+	#
+	find . -type f -path "*/man/man*/*" ! -name '*.gz' -links 1 \
 		-exec $__COMPRESSOR -9 {} +
 
 	# Re-link manpage symlinks to point to compressed versions.
