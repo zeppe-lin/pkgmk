@@ -202,6 +202,14 @@ When gzip-compatible compression is used, *pkgmk* invokes *gzip*(1).
 If *pigz*(1) is available in *PATH*, it may be used as a drop-in
 replacement.
 
+To ensure consistent behavior across different compressors and to
+preserve upstream hard-link structures, only manual pages with a
+hard link count of one are compressed.
+Multi-linked manual pages remain uncompressed so that the original
+link topology is preserved.
+Manual page symbolic links are rewritten to point to compressed
+targets.
+
 # SEE ALSO
 
 *pkgmk.conf*(5),
